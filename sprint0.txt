@@ -1,0 +1,75 @@
+VizuAlgo
+
+WIZJA:
+
+1.OPIS
+Celem projektu jest stworzenie narzędzia służącego do wizualizacji działania algorytmów oraz rozwiązań zadań algorytmicznych.
+Mamy zamiar stworzyć bibliotekę C++, która będzie używana do tworzenia slajdów prezentujących kolejne etapy wykonania programu oraz rysowania struktur danych.
+Dodatkowo chcemy umożliwić użytkownikowi wygodne korzystanie z biblioteki za pomocą strony do kompilowania kodu i pobrania slajdów.
+
+2. GRUPY UŻYTKOWNIKÓW / ROLE W SYSTEMIE
+Projekt jest skierowany do ludzi tworzących wszelkie materiały dydaktyczne związane z programowaniem (w szczególności z algorytmiką). Przykładowo:
+- nauczyciel informatyki prezentujący działanie algorytmu sortowania
+- organizator konkursu algorytmicznego tworzący omówienie zadań
+- osoba tworząca internetowy kurs STLa
+- pracownik naukowy publikujący własny algorytm
+
+3. FUNKCJONALNOŚCI
+3.1. Biblioteka C++ obsługująca wyświetlanie na slajdach:
+  - tablice 1D, 2D
+  - inline LaTeX
+  - kod (źródłowy)
+  - zmienne
+  - kontenery
+  - drzewa (też binarne)
+  - obrazki
+  - macierze
+  - grafy
+  - DAGi
+  - strzałki
+  - grafy funkcyjne
+  - strona
+  - geometria
+3.2. Aplikacja webowa - wygodny interfejs dla użytkownika, który wystarczy, że wklei kod i otrzyma slajdy w wybranej formie.
+
+4.TECHNOLOGIE
+C++, html, LaTeX, DoxyGen, nginx, JS, Django, graphviz
+
+5.NARZĘDZIA
+git, Github, Google Test / Catch, Sublime Text, Make
+
+HARMONOGRAM:
+4 sprinty
+
+1. 27.03
+  - tablice 1D, 2D
+  - LaTeX
+  - kod (źródłowy)
+  - zmienne
+  - dokumentacja (specyfikacja funkcjonalna)
+
+2. 17.04
+  - kontenery (początek)
+  - drzewa
+  - drzewa binarne
+  - obrazki
+  - macierze
+  - dokumentacja (specyfikacja niefunkcjonalna, architektura)
+  - poprawianie dokumentacji
+
+3. 15.05
+  - grafy
+  - kontenery (ciąg dalszy)
+  - DAGi
+  - strzałki
+  - grafy funkcyjne
+  - dokumentacja (diagramy użycia)
+  - poprawianie dokumentacji
+
+4. 12.06
+  - prezentacja
+  - plakat
+  - strona
+  - geometria
+  - dokumentacja
+  - poprawianie dokumentacji
