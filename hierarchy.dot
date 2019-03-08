@@ -1,0 +1,13 @@
+digraph {
+	SlideElement -> Array1DElement
+	SlideElement -> Array2DElement
+	Drawable
+	Presentation -> HTMLPresentation
+	SlideElement -> LatexElement
+	Presentation -> LatexPresentation
+	Presentation
+	Drawable -> Slide
+	Drawable -> SlideElement
+	SlideElement -> SourceCodeElement
+	SlideElement -> VariableElement
+}
