@@ -7,7 +7,7 @@
 namespace valgo {
 
 template<class T>
-class Array1DElement : public Drawable {
+class Array1DElement : public SlideElement {
 private:
 	std::vector<T> vec_;
 

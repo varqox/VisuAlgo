@@ -7,7 +7,7 @@
 namespace valgo {
 
 template<class T>
-class VariableElement : public Drawable {
+class VariableElement : public SlideElement {
 private:
 	T var_;
 

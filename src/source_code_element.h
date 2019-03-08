@@ -34,7 +34,7 @@ enum class ProgrammingLanguage {
 	XML,
 };
 
-class SourceCodeElement : public Drawable {
+class SourceCodeElement : public SlideElement {
 private:
 
 	ProgrammingLanguage lang_;

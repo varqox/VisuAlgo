@@ -4,7 +4,7 @@
 
 namespace valgo {
 
-class LatexElement : public Drawable {
+class LatexElement : public SlideElement {
 private:
 	std::string latex_;
 
