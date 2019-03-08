@@ -16,9 +16,9 @@ public:
 
 	void set(T var) { var_ = std::move(var); }
 
-	virtual LatexCode draw_as_latex() const;
+	virtual LatexCode draw_as_latex() const override;
 
-	virtual HTMLCode draw_as_html() const;
+	virtual HTMLCode draw_as_html() const override;
 };
 
 } // namespace valgo

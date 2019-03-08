@@ -4,15 +4,15 @@
 
 namespace valgo {
 
-class HTMLPresentation {
+class HTMLPresentation : public Presentation {
 	std::string content_;
 
 public:
 	HTMLPresentation() = default;
 
-	virtual void add_slide(const Slide& slide);
+	virtual void add_slide(const Slide& slide) override;
 
-	virtual std::string to_str() const;
+	virtual std::string to_str() const override;
 };
 
 } // namespace valgo

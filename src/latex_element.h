@@ -13,9 +13,9 @@ public:
 
 	void set(std::string latex) noexcept { latex_ = std::move(latex); }
 
-	virtual LatexCode draw_as_latex() const;
+	virtual LatexCode draw_as_latex() const override;
 
-	virtual HTMLCode draw_as_html() const;
+	virtual HTMLCode draw_as_html() const override;
 };
 
 } // namespace valgo
