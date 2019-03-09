@@ -11,10 +11,6 @@ class Drawable {
 public:
 	Drawable() = default;
 
-	Drawable(const Drawable&) = delete;
-
-	Drawable& operator=(const Drawable&) = delete;
-
 	virtual ~Drawable() = default;
 
 	virtual LatexCode draw_as_latex() const = 0;

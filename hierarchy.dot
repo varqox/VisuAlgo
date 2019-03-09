@@ -1,13 +1,9 @@
 digraph {
-	SlideElement -> Array1DElement [dir=back];
-	SlideElement -> Array2DElement [dir=back];
-	Drawable
-	Presentation -> HTMLPresentation [dir=back];
-	SlideElement -> LatexElement [dir=back];
-	Presentation -> LatexPresentation [dir=back];
-	Presentation
-	Drawable -> SlideView [dir=back];
-	Drawable -> SlideElement [dir=back];
-	SlideElement -> SourceCodeElement [dir=back];
-	SlideElement -> VariableElement [dir=back];
+	Drawable -> SlideElement, Slide [dir=back];
+	SlideElement -> Array1DElement, Array2DElement, LatexElement [dir=back];
+	SlideElement -> SourceCodeElement, VariableElement [dir=back];
+
+	SlideBuilder
+
+	Presentation -> HTMLPresentation, LatexPresentation [dir=back];
 }

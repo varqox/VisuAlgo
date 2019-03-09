@@ -1,18 +1,15 @@
 #pragma once
 
-#include "slide_element.h"
-
-#include <memory>
-#include <vector>
+#include "slide.h"
 
 namespace valgo {
 
-class SlideView : public Drawable {
+class SlideBuilder {
 private:
 	std::vector<SlideElement*> elems_;
 
 public:
-	SlideView() = default;
+	SlideBuilder() = default;
 
 	void add_element(SlideElement& elem);
 
@@ -20,9 +17,7 @@ public:
 
 	void remove_all_elements();
 
-	virtual LatexCode draw_as_latex() const override;
-
-	virtual HTMLCode draw_as_html() const override;
+	Slide build();
 };
 
 } // namespace valgo

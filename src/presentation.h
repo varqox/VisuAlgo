@@ -1,6 +1,6 @@
 #pragma once
 
-#include "slide_view.h"
+#include "slide.h"
 
 namespace valgo {
 
@@ -10,7 +10,7 @@ public:
 
 	virtual ~Presentation() = default;
 
-	virtual void add_slide(const SlideView& slide_view) = 0;
+	virtual void add_slide(const Slide& slide) = 0;
 
 	virtual std::string to_str() const = 0;
 };

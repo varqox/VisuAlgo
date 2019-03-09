@@ -10,7 +10,7 @@ class LatexPresentation : public Presentation {
 public:
 	LatexPresentation() = default;
 
-	virtual void add_slide(const SlideView& slide_view) override;
+	virtual void add_slide(const Slide& slide) override;
 
 	virtual std::string to_str() const override;
 };
