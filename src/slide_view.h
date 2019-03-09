@@ -7,12 +7,12 @@
 
 namespace valgo {
 
-class Slide : public Drawable {
+class SlideView : public Drawable {
 private:
 	std::vector<SlideElement*> elems_;
 
 public:
-	Slide() = default;
+	SlideView() = default;
 
 	void add_element(SlideElement& elem);
 

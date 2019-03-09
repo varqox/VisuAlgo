@@ -6,7 +6,7 @@ digraph {
 	SlideElement -> LatexElement [dir=back];
 	Presentation -> LatexPresentation [dir=back];
 	Presentation
-	Drawable -> Slide [dir=back];
+	Drawable -> SlideView [dir=back];
 	Drawable -> SlideElement [dir=back];
 	SlideElement -> SourceCodeElement [dir=back];
 	SlideElement -> VariableElement [dir=back];
