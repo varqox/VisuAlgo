@@ -13,7 +13,7 @@ private:
 
 public:
 	VariableElement() = default;
-	
+
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
 	void set(T var) { var_ = std::move(var); }

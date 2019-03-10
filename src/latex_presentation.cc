@@ -3,8 +3,8 @@
 namespace valgo {
 
 LatexPresentation::LatexPresentation() {
-	head_ = "\\documentclass{article}\n\\begin{document}";
-	tail_ = "\\end{document}\n";
+	head_ = "\\documentclass{article}\n\\begin{document}\n";
+	tail_ = "\\end{document}";
 }
 
 void LatexPresentation::add_slide(const Slide& slide) {

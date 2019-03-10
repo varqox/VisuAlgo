@@ -42,7 +42,7 @@ private:
 
 public:
 	SourceCodeElement() = default;
-	
+
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
 	void set_code(std::string source_code) noexcept {

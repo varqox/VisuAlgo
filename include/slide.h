@@ -2,8 +2,8 @@
 
 #include "slide_element.h"
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 namespace valgo {
 
@@ -13,9 +13,9 @@ private:
 
 public:
 	Slide() = default;
-	
+
 	void add_element(SlideElement* elem);
-	
+
 	virtual LatexCode draw_as_latex() const override;
 
 	virtual HTMLCode draw_as_html() const override;
