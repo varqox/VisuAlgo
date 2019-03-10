@@ -1,11 +1,17 @@
 #pragma once
 
 #include <string>
+#include <stdexcept>
+
+namespace valgo {
 
 using LatexCode = std::string;
 using HTMLCode = std::string;
 
-namespace valgo {
+class NotImplemented : public std::logic_error {
+public:
+	NotImplemented() : std::logic_error("Function not yet implemented") {}
+};
 
 class Drawable {
 public:

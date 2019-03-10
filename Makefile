@@ -6,7 +6,9 @@ all: visualgo.a hierarchy.svg
 
 VISUALGO_SRCS := \
 	src/latex_presentation.cc \
-	src/html_presentation.cc
+	src/latex_element.cc \
+	src/slide.cc \
+	src/slide_builder.cc
 
 $(eval $(call load_dependencies, $(VISUALGO_SRCS)))
 VISUALGO_OBJS := $(call SRCS_TO_OBJS, $(VISUALGO_SRCS))

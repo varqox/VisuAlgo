@@ -17,7 +17,7 @@ public:
 
 	void remove_all_elements();
 
-	Slide build();
+	Slide build() const;
 };
 
 } // namespace valgo

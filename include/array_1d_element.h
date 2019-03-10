@@ -13,6 +13,8 @@ private:
 
 public:
 	Array1DElement() = default;
+	
+	virtual std::unique_ptr<SlideElement> clone() const override;
 
 	void set(std::vector<T> vec) noexcept { vec_ = std::move(vec); }
 

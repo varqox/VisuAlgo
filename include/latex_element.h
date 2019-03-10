@@ -10,7 +10,9 @@ private:
 
 public:
 	LatexElement() = default;
-
+	
+	virtual std::unique_ptr<SlideElement> clone() const override;
+	
 	void set(std::string latex) noexcept { latex_ = std::move(latex); }
 
 	virtual LatexCode draw_as_latex() const override;
