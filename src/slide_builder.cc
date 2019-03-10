@@ -5,7 +5,7 @@
 namespace valgo {
 
 void SlideBuilder::add_element(SlideElement& elem) {
-	elems_.push_back(&elem);
+	elems_.emplace_back(&elem);
 }
 
 void SlideBuilder::remove_element(SlideElement& elem) {
