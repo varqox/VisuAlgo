@@ -16,12 +16,7 @@ LatexCode Slide::draw_as_latex() const {
 }
 
 HTMLCode Slide::draw_as_html() const {
-	LatexCode ret;
-	for (auto& elem : elems_) {
-		ret += elem.get()->draw_as_latex();
-		ret += "\\\\\n";
-	}
-	return ret;
+	throw NotImplemented();
 }
 
 } // namespace valgo
