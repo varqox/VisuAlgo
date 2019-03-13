@@ -1,6 +1,6 @@
-#include "include/latex_element.h"
-#include "include/latex_presentation.h"
-#include "include/slide_builder.h"
+#include "../include/latex_element.h"
+#include "../include/latex_presentation.h"
+#include "../include/slide_builder.h"
 
 #include <iostream>
 
@@ -13,7 +13,7 @@ int main() {
 	LatexElement le;
 	sb.add_element(le);
 	for (int i = 0; i < 4; ++i) {
-		le.set('$' + to_string(i) + '$');
+		le.set("$\\sum_{i=1}^{n}{" + to_string(i) + "}$");
 		pres.add_slide(sb.build());
 	}
 

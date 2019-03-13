@@ -25,13 +25,13 @@ hierarchy.svg: hierarchy.dot
 		$(call TIME_CMD,DOT) \
 		dot -Tsvg -o $@ $^
 
-foo: foo.o visualgo.a
+foo: src/foo.o visualgo.a
 	$(LINK)
 
 .PHONY: clean
-clean: OBJS := $(VISUALGO_OBJS)
+clean: OBJS := $(VISUALGO_OBJS) src/foo.o
 clean:
-	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo)
+	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo) visualgo.a foo
 	$(Q)find src -type f -name '*.deps' | xargs rm -f
 
 .PHONY: help
