@@ -1,7 +1,7 @@
 include Makefile.config
 
 .PHONY: all
-all: visualgo.a hierarchy.svg
+all: visualgo.a hierarchy.svg foo
 	@printf "\033[32mBuild finished\033[0m\n"
 
 VISUALGO_SRCS := \
@@ -21,11 +21,14 @@ hierarchy.svg: hierarchy.dot
 		$(call TIME_CMD,DOT) \
 		dot -Tsvg -o $@ $^
 
+foo: foo.o visualgo.a
+	$(LINK)
+
 .PHONY: clean
 clean: OBJS := $(VISUALGO_OBJS)
 clean:
 	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo)
-	$(Q)find src test -type f -name '*.deps' | xargs rm -f
+	$(Q)find src -type f -name '*.deps' | xargs rm -f
 
 .PHONY: help
 help:
