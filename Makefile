@@ -25,6 +25,7 @@ hierarchy.svg: hierarchy.dot
 		$(call TIME_CMD,DOT) \
 		dot -Tsvg -o $@ $^
 
+$(eval $(call load_dependencies, src/foo.cc))
 foo: src/foo.o visualgo.a
 	$(LINK)
 
