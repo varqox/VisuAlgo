@@ -17,11 +17,9 @@ public:
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
-	void resize(size_t n, size_t m) { vec_.resize(n * m); }
+	void resize(size_t n, size_t m);
 
-	void set_elem(size_t i, size_t j, T val) {
-		vec_[i * m_ + j] = std::move(val);
-	}
+	void set_elem(size_t i, size_t j, T val);
 
 	virtual LatexCode draw_as_latex() const override;
 

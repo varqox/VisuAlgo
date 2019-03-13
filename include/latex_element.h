@@ -13,7 +13,7 @@ public:
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
-	void set(std::string latex) noexcept { latex_ = std::move(latex); }
+	void set(std::string latex) noexcept;
 
 	virtual LatexCode draw_as_latex() const override;
 

@@ -12,42 +12,19 @@ private:
     std::vector<T> vec_;
 
 public:
-    Array1DElement() = default;
+	Array1DElement() = default;
 
-    virtual std::unique_ptr<SlideElement> clone() const override {
-        return std::make_unique<Array1DElement>(*this);
-    }
+	virtual std::unique_ptr<SlideElement> clone() const override;
 
-    void set(std::vector<T> vec) noexcept { vec_ = std::move(vec); }
+	void set(std::vector<T> vec) noexcept;
 
-    void resize(size_t n) { vec_.resize(n); }
+	void resize(size_t n);
 
-    void set_elem(size_t n, T val) { vec_[n] = std::move(val); }
+	void set_elem(size_t n, T val);
 
-    virtual LatexCode draw_as_latex() const override {
-        std::string ret = "\\begin{table}[h!]\n \\begin{tabular}{|";
-        
-        for (size_t i = 0; i < vec_.size(); i++)
-            ret += "c|";
-        ret += "}\n  \\hline\n  ";
-        
-        for (size_t i = 0; i < vec_.size(); i++) {
-            if (i < vec_.size() - 1)  {
-                ret += " " + std::to_string(vec_[i]) + " &";
-            }
-            else {
-                ret += " " + std::to_string(vec_[i]) + "\\\\\n  \\hline\n";
-            }
-        }
+	virtual LatexCode draw_as_latex() const override;
 
-        ret += " \\end{tabular}\n \\end{table}\n";
-
-        return ret;
-    }
-
-    virtual HTMLCode draw_as_html() const override {
-        throw NotImplemented();
-    }
+	virtual HTMLCode draw_as_html() const override;
 };
 
 } // namespace valgo

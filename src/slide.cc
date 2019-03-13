@@ -10,7 +10,7 @@ LatexCode Slide::draw_as_latex() const {
 	LatexCode ret;
 	for (auto& elem : elems_) {
 		ret += elem.get()->draw_as_latex();
-		ret += "\\\\\n";
+		ret += "\n";
 	}
 	return ret;
 }

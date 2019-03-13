@@ -1,7 +1,47 @@
 #include "../include/latex_presentation.h"
-#include "utilities.h"
+#include "../include/utilities.h"
 
 namespace valgo {
+
+std::string LatexPresentation::title() const {
+    return title_;
+}
+
+void LatexPresentation::title(std::string new_title) {
+    title_ = std::move(new_title);
+}
+
+std::string LatexPresentation::footer_title() const {
+    return footer_title_;
+}
+
+void LatexPresentation::footer_title(std::string new_footer_title) {
+	footer_title_ = std::move(new_footer_title);
+}
+
+std::optional<std::string> LatexPresentation::author() const {
+    return author_;
+}
+
+void LatexPresentation::author(std::optional<std::string> new_author) {
+	author_ = std::move(new_author);
+}
+
+std::optional<std::string> LatexPresentation::date() const {
+    return date_;
+}
+
+void LatexPresentation::date(std::optional<std::string> new_date) {
+	date_ = std::move(new_date);
+}
+
+std::optional<std::string> LatexPresentation::institute() const {
+    return institute_;
+}
+
+void LatexPresentation::institute(std::optional<std::string> new_institute) {
+	institute_ = std::move(new_institute);
+}
 
 void LatexPresentation::add_slide(const Slide& slide) {
 	back_insert(content_, "\n\\begin{frame}\n", slide.draw_as_latex(),

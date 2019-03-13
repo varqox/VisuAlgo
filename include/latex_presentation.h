@@ -15,33 +15,25 @@ public:
 	LatexPresentation(std::string title, std::string footer_title) noexcept
 		: title_(std::move(title)), footer_title_(std::move(footer_title)) {}
 
-	std::string title() const { return title_; }
+	std::string title() const;
 
-	void title(std::string new_title) { title_ = std::move(new_title); }
+	void title(std::string new_title);
 
-	std::string footer_title() const { return footer_title_; }
+	std::string footer_title() const;
 
-	void footer_title(std::string new_footer_title) {
-		footer_title_ = std::move(new_footer_title);
-	}
+	void footer_title(std::string new_footer_title);
 
-	std::optional<std::string> author() const { return author_; }
+	std::optional<std::string> author() const;
 
-	void author(std::optional<std::string> new_author) {
-		author_ = std::move(new_author);
-	}
+	void author(std::optional<std::string> new_author);
 
-	std::optional<std::string> date() const { return date_; }
+	std::optional<std::string> date() const;
 
-	void date(std::optional<std::string> new_date) {
-		date_ = std::move(new_date);
-	}
+	void date(std::optional<std::string> new_date);
 
-	std::optional<std::string> institute() const { return institute_; }
+	std::optional<std::string> institute() const;
 
-	void institute(std::optional<std::string> new_institute) {
-		institute_ = std::move(new_institute);
-	}
+	void institute(std::optional<std::string> new_institute);
 
 	virtual void add_slide(const Slide& slide) override;
 

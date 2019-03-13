@@ -14,4 +14,8 @@ HTMLCode LatexElement::draw_as_html() const {
 	throw NotImplemented();
 }
 
+void LatexElement::set(std::string latex) noexcept {
+	latex_ = std::move(latex);
+}
+
 } // namespace valgo

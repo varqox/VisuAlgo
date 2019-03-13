@@ -18,7 +18,7 @@ int main() {
 	}
 
 	pres.author("Dream team");
-	pres.date("33.25.9999");
+	pres.date("12.03.2019");
 	pres.institute("MIMUW");
 	cout << pres.to_str() << std::endl;
 }

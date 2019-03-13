@@ -45,11 +45,9 @@ public:
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
-	void set_code(std::string source_code) noexcept {
-		code_ = std::move(source_code);
-	}
+	void set_code(std::string source_code) noexcept;
 
-	void set_language(ProgrammingLanguage lang) noexcept { lang_ = lang; }
+	void set_language(ProgrammingLanguage lang) noexcept;
 
 	virtual LatexCode draw_as_latex() const override;
 
