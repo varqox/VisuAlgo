@@ -44,8 +44,7 @@ void LatexPresentation::institute(std::optional<std::string> new_institute) {
 }
 
 void LatexPresentation::add_slide(const Slide& slide) {
-	back_insert(content_, "\n\\begin{frame}\n", slide.draw_as_latex(),
-		"\\end{frame}\n");
+	back_insert(content_, '\n', slide.draw_as_latex(), '\n');
 }
 
 std::string LatexPresentation::to_str() const {
