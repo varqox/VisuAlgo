@@ -16,7 +16,7 @@ public:
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
-	void set(T var);
+	void set(T var) { var_ = std::move(var); }
 
 	virtual LatexCode draw_as_latex() const override;
 
