@@ -1,5 +1,5 @@
 #include "../include/latex_presentation.h"
-#include "../include/utilities.h"
+#include "utilities.h"
 
 namespace valgo {
 
