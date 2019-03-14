@@ -25,23 +25,23 @@ inline std::string concat(Args&&... args);
 
 template<class... Args>
 inline std::string& back_insert(std::string& str, Args&&... args) {
-    size_t total_length = str.size();
-    ((total_length += string_length(args)), ...);
+	size_t total_length = str.size();
+	((total_length += string_length(args)), ...);
 
-    // Allocate more space (reserve is inefficient)
-    size_t old_size = str.size();
-    str.resize(total_length);
-    str.resize(old_size);
+	// Allocate more space (reserve is inefficient)
+	size_t old_size = str.size();
+	str.resize(total_length);
+	str.resize(old_size);
 
-    ((str += std::forward<Args>(args)), ...);
-    return str;
+	((str += std::forward<Args>(args)), ...);
+	return str;
 }
 
 template<class... Args>
 inline std::string concat(Args&&... args) {
-    std::string str;
-    back_insert(str, std::forward<Args>(args)...);
-    return str;
+	std::string str;
+	back_insert(str, std::forward<Args>(args)...);
+	return str;
 }
 
 } // namespace valgo
