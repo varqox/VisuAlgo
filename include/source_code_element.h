@@ -6,38 +6,9 @@
 
 namespace valgo {
 
-enum class ProgrammingLanguage {
-	ASSEMBLER,
-	AWK,
-	BASH,
-	C,
-	CAML,
-	CPP,
-	GO,
-	HASKELL,
-	HTML,
-	JAVA,
-	LATEX,
-	LLVM,
-	MAKE,
-	MATHEMATICA,
-	MATLAB,
-	PASCAL,
-	PERL,
-	PYTHON,
-	R,
-	RUBY,
-	SCALA,
-	SH,
-	SQL,
-	TEX,
-	XML,
-};
-
 class SourceCodeElement : public SlideElement {
 private:
-
-	ProgrammingLanguage lang_;
+	std::string lang_;
 	std::string code_;
 
 public:
@@ -45,9 +16,13 @@ public:
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
-	void set_code(std::string source_code) noexcept;
+	// Returns *this to allow chaining
+	SourceCodeElement& set_code(std::string source_code) noexcept;
 
-	void set_language(ProgrammingLanguage lang) noexcept;
+	// Sets programming language to @p lang. @p lang should be a valid
+	// lstlisting LaTeX package language e.g. "C", "C++", "Python", ...
+	// Returns *this to allow chaining
+	SourceCodeElement& set_lang(std::string lang) noexcept;
 
 	virtual LatexCode draw_as_latex() const override;
 

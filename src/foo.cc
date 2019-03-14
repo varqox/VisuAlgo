@@ -1,6 +1,7 @@
 #include "../include/latex_element.h"
 #include "../include/latex_presentation.h"
 #include "../include/slide_builder.h"
+#include "../include/source_code_element.h"
 
 #include <iostream>
 
@@ -9,6 +10,14 @@ using namespace valgo;
 
 int main() {
 	LatexPresentation pres("Test", "Test presentation");
+	pres.add_slide(Slide(SourceCodeElement().set_lang("C++").set_code(
+		"for (int i = 2; i < N; ++i)\n"
+		"	is_prime[i] = true;\n"
+		"for (int i = 2; i < N; ++i)\n"
+		"	if (is_prime[i])\n"
+		"		for (int j = i + i; j < N; j += i)\n"
+		"			is_prime[j] = false;\n")));
+
 	SlideBuilder sb;
 	LatexElement le;
 	sb.add_element(le);
