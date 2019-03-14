@@ -3,7 +3,7 @@
 
 namespace valgo {
 
-void Slide::add_element(SlideElement* elem) {
+void Slide::add_element(const SlideElement* elem) {
 	elems_.emplace_back(elem->clone());
 }
 
