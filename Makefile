@@ -9,8 +9,6 @@ VISUALGO_SRCS := \
 	src/latex_element.cc \
 	src/slide.cc \
 	src/slide_builder.cc \
-	src/array_1d_element.cc \
-	src/array_2d_element.cc \
 	src/source_code_element.cc \
 	src/variable_element.cc
 
