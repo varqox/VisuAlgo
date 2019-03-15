@@ -7,6 +7,11 @@ std::unique_ptr<SlideElement> SourceCodeElement::clone() const {
 	return std::make_unique<SourceCodeElement>(*this);
 }
 
+SourceCodeElement& SourceCodeElement::set_title(std::optional<std::string> title) {
+	title_ = std::move(title);
+	return *this;
+}
+
 SourceCodeElement& SourceCodeElement::set_code(std::string source_code) noexcept {
 	code_ = std::move(source_code);
 	return *this;
@@ -19,7 +24,8 @@ SourceCodeElement& SourceCodeElement::set_lang(std::string lang) noexcept {
 
 LatexCode SourceCodeElement::draw_as_latex() const {
 	return concat("\\begin{lstlisting}[",
-		"language=", lang_, ","
+		"language=", lang_, ",",
+		title_.has_value() ? concat("title=", title_.value(), ',') : "",
 		"numbers=left,"
 		"xleftmargin=16pt,"
 		"basicstyle=\\small\\ttfamily,"

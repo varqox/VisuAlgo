@@ -2,12 +2,14 @@
 
 #include "slide_element.h"
 
+#include <optional>
 #include <vector>
 
 namespace valgo {
 
 class SourceCodeElement : public SlideElement {
 private:
+	std::optional<std::string> title_;
 	std::string lang_;
 	std::string code_;
 
@@ -15,6 +17,8 @@ public:
 	SourceCodeElement() = default;
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
+
+	SourceCodeElement& set_title(std::optional<std::string> title);
 
 	// Returns *this to allow chaining
 	SourceCodeElement& set_code(std::string source_code) noexcept;
