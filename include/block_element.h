@@ -8,7 +8,7 @@ namespace valgo {
 
 class BlockElement : public SlideElement {
 public:
-	enum Color { BLUE, RED };
+	enum Color { BLUE, RED, GREEN };
 
 private:
 	std::string title_;

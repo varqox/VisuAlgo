@@ -27,6 +27,7 @@ LatexCode BlockElement::draw_as_latex() const {
 		switch (color_) {
 		case BLUE: return "block";
 		case RED: return "alertblock";
+		case GREEN: return "exampleblock";
 		}
 	}();
 

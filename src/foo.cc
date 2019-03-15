@@ -23,7 +23,7 @@ int main() {
 		Slide slide;
 		slide.set_title("Sito Eratostenesa");
 		slide.add_element(
-			BlockElement("Standardowa implementacja", BlockElement::RED,
+			BlockElement("Standardowa implementacja", BlockElement::GREEN,
 				LatexElement("\\LaTeX~is coming..."), code));
 		slide.add_element(LatexElement("Działa w $O(n \\lg n)$"));
 		pres.add_slide(slide);
