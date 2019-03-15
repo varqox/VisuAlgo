@@ -20,24 +20,15 @@ public:
 	template<class... Elem>
 	explicit Slide(const Elem&... elems);
 
-	Slide& set_title(std::string title) noexcept {
-		title_ = std::move(title);
-		return *this;
-	}
+	Slide& set_title(std::string title) noexcept;
 
 	// Sets whether it is allowed to put overflowing contents on many slides.
 	// Returns *this to allow chaining
-	Slide& allow_multi_silde(bool val) noexcept {
-		allow_multi_slide_ = val;
-		return *this;
-	}
+	Slide& allow_multi_silde(bool val) noexcept;
 
 	// Sets whether the contents should be shrank to fit on one slide.
 	// Returns *this to allow chaining
-	Slide& shrink(bool val) noexcept {
-		shrink_ = val;
-		return *this;
-	}
+	Slide& shrink(bool val) noexcept;
 
 	void add_element(const SlideElement& elem);
 
@@ -52,6 +43,21 @@ template<class... Elem>
 inline Slide::Slide(const Elem&... elems) {
 	elems_.reserve(sizeof...(elems));
 	(elems_.emplace_back(elems.clone()), ...);
+}
+
+inline Slide& Slide::set_title(std::string title) noexcept {
+	title_ = std::move(title);
+	return *this;
+}
+
+inline Slide& Slide::allow_multi_silde(bool val) noexcept {
+	allow_multi_slide_ = val;
+	return *this;
+}
+
+inline Slide& Slide::shrink(bool val) noexcept {
+	shrink_ = val;
+	return *this;
 }
 
 } // namespace valgo
