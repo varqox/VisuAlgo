@@ -10,12 +10,18 @@ namespace valgo {
 class Slide : public Drawable {
 private:
 	std::vector<std::unique_ptr<SlideElement>> elems_;
+	std::string title_; // Empty title means no title
 	bool allow_multi_slide_ = true;
 	bool shrink_ = false;
 
 public:
 	template<class... Elem>
 	explicit Slide(const Elem&... elems);
+
+	Slide& set_title(std::string title) noexcept {
+		title_ = std::move(title);
+		return *this;
+	}
 
 	// Sets whether it is allowed to put overflowing contents on many slides.
 	// Returns *this to allow chaining

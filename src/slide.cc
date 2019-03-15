@@ -15,7 +15,7 @@ LatexCode Slide::draw_as_latex() const {
 	if (shrink_)
 		back_insert(ret, ",shrink");
 
-	back_insert(ret, "]\n");
+	back_insert(ret, "]{", title_, "}\n");
 
 	for (auto& elem : elems_)
 		back_insert(ret, elem.get()->draw_as_latex(), '\n');

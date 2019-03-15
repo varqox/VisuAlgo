@@ -16,7 +16,7 @@ int main() {
 		"for (int i = 2; i < N; ++i)\n"
 		"	if (is_prime[i])\n"
 		"		for (int j = i + i; j < N; j += i)\n"
-		"			is_prime[j] = false;\n")));
+		"			is_prime[j] = false;\n")).set_title("Sito Eratostenesa"));
 
 	SlideBuilder sb;
 	LatexElement le;
