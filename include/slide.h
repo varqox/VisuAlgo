@@ -11,7 +11,7 @@ class Slide : public Drawable {
 private:
 	std::vector<std::unique_ptr<SlideElement>> elems_;
 	std::string title_; // Empty title means no title
-	bool allow_multi_slide_ = true;
+	bool allow_multi_slide_ = false;
 	bool shrink_ = false;
 
 public:
