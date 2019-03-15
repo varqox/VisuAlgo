@@ -11,9 +11,12 @@ private:
 public:
 	LatexElement() = default;
 
+	explicit LatexElement(std::string latex) noexcept;
+
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
-	void set(std::string latex) noexcept;
+	// Returns *this to allow chaining
+	LatexElement& set(std::string latex) noexcept;
 
 	virtual LatexCode draw_as_latex() const override;
 

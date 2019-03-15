@@ -18,8 +18,8 @@ void SlideBuilder::remove_all_elements() {
 
 Slide SlideBuilder::build() const {
 	Slide ret;
-	for (auto& elem : elems_)
-		ret.add_element(elem);
+	for (SlideElement* elem : elems_)
+		ret.add_element(*elem);
 	return ret;
 }
 
