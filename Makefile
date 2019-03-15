@@ -5,8 +5,9 @@ all: visualgo.a hierarchy.svg foo
 	@printf "\033[32mBuild finished\033[0m\n"
 
 VISUALGO_SRCS := \
-	src/latex_presentation.cc \
+	src/block_element.cc \
 	src/latex_element.cc \
+	src/latex_presentation.cc \
 	src/slide.cc \
 	src/slide_builder.cc \
 	src/source_code_element.cc

@@ -2,6 +2,7 @@
 #include "../include/latex_presentation.h"
 #include "../include/slide_builder.h"
 #include "../include/source_code_element.h"
+#include "../include/block_element.h"
 
 #include <iostream>
 
@@ -10,13 +11,23 @@ using namespace valgo;
 
 int main() {
 	LatexPresentation pres("Test", "Test presentation");
-	pres.add_slide(Slide(SourceCodeElement().set_lang("C++").set_code(
-		"for (int i = 2; i < N; ++i)\n"
-		"	is_prime[i] = true;\n"
-		"for (int i = 2; i < N; ++i)\n"
-		"	if (is_prime[i])\n"
-		"		for (int j = i + i; j < N; j += i)\n"
-		"			is_prime[j] = false;\n")).set_title("Sito Eratostenesa"));
+	{
+		SourceCodeElement code;
+		code.set_lang("C++").set_code(
+			"for (int i = 2; i < N; ++i)\n"
+			"	is_prime[i] = true;\n"
+			"for (int i = 2; i < N; ++i)\n"
+			"	if (is_prime[i])\n"
+			"		for (int j = i + i; j < N; j += i)\n"
+			"			is_prime[j] = false;\n");
+		Slide slide;
+		slide.set_title("Sito Eratostenesa");
+		slide.add_element(
+			BlockElement("Standardowa implementacja", BlockElement::RED,
+				LatexElement("\\LaTeX~is coming..."), code));
+		slide.add_element(LatexElement("Działa w $O(n \\lg n)$"));
+		pres.add_slide(slide);
+	}
 
 	SlideBuilder sb;
 	LatexElement le;
