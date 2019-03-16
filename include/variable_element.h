@@ -9,10 +9,11 @@ namespace valgo {
 template<class T>
 class VariableElement : public SlideElement {
 private:
+	const std::string name_;
 	T var_;
 
 public:
-	VariableElement() = default;
+	VariableElement(std::string name);
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
@@ -22,5 +23,10 @@ public:
 
 	virtual HTMLCode draw_as_html() const override;
 };
+
+/****************** Implementation ******************/
+
+template<class T>
+inline VariableElement<T>::VariableElement(std::string name) : name_(std::move(name)) {}
 
 } // namespace valgo
