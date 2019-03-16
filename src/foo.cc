@@ -46,10 +46,20 @@ int main() {
 		pres.add_slide(sb.build());
 	}
 
-	Array1D<int> arr;
+	Array1D<int> arr("tab");
 	sb.add_elem(arr);
 	std::vector<int> vec{3, 1, 4, 1, 5, 9, 2, 6, 5};
 	arr.set(vec);
+	arr.set_color(4, Array1D<int>::GREEN);
+	arr.set_color(2, Array1D<int>::BLUE);
+	arr.set_color(7, Array1D<int>::RED);
+
+	Array1D<int> arr2;
+	sb.add_elem(arr2);
+	arr2.set(vec);
+	arr2.set_color(4, Array1D<int>::GREEN);
+	arr2.set_color(2, Array1D<int>::BLUE);
+	arr2.set_color(7, Array1D<int>::RED);
 
 	Variable<double> var("pi");
 	var.set(3.14159265);

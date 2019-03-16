@@ -48,7 +48,7 @@ void LatexPresentation::add_slide(const Slide& slide) {
 }
 
 std::string LatexPresentation::to_str() const {
-	std::string ret(concat("\\documentclass{beamer}\n"
+	std::string ret(concat("\\documentclass[table]{beamer}\n"
 		"%\n"
 		"% Choose how your presentation looks.\n"
 		"%\n"
@@ -69,6 +69,7 @@ std::string LatexPresentation::to_str() const {
 		"\\usepackage[polish]{babel}\n"
 		"\\usepackage[utf8]{inputenc}\n"
 		"\\usepackage{lmodern}\n"
+		"\\usepackage{xcolor}\n"
 		"\\selectlanguage{polish}\n"
 		"\n"
 		"\\title[", title_, "]{", footer_title_, "}\n"));
