@@ -4,9 +4,9 @@ digraph {
 	edge [dir=back]
 
 	Drawable -> SlideElement, Slide
-	SlideElement -> Array1DElement, Array2DElement, LatexElement
-	SlideElement -> SourceCodeElement, VariableElement
-	SlideElement -> BlockElement, ItemizeElement
+	SlideElement -> Array1D, Array2D, Latex
+	SlideElement -> SourceCode, Variable
+	SlideElement -> Block, Itemize
 
 	SlideBuilder
 

@@ -1,21 +1,22 @@
 #pragma once
 
 #include "slide_element.h"
+
 #include <sstream>
 #include <vector>
 
 namespace valgo {
 
 template<class T>
-class Array1DElement : public SlideElement {
+class Array1D : public SlideElement {
 private:
 	std::vector<T> vec_;
 
 public:
-	Array1DElement() = default;
+	Array1D() = default;
 
 	virtual std::unique_ptr<SlideElement> clone() const override {
-		return std::make_unique<Array1DElement>(*this);
+		return std::make_unique<Array1D>(*this);
 	}
 
 	void set(std::vector<T> vec) noexcept { vec_ = std::move(vec); }

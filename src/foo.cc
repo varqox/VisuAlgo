@@ -1,9 +1,9 @@
-#include "../include/block_element.h"
-#include "../include/itemize_element.h"
-#include "../include/latex_element.h"
+#include "../include/block.h"
+#include "../include/itemize.h"
+#include "../include/latex.h"
 #include "../include/latex_presentation.h"
 #include "../include/slide_builder.h"
-#include "../include/source_code_element.h"
+#include "../include/source_code.h"
 
 #include <iostream>
 
@@ -13,7 +13,7 @@ using namespace valgo;
 int main() {
 	LatexPresentation pres("Test", "Test presentation");
 	{
-		SourceCodeElement code;
+		SourceCode code;
 		code.set_lang("C++").set_code(
 			"for (int i = 2; i < N; ++i)\n"
 			"	is_prime[i] = true;\n"
@@ -23,21 +23,21 @@ int main() {
 			"			is_prime[j] = false;\n");
 		Slide slide;
 		slide.set_title("Sito Eratostenesa");
-		slide.add_element(
-			BlockElement("Standardowa implementacja", BlockElement::GREEN,
-				LatexElement("\\LaTeX~is coming..."), code));
+		slide.add_elem(
+			Block("Standardowa implementacja", Block::GREEN,
+				Latex("\\LaTeX~is coming..."), code));
 
-		ItemizeElement itmz;
-		itmz.add_item(LatexElement("Znajduje liczby pierwsze od 2 do $N - 1$"));
-		itmz.add_item(LatexElement("Działa w $O(n \\lg n)$"));
-		slide.add_element(itmz);
+		Itemize itmz;
+		itmz.add_item(Latex("Znajduje liczby pierwsze od 2 do $N - 1$"));
+		itmz.add_item(Latex("Działa w $O(n \\lg n)$"));
+		slide.add_elem(itmz);
 
 		pres.add_slide(slide);
 	}
 
 	SlideBuilder sb;
-	LatexElement le;
-	sb.add_element(le);
+	Latex le;
+	sb.add_elem(le);
 	for (int i = 0; i < 4; ++i) {
 		le.set("$\\sum_{i=1}^{n}{" + to_string(i) + "}$");
 		pres.add_slide(sb.build());

@@ -1,28 +1,28 @@
-#include "../include/source_code_element.h"
+#include "../include/source_code.h"
 #include "utilities.h"
 
 namespace valgo {
 
-std::unique_ptr<SlideElement> SourceCodeElement::clone() const {
-	return std::make_unique<SourceCodeElement>(*this);
+std::unique_ptr<SlideElement> SourceCode::clone() const {
+	return std::make_unique<SourceCode>(*this);
 }
 
-SourceCodeElement& SourceCodeElement::set_title(std::optional<std::string> title) {
+SourceCode& SourceCode::set_title(std::optional<std::string> title) {
 	title_ = std::move(title);
 	return *this;
 }
 
-SourceCodeElement& SourceCodeElement::set_code(std::string source_code) noexcept {
+SourceCode& SourceCode::set_code(std::string source_code) noexcept {
 	code_ = std::move(source_code);
 	return *this;
 }
 
-SourceCodeElement& SourceCodeElement::set_lang(std::string lang) noexcept {
+SourceCode& SourceCode::set_lang(std::string lang) noexcept {
 	lang_ = std::move(lang);
 	return *this;
 }
 
-LatexCode SourceCodeElement::draw_as_latex() const {
+LatexCode SourceCode::draw_as_latex() const {
 	return concat("\\begin{lstlisting}[",
 		"language=", lang_, ",",
 		title_.has_value() ? concat("title=", title_.value(), ',') : "",
@@ -43,7 +43,7 @@ LatexCode SourceCodeElement::draw_as_latex() const {
 		"\\end{lstlisting}");
 }
 
-HTMLCode SourceCodeElement::draw_as_html() const {
+HTMLCode SourceCode::draw_as_html() const {
 	throw NotImplemented();
 }
 

@@ -6,26 +6,26 @@
 
 namespace valgo {
 
-class ItemizeElement : public SlideElement {
+class Itemize : public SlideElement {
 private:
 	std::vector<std::unique_ptr<SlideElement>> elems_;
 
 public:
-	ItemizeElement(const ItemizeElement& be);
-	ItemizeElement& operator=(const ItemizeElement& be);
+	Itemize(const Itemize& be);
+	Itemize& operator=(const Itemize& be);
 
-	ItemizeElement(ItemizeElement&&) noexcept = default;
-	ItemizeElement& operator=(ItemizeElement&&) noexcept = default;
+	Itemize(Itemize&&) noexcept = default;
+	Itemize& operator=(Itemize&&) noexcept = default;
 
-	ItemizeElement() noexcept = default;
+	Itemize() noexcept = default;
 
 	template<class... Elem>
-	explicit ItemizeElement(const Elem&... elems);
+	explicit Itemize(const Elem&... elems);
 
 	std::unique_ptr<SlideElement> clone() const override;
 
 	// Returns *this to allow chaining
-	ItemizeElement& add_item(const SlideElement& elem);
+	Itemize& add_item(const SlideElement& elem);
 
 	virtual LatexCode draw_as_latex() const override;
 
@@ -35,7 +35,7 @@ public:
 /****************** Implementation ******************/
 
 template<class... Elem>
-inline ItemizeElement::ItemizeElement(const Elem&... elems) {
+inline Itemize::Itemize(const Elem&... elems) {
 	elems_.reserve(sizeof...(elems));
 	(elems_.emplace_back(elems.clone()), ...);
 }

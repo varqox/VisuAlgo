@@ -1,28 +1,28 @@
-#include "../include/block_element.h"
+#include "../include/block.h"
 #include "utilities.h"
 
 namespace valgo {
 
-BlockElement::BlockElement(const BlockElement& be) : title_(be.title_), color_(be.color_) {
+Block::Block(const Block& be) : title_(be.title_), color_(be.color_) {
 	elems_.reserve(be.elems_.size());
 	for (auto const& elem : be.elems_)
 		elems_.emplace_back(elem->clone());
 }
 
-BlockElement& BlockElement::operator=(const BlockElement& elem) {
-	return (*this = BlockElement(elem));
+Block& Block::operator=(const Block& elem) {
+	return (*this = Block(elem));
 }
 
-std::unique_ptr<SlideElement> BlockElement::clone() const {
-	return std::make_unique<BlockElement>(*this);
+std::unique_ptr<SlideElement> Block::clone() const {
+	return std::make_unique<Block>(*this);
 }
 
-BlockElement& BlockElement::add_element(const SlideElement& elem) {
+Block& Block::add_elem(const SlideElement& elem) {
 	elems_.emplace_back(elem.clone());
 	return *this;
 }
 
-LatexCode BlockElement::draw_as_latex() const {
+LatexCode Block::draw_as_latex() const {
 	auto block_name = [&]{
 		switch (color_) {
 		case BLUE: return "block";
@@ -38,7 +38,7 @@ LatexCode BlockElement::draw_as_latex() const {
 	return back_insert(res, "\\end{", block_name, "}");
 }
 
-HTMLCode BlockElement::draw_as_html() const {
+HTMLCode Block::draw_as_html() const {
 	throw NotImplemented();
 }
 

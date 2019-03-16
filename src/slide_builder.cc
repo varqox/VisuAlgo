@@ -4,11 +4,11 @@
 
 namespace valgo {
 
-void SlideBuilder::add_element(SlideElement& elem) {
+void SlideBuilder::add_elem(SlideElement& elem) {
 	elems_.emplace_back(&elem);
 }
 
-void SlideBuilder::remove_element(SlideElement& elem) {
+void SlideBuilder::remove_elem(SlideElement& elem) {
 	elems_.erase(std::find(elems_.begin(), elems_.end(), &elem));
 }
 
@@ -19,7 +19,7 @@ void SlideBuilder::remove_all_elements() {
 Slide SlideBuilder::build() const {
 	Slide ret;
 	for (SlideElement* elem : elems_)
-		ret.add_element(*elem);
+		ret.add_elem(*elem);
 	return ret;
 }
 

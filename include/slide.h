@@ -31,7 +31,7 @@ public:
 	Slide& shrink(bool val) noexcept;
 
 	// Returns *this to allow chaining
-	Slide& add_element(const SlideElement& elem);
+	Slide& add_elem(const SlideElement& elem);
 
 	virtual LatexCode draw_as_latex() const override;
 

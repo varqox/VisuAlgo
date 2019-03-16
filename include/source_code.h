@@ -7,26 +7,26 @@
 
 namespace valgo {
 
-class SourceCodeElement : public SlideElement {
+class SourceCode : public SlideElement {
 private:
 	std::optional<std::string> title_;
 	std::string lang_;
 	std::string code_;
 
 public:
-	SourceCodeElement() = default;
+	SourceCode() = default;
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
-	SourceCodeElement& set_title(std::optional<std::string> title);
+	SourceCode& set_title(std::optional<std::string> title);
 
 	// Returns *this to allow chaining
-	SourceCodeElement& set_code(std::string source_code) noexcept;
+	SourceCode& set_code(std::string source_code) noexcept;
 
 	// Sets programming language to @p lang. @p lang should be a valid
 	// lstlisting LaTeX package language e.g. "C", "C++", "Python", ...
 	// Returns *this to allow chaining
-	SourceCodeElement& set_lang(std::string lang) noexcept;
+	SourceCode& set_lang(std::string lang) noexcept;
 
 	virtual LatexCode draw_as_latex() const override;
 

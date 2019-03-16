@@ -11,9 +11,9 @@ private:
 public:
 	SlideBuilder() = default;
 
-	void add_element(SlideElement& elem);
+	void add_elem(SlideElement& elem);
 
-	void remove_element(SlideElement& elem);
+	void remove_elem(SlideElement& elem);
 
 	void remove_all_elements();
 

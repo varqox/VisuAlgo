@@ -1,31 +1,32 @@
 #pragma once
 
 #include "slide_element.h"
+
 #include <sstream>
 #include <vector>
 
 namespace valgo {
 
 template<class T>
-class Array2DElement : public SlideElement {
+class Array2D : public SlideElement {
 private:
 	size_t n_, m_;
 	std::vector<T> vec_; // n_ x m_
 
 public:
-	Array2DElement() = default;
+	Array2D() = default;
 
 	virtual std::unique_ptr<SlideElement> clone() const override {
-		 return std::make_unique<Array2DElement>(*this);
+		 return std::make_unique<Array2D>(*this);
 	}
 
-	void resize(size_t n, size_t m) { 
+	void resize(size_t n, size_t m) {
 		vec_.resize(n * m);
 		n_ = n;
 		m_ = m;
 	}
 
-	void set_elem(size_t i, size_t j, T val) { 
+	void set_elem(size_t i, size_t j, T val) {
 		vec_[i * n_ + j] = std::move(val);
 	}
 

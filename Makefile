@@ -5,13 +5,13 @@ all: visualgo.a hierarchy.svg foo
 	@printf "\033[32mBuild finished\033[0m\n"
 
 VISUALGO_SRCS := \
-	src/block_element.cc \
-	src/itemize_element.cc \
-	src/latex_element.cc \
+	src/block.cc \
+	src/itemize.cc \
+	src/latex.cc \
 	src/latex_presentation.cc \
 	src/slide.cc \
 	src/slide_builder.cc \
-	src/source_code_element.cc
+	src/source_code.cc
 
 $(eval $(call load_dependencies, $(VISUALGO_SRCS)))
 VISUALGO_OBJS := $(call SRCS_TO_OBJS, $(VISUALGO_SRCS))
