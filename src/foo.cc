@@ -4,8 +4,11 @@
 #include "../include/latex_presentation.h"
 #include "../include/slide_builder.h"
 #include "../include/source_code.h"
+#include "../include/array_1d.h"
+#include "../include/variable.h"
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
 using namespace valgo;
@@ -42,6 +45,19 @@ int main() {
 		le.set("$\\sum_{i=1}^{n}{" + to_string(i) + "}$");
 		pres.add_slide(sb.build());
 	}
+
+	Array1D<int> arr;
+	sb.add_elem(arr);
+	std::vector<int> vec{3, 1, 4, 1, 5, 9, 2, 6, 5};
+	arr.set(vec);
+
+	Variable<double> var("pi");
+	var.set(3.14159265);
+	sb.add_elem(var);
+
+
+	pres.add_slide(sb.build());
+
 
 	pres.author("Dream team");
 	pres.date("12.03.2019");
