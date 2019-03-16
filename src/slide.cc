@@ -3,8 +3,9 @@
 
 namespace valgo {
 
-void Slide::add_element(const SlideElement& elem) {
+Slide& Slide::add_element(const SlideElement& elem) {
 	elems_.emplace_back(elem.clone());
+	return *this;
 }
 
 LatexCode Slide::draw_as_latex() const {
