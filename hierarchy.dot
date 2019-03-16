@@ -1,10 +1,14 @@
 digraph {
-	Drawable -> SlideElement, Slide [dir=back];
-	SlideElement -> Array1DElement, Array2DElement, LatexElement [dir=back];
-	SlideElement -> SourceCodeElement, VariableElement [dir=back];
-	SlideElement -> BlockElement [dir=back];
+	// overlap = false
+	node [style="rounded", shape=record, fontsize=12]
+	edge [dir=back]
+
+	Drawable -> SlideElement, Slide
+	SlideElement -> Array1DElement, Array2DElement, LatexElement
+	SlideElement -> SourceCodeElement, VariableElement
+	SlideElement -> BlockElement, ItemizeElement
 
 	SlideBuilder
 
-	Presentation -> HTMLPresentation, LatexPresentation [dir=back];
+	Presentation -> HTMLPresentation, LatexPresentation
 }

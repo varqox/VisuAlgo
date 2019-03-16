@@ -6,6 +6,7 @@ all: visualgo.a hierarchy.svg foo
 
 VISUALGO_SRCS := \
 	src/block_element.cc \
+	src/itemize_element.cc \
 	src/latex_element.cc \
 	src/latex_presentation.cc \
 	src/slide.cc \

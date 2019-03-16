@@ -1,8 +1,9 @@
+#include "../include/block_element.h"
+#include "../include/itemize_element.h"
 #include "../include/latex_element.h"
 #include "../include/latex_presentation.h"
 #include "../include/slide_builder.h"
 #include "../include/source_code_element.h"
-#include "../include/block_element.h"
 
 #include <iostream>
 
@@ -25,7 +26,12 @@ int main() {
 		slide.add_element(
 			BlockElement("Standardowa implementacja", BlockElement::GREEN,
 				LatexElement("\\LaTeX~is coming..."), code));
-		slide.add_element(LatexElement("Działa w $O(n \\lg n)$"));
+
+		ItemizeElement itmz;
+		itmz.add_item(LatexElement("Znajduje liczby pierwsze od 2 do $N - 1$"));
+		itmz.add_item(LatexElement("Działa w $O(n \\lg n)$"));
+		slide.add_element(itmz);
+
 		pres.add_slide(slide);
 	}
 
