@@ -85,7 +85,7 @@ inline std::string Array1D<T>::draw_cell(size_t cell_number) const {
 
 	std::stringstream ret;
 	if (!cell_color.empty()) {
-		ret << "\\cellcolor[HTML]{" << cell_color << "}";
+		ret << "\\cellcolor[HTML]{" << cell_color << "} ";
 	}
 	ret << vec_[cell_number] << " ";
 	return ret.str();
@@ -142,10 +142,10 @@ inline std::string Array1D<T>::draw_cells() const {
 	for (size_t i = 0; i < vec_.size(); i++) {
 		ret << draw_cell(i);
 		if (i < vec_.size() - 1)  {
-			ret<< " &";
+			ret<< "& ";
 		}
 		else {
-			ret << "\n";
+			ret << "\\\\\n";
 		}
 	}
 	return ret.str();
@@ -166,9 +166,9 @@ inline LatexCode Array1D<T>::draw_as_latex() const {
 
 	auto add_hline = [&] {
 		if (is_labeled_)
-			ret << " \\hhline{~|*{" << vec_.size() << "}{-}}\n  ";
+			ret << "  \\hhline{~|*{" << vec_.size() << "}{-}}\n  ";
 		else
-			ret << " \\hline";
+			ret << "  \\hline\n";
 	};
 
 	add_hline();
@@ -176,17 +176,16 @@ inline LatexCode Array1D<T>::draw_as_latex() const {
 	if (is_labeled_) {
 		ret << name_ << "[i] &";
 	}
-	ret << draw_cells();
+	ret <<"   " << draw_cells();
 
-	ret << "\\\\ ";
 	add_hline();
 
 	if (is_labeled_) {
 		ret << draw_bottom_labels();
 	}
 
-	ret << " \n \\end{tabular} \n";
-	ret << "  \\end{table}\n";
+	ret << " \\end{tabular}\n";
+	ret << "\\end{table}\n";
 
 	return ret.str();
 }
