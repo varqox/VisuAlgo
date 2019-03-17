@@ -145,17 +145,20 @@ inline LatexCode Array1D<T>::draw_as_latex() const {
 		ret << "c|";
 	}
 
-	ret << draw_cells();
-
-	ret << "}\n  \\cline{" << cline_begin << "-" << cline_end << "}\n  ";
+	ret << "}\n";
+	ret << " \\cline{" << cline_begin << "-" << cline_end << "}\n  ";
 
 	if (is_labeled_) {
 		ret << name_ << "[i] &";
 	}
+	ret << draw_cells();
+
 	ret << "\\\\  \\cline{" << cline_begin << "-" << cline_end << "}\n  ";
+
 	if (is_labeled_) {
 		ret << draw_bottom_labels();
 	}
+	
 	ret << " \n \\end{tabular} \n";
 	ret << "  \\end{table}\n";
 
