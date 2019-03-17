@@ -27,7 +27,7 @@ public:
 	}
 
 	void set_elem(size_t i, size_t j, T val) {
-		vec_[i * n_ + j] = std::move(val);
+		vec_[i * m_ + j] = std::move(val);
 	}
 
 	virtual LatexCode draw_as_latex() const override {
@@ -41,10 +41,10 @@ public:
         for (size_t i = 0; i < n_; i++) {
         	for (size_t j = 0; j < m_; j++) {
         		if (j < m_ - 1)  {
-                	ret << " " << vec_[i * n_ + j] << " &";
+                	ret << " " << vec_[i * m_ + j] << " &";
             	}
             	else {
-                	ret << " " << vec_[i * n_ + j] << "\\\\\n  \\hline\n";
+                	ret << " " << vec_[i * m_ + j] << "\\\\\n  \\hline\n";
             	}
         	}
 
