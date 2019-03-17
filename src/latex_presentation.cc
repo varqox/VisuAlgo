@@ -70,6 +70,7 @@ std::string LatexPresentation::to_str() const {
 		"\\usepackage[utf8]{inputenc}\n"
 		"\\usepackage{lmodern}\n"
 		"\\usepackage{xcolor}\n"
+		"\\usepackage{hhline}\n"
 		"\\selectlanguage{polish}\n"
 		"\n"
 		"\\title[", title_, "]{", footer_title_, "}\n"));

@@ -128,15 +128,6 @@ inline std::string Array1D<T>::draw_cells() const {
 template <class T>
 inline LatexCode Array1D<T>::draw_as_latex() const {
 	std::stringstream ret;
-	size_t cline_begin, cline_end;
-	if (is_labeled_) {
-		cline_begin = 2;
-		cline_end = vec_.size() + 1;
-	}
-	else {
-		cline_begin = 1;
-		cline_end = vec_.size();
-	}
 	ret << "\\begin{table}[h!]\n \\begin{tabular}{";
 	if (is_labeled_) ret << "c";
 	ret << "|";
@@ -146,14 +137,23 @@ inline LatexCode Array1D<T>::draw_as_latex() const {
 	}
 
 	ret << "}\n";
-	ret << " \\cline{" << cline_begin << "-" << cline_end << "}\n  ";
+
+	auto add_hline = [&] {
+		if (is_labeled_)
+			ret << " \\hhline{~|*{" << vec_.size() << "}{-}}\n  ";
+		else
+			ret << " \\hline";
+	};
+
+	add_hline();
 
 	if (is_labeled_) {
 		ret << name_ << "[i] &";
 	}
 	ret << draw_cells();
 
-	ret << "\\\\  \\cline{" << cline_begin << "-" << cline_end << "}\n  ";
+	ret << "\\\\ ";
+	add_hline();
 
 	if (is_labeled_) {
 		ret << draw_bottom_labels();
