@@ -20,14 +20,14 @@ private:
 
 	std::string draw_bottom_labels() const;
 	std::string draw_cells() const;
-	std::string draw_cell(int cell_number) const;
+	std::string draw_cell(size_t cell_number) const;
 
 public:
 	Array1D();
 
 	Array1D(std::string name);
 
-	virtual std::unique_ptr<SlideElement> clone() const;
+	virtual std::unique_ptr<SlideElement> clone() const override;
 
 	void set(std::vector<T> vec) noexcept;
 
@@ -50,7 +50,7 @@ inline void Array1D<T>::set_color(size_t n, Color color) {
 }
 
 template <class T>
-inline std::string Array1D<T>::draw_cell(int cell_number) const {
+inline std::string Array1D<T>::draw_cell(size_t cell_number) const {
 	std::string cell_color = [&]{
 		switch (colors_[cell_number]) {
 			case BLUE: return "AFEEEE";
@@ -128,7 +128,7 @@ inline std::string Array1D<T>::draw_cells() const {
 template <class T>
 inline LatexCode Array1D<T>::draw_as_latex() const {
 	std::stringstream ret;
-	int cline_begin, cline_end;
+	size_t cline_begin, cline_end;
 	if (is_labeled_) {
 		cline_begin = 2;
 		cline_end = vec_.size() + 1;
@@ -158,7 +158,7 @@ inline LatexCode Array1D<T>::draw_as_latex() const {
 	if (is_labeled_) {
 		ret << draw_bottom_labels();
 	}
-	
+
 	ret << " \n \\end{tabular} \n";
 	ret << "  \\end{table}\n";
 
