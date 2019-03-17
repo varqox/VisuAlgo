@@ -27,7 +27,7 @@ int main() {
 		Slide slide;
 		slide.set_title("Sito Eratostenesa");
 		slide.add_elem(
-			Block("Standardowa implementacja", Block::GREEN,
+			Block("Standardowa implementacja", Color::BROWN,
 				Latex("\\LaTeX~is coming..."), code));
 
 		Itemize itmz;
@@ -49,28 +49,28 @@ int main() {
 	Array1D<int> arr("tab");
 	sb.add_elem(arr);
 	std::vector<int> vec{3, 1, 4, 1, 5, 9, 2, 6, 5};
-	arr.set(vec);
-	arr.set_color(4, Array1D<int>::GREEN);
-	arr.set_color(2, Array1D<int>::BLUE);
-	arr.set_color(7, Array1D<int>::RED);
+	arr.set(vec)
+	   .set_color(4, Color::GREEN)
+	   .set_color(2, Color::BLUE)
+	   .set_color(7, Color::RED)
+	   .set_color(1, Color::YELLOW)
+	   .set_color(3, Color::BROWN);
 
 	Array1D<int> arr2;
 	sb.add_elem(arr2);
-	arr2.set(vec);
-	arr2.set_color(4, Array1D<int>::GREEN);
-	arr2.set_color(2, Array1D<int>::BLUE);
-	arr2.set_color(7, Array1D<int>::RED);
+	arr2.set(vec)
+	    .set_whole_array_color(Color::YELLOW)
+	    .set_range_color(2, 4, Color::BROWN)
+	    .set_range_color(5, 6, std::nullopt);
 
 	Variable<double> var("pi");
 	var.set(3.14159265);
 	sb.add_elem(var);
 
-
 	pres.add_slide(sb.build());
-
 
 	pres.author("Dream team");
 	pres.date("12.03.2019");
 	pres.institute("MIMUW");
-	cout << pres.to_str() << std::endl;
+	cout << pres.to_str() << endl;
 }

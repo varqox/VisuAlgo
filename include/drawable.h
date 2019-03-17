@@ -13,6 +13,14 @@ public:
 	NotImplemented() : std::logic_error("Function not yet implemented") {}
 };
 
+enum class Color {
+	BLUE,
+	RED,
+	GREEN,
+	BROWN,
+	YELLOW,
+};
+
 class Drawable {
 public:
 	Drawable() = default;

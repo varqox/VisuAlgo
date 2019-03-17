@@ -25,9 +25,11 @@ Block& Block::add_elem(const SlideElement& elem) {
 LatexCode Block::draw_as_latex() const {
 	auto block_name = [&]{
 		switch (color_) {
-		case BLUE: return "block";
-		case RED: return "alertblock";
-		case GREEN: return "exampleblock";
+		case Color::BLUE: return "block";
+		case Color::RED: return "alertblock";
+		case Color::GREEN: return "exampleblock";
+		case Color::BROWN: return "block_brown";
+		case Color::YELLOW: return "block_yellow";
 		}
 	}();
 

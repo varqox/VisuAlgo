@@ -7,9 +7,6 @@
 namespace valgo {
 
 class Block : public SlideElement {
-public:
-	enum Color { BLUE, RED, GREEN };
-
 private:
 	std::string title_;
 	Color color_;
@@ -22,7 +19,7 @@ public:
 	Block(Block&&) noexcept = default;
 	Block& operator=(Block&&) noexcept = default;
 
-	explicit Block(std::string title, Color color = BLUE) noexcept;
+	explicit Block(std::string title, Color color = Color::BLUE) noexcept;
 
 	template<class... Elem>
 	explicit Block(std::string title, Color color, const SlideElement& first_elem,
