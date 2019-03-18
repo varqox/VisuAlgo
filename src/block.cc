@@ -23,21 +23,11 @@ Block& Block::add_elem(const SlideElement& elem) {
 }
 
 LatexCode Block::draw_as_latex() const {
-	auto block_name = [&]{
-		switch (color_) {
-		case Color::BLUE: return "block";
-		case Color::RED: return "alertblock";
-		case Color::GREEN: return "exampleblock";
-		case Color::BROWN: return "block_brown";
-		case Color::YELLOW: return "block_yellow";
-		}
-	}();
-
-	auto res = concat("\\begin{", block_name, "}{", title_, "}\n");
+	auto res = concat("\\begin{colorblock}{", color_.to_hex(), "}{",
+		contrast_color(color_).to_hex(), "}{", title_, "}\n");
 	for (auto const& elem : elems_)
 		back_insert(res, elem->draw_as_latex(), '\n');
-
-	return back_insert(res, "\\end{", block_name, "}");
+	return back_insert(res, "\\end{colorblock}");
 }
 
 HTMLCode Block::draw_as_html() const {

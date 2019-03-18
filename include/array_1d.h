@@ -1,5 +1,6 @@
 #pragma once
 
+#include "color.h"
 #include "slide_element.h"
 
 #include <optional>
@@ -70,22 +71,9 @@ inline Array1D<T>& Array1D<T>::set_whole_array_color(std::optional<Color> color)
 
 template <class T>
 inline std::string Array1D<T>::draw_cell(size_t cell_number) const {
-	std::string cell_color = [&] {
-		if (colors_[cell_number].has_value()) {
-			switch (colors_[cell_number].value()) {
-				case Color::BLUE: return "AFEEEE";
-				case Color::RED: return "FF6961";
-				case Color::GREEN: return "C0D890";
-				case Color::BROWN: return "96735A";
-				case Color::YELLOW: return "FFFF80";
-			}
-		}
-		return ""; // std::nullopt
-	}();
-
 	std::stringstream ret;
-	if (!cell_color.empty()) {
-		ret << "\\cellcolor[HTML]{" << cell_color << "}";
+	if (colors_[cell_number].has_value()) {
+		ret << "\\cellcolor[HTML]{" << colors_[cell_number].value().to_hex() << "}";
 	}
 	ret << vec_[cell_number] << " ";
 	return ret.str();
@@ -179,7 +167,7 @@ inline LatexCode Array1D<T>::draw_as_latex() const {
 	}
 	ret << draw_cells();
 
-	add_hline(); 
+	add_hline();
 
 	if (is_labeled_) {
 		ret << draw_bottom_labels();

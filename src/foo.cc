@@ -28,7 +28,7 @@ int main() {
 		Slide slide;
 		slide.set_title("Sito Eratostenesa");
 		slide.add_elem(
-			Block("Standardowa implementacja", Color::BROWN,
+			Block("Standardowa implementacja", Color::light_brown,
 				Latex("\\LaTeX~is coming..."), code));
 
 		Itemize itmz;
@@ -51,17 +51,17 @@ int main() {
 	sb.add_elem(arr);
 	std::vector<int> vec{3, 1, 4, 1, 5, 9, 2, 6, 5};
 	arr.set(vec)
-	   .set_color(4, Color::GREEN)
-	   .set_color(2, Color::BLUE)
-	   .set_color(7, Color::RED)
-	   .set_color(1, Color::YELLOW)
-	   .set_color(3, Color::BROWN);
+	   .set_color(4, Color::light_green)
+	   .set_color(2, Color::light_blue)
+	   .set_color(7, Color::light_red)
+	   .set_color(1, Color::light_yellow)
+	   .set_color(3, Color::light_brown);
 
 	Array1D<int> arr2;
 	sb.add_elem(arr2);
 	arr2.set(vec)
-	    .set_whole_array_color(Color::YELLOW)
-	    .set_range_color(2, 4, Color::BROWN)
+	    .set_whole_array_color(Color::light_yellow)
+	    .set_range_color(2, 4, Color::light_brown)
 	    .set_range_color(5, 6, std::nullopt);
 
 	Variable<double> var("pi");
@@ -78,9 +78,9 @@ int main() {
 			arr3.set_elem(i, j, 10 * (i + j) + i);
 		}
 	}
-	arr3.set_row_color(3, Color::BLUE);
-	arr3.set_column_color(4, Color::RED);
-	arr3.set_color(3, 4, Color::BROWN);
+	arr3.set_row_color(3, Color::light_blue);
+	arr3.set_column_color(4, Color::light_red);
+	arr3.set_color(3, 4, Color::light_brown);
 
 	sb.add_elem(arr3);
 	pres.add_slide(sb.build());

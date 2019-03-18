@@ -1,5 +1,6 @@
 #pragma once
 
+#include "color.h"
 #include "slide_element.h"
 
 #include <sstream>
@@ -104,21 +105,9 @@ public:
 
 	template <class T>
 	inline std::string Array2D<T>::draw_cell(size_t row, size_t column) const {
-		std::string cell_color = [&] {
-			if (colors_[row * m_ + column].has_value()) {
-				switch (colors_[row * m_ + column].value()) {
-					case Color::BLUE: return "AFEEEE";
-					case Color::RED: return "FF6961";
-					case Color::GREEN: return "C0D890";
-					case Color::BROWN: return "96735A";
-					case Color::YELLOW: return "FFFF80";
-				}
-			}
-		return ""; // std::nullopt
-		}();
 		std::stringstream ret;
-		if (!cell_color.empty()) {
-			ret << "\\cellcolor[HTML]{" << cell_color << "}";
+		if (colors_[row * m_ + column].has_value()) {
+			ret << "\\cellcolor[HTML]{" << colors_[row * m_ + column].value().to_hex() << "}";
 		}
 		ret << vec_[row * m_ + column] << " ";
 		return ret.str();
