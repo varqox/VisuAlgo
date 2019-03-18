@@ -16,9 +16,9 @@ private:
 	bool is_labeled_;
 	std::vector<std::optional<Color>> colors_;
 
-	std::string draw_bottom_labels() const;
-	std::string draw_cells() const;
-	std::string draw_cell(size_t cell_number) const;
+	LatexCode draw_bottom_labels() const;
+	LatexCode draw_cells() const;
+	LatexCode draw_cell(size_t cell_number) const;
 
 public:
 	Array1D();
@@ -85,7 +85,7 @@ inline std::string Array1D<T>::draw_cell(size_t cell_number) const {
 
 	std::stringstream ret;
 	if (!cell_color.empty()) {
-		ret << "\\cellcolor[HTML]{" << cell_color << "} ";
+		ret << "\\cellcolor[HTML]{" << cell_color << "}";
 	}
 	ret << vec_[cell_number] << " ";
 	return ret.str();
@@ -94,13 +94,13 @@ inline std::string Array1D<T>::draw_cell(size_t cell_number) const {
 template <class T>
 inline std::string Array1D<T>::draw_bottom_labels() const {
 	std::stringstream ret;
-	ret << "\\multicolumn{1}{c}{i} & ";
+	ret << " \\multicolumn{1}{c}{i} & ";
 	for (size_t i = 0; i < vec_.size(); i++) {
 		if (i < vec_.size() - 1)  {
 			ret << "\\multicolumn{1}{c}{" << i << "} & ";
 		}
 		else {
-			ret << "\\multicolumn{1}{c}{" << i << "} ";
+			ret << "\\multicolumn{1}{c}{" << i << "} \n";
 		}
 	}
 	return ret.str();
@@ -127,6 +127,7 @@ inline Array1D<T>& Array1D<T>::set(std::vector<T> vec) noexcept {
 template <class T>
 inline Array1D<T>& Array1D<T>::resize(size_t n) {
 	vec_.resize(n);
+	colors_.resize(n);
 	return *this;
 }
 
@@ -174,11 +175,11 @@ inline LatexCode Array1D<T>::draw_as_latex() const {
 	add_hline();
 
 	if (is_labeled_) {
-		ret << name_ << "[i] &";
+		ret << " " << name_ << "[i] & ";
 	}
-	ret <<"   " << draw_cells();
+	ret << draw_cells();
 
-	add_hline();
+	add_hline(); 
 
 	if (is_labeled_) {
 		ret << draw_bottom_labels();
