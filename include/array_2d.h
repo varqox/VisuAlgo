@@ -170,7 +170,7 @@ public:
 	inline LatexCode Array2D<T>::draw_as_latex() const {
 		std::stringstream ret;
 		ret << "\\begin{table}[h!]\n\\caption{" << name_ <<"[i][j]}\n \\begin{tabular}{";
-		if (is_labeled_) ret << "c";
+		if (is_labeled_) ret << "r";
 		ret << "|";
 
 		for (size_t i = 0; i < m_; i++) {
