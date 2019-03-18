@@ -10,7 +10,7 @@
 using namespace std;
 
 namespace valgo {
- 
+
 template <class T>
 class Array2D : public SlideElement {
 private:
@@ -56,7 +56,7 @@ public:
 
 	template <class T>
 	inline Array2D<T>::Array2D(std::string name) : name_(std::move(name)), is_labeled_(true) {}
-	
+
 	template <class T>
 	inline std::unique_ptr<SlideElement> Array2D<T>::clone() const {
 		 return std::make_unique<Array2D>(*this);
@@ -80,7 +80,7 @@ public:
 	template <class T>
 	inline Array2D<T>& Array2D<T>::set_color(size_t i, size_t j, std::optional<Color> color) {
 		colors_[i * m_ + j] = std::move(color);
-		return *this; 
+		return *this;
 	}
 
 	template <class T>
@@ -137,14 +137,14 @@ public:
 	template <class T>
 	inline LatexCode Array2D<T>::draw_labels() const {
 		std::stringstream ret;
-		ret << "   \\multicolumn{1}{c}{i" << "\\textbackslash" << " j} & ";
+		ret << "   \\diag{.1em}{1.1em}{\\footnotesize i}{\\footnotesize j} & ";
 		for (size_t j = 0; j < m_; j++) {
-			if (j < m_ - 1)  
+			if (j < m_ - 1)
 				ret << "\\multicolumn{1}{c}{" << j << "} & ";
-			
-			else 
+
+			else
 				ret << "\\multicolumn{1}{c}{" << j << "}\\\\\n";
-		
+
 		}
 
 		return ret.str();
