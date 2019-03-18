@@ -6,6 +6,7 @@
 #include "../include/source_code.h"
 #include "../include/array_1d.h"
 #include "../include/variable.h"
+#include "../include/array_2d.h"
 
 #include <iostream>
 #include <vector>
@@ -68,6 +69,22 @@ int main() {
 	sb.add_elem(var);
 
 	pres.add_slide(sb.build());
+
+	Array2D<int> arr3("Kuchar");
+		arr3.resize (5, 10);
+
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 10; j++) {
+			arr3.set_elem(i, j, 10 * (i + j) + i);
+		}
+	}
+	arr3.set_row_color(3, Color::BLUE);
+	arr3.set_column_color(4, Color::RED);
+	arr3.set_color(3, 4, Color::BROWN);
+
+	sb.add_elem(arr3);
+	pres.add_slide(sb.build());
+
 
 	pres.author("Dream team");
 	pres.date("12.03.2019");
