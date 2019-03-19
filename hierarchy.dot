@@ -4,11 +4,17 @@ digraph {
 	edge [dir=back]
 
 	Drawable -> SlideElement, Slide
-	SlideElement -> Array1D, Array2D, Latex
+	SlideElement -> Array1D, Array2D, Latex, Graph_
 	SlideElement -> SourceCode, Variable
 	SlideElement -> Block, Itemize
 
 	SlideBuilder
 
+	Color
+
+	Graph_ -> UndirectedGraph
+
 	Presentation -> HTMLPresentation, LatexPresentation
+
+	Graph_ [label="Graph"]
 }
