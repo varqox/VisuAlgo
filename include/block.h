@@ -20,7 +20,7 @@ public:
 	Block(Block&&) noexcept = default;
 	Block& operator=(Block&&) noexcept = default;
 
-	explicit Block(std::string title, Color color = Color::blue) noexcept;
+	explicit Block(std::string title, Color color = Color::BLUE) noexcept;
 
 	template<class... Elem>
 	explicit Block(std::string title, Color color, const SlideElement& first_elem,
