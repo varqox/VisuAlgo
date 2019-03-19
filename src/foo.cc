@@ -15,8 +15,62 @@
 using namespace std;
 using namespace valgo;
 
+LatexPresentation pres("Test", "Test presentation");
+SlideBuilder sb;
+UndirectedGraph<int, string, int> visu_g;
+
+vector<int> dijkstra(int n, const vector<vector<pair<int, int>>> &g, int source) {
+	vector<int> dist(n, 1e9);
+	dist[source] = 0;
+	visu_g.set_node_color(source, Color::LIGHT_YELLOW).set_node_info(source, "dist=0");
+
+	set<pair<int, int>> s = { {0, source} };
+
+	while (!s.empty()) {
+		int v = s.begin()->second;
+		s.erase(s.begin());
+		visu_g.set_node_color(v, Color::LIGHT_GREEN);
+		pres.add_slide(sb.build());
+
+		for (auto&& neighbor : g[v]) {
+			int u = neighbor.first, w = neighbor.second;
+
+			if (dist[u] > dist[v] + w) {
+				auto it = s.find({dist[u], u});
+				if (it != s.end())
+					s.erase(it);
+				dist[u] = dist[v] + w;
+				visu_g.set_node_info(u, "dist=" + to_string(dist[u]));
+				visu_g.set_node_color(u, Color::LIGHT_YELLOW);
+				s.emplace(dist[u], u);
+			}
+		}
+		pres.add_slide(sb.build());
+	}
+	return dist;
+}
+
 int main() {
-	LatexPresentation pres("Test", "Test presentation");
+	sb.add_elem(visu_g);
+	int n, m;
+	cin >> n >> m;
+
+	for (int i = 0; i < n; i++)
+		visu_g.add_node(i, "dist=inf").set_node_color(i, Color::LIGHT_RED);
+
+	vector<vector<pair<int, int>>> g(n);
+	for (int i = 0; i < m; i++) {
+		int a, b, c;
+		cin >> a >> b >> c;
+		g[a].emplace_back(b, c);
+		g[b].emplace_back(a, c);
+		visu_g.add_edge(a, b, c);
+	}
+
+	dijkstra(n, g, 0);
+
+	sb.remove_all_elements();
+
 	{
 		SourceCode code;
 		code.set_lang("C++").set_code(
@@ -39,8 +93,6 @@ int main() {
 
 		pres.add_slide(slide);
 	}
-
-	SlideBuilder sb;
 
 	constexpr int N = 12;
 	Array1D<bool> vtab("pierwsza");
@@ -121,39 +173,39 @@ int main() {
 	pres.add_slide(sb.build());
 
 	sb.remove_all_elements();
-	UndirectedGraph<int, string, int> g;
-	sb.add_elem(g);
+	UndirectedGraph<int, string, int> gg;
+	sb.add_elem(gg);
 
 	constexpr int init_level = 8;
 	int level = init_level;
 	for (int i = 1; i < level; i++)
-		g.add_edge(i, i * 2, i).add_edge(i, i * 2 + 1, i);
-	g.set_every_node_color(Color::LIGHT_YELLOW).set_every_edge_color(Color::BLUE);
+		gg.add_edge(i, i * 2, i).add_edge(i, i * 2 + 1, i);
+	gg.set_every_node_color(Color::LIGHT_YELLOW).set_every_edge_color(Color::BLUE);
 	for (int i = level; i < level * 2; i++)
-		g.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
+		gg.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
 	pres.add_slide(sb.build().set_title("hide\\_node"));
 	while (level != 1) {
 		for (int i = level; i < level * 2; i++)
-			g.hide_node(i);
+			gg.hide_node(i);
 		for (int i = level / 2; i < level; i++)
-			g.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
+			gg.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
 		pres.add_slide(sb.build().set_title("hide\\_node"));
 		level /= 2;
 	}
 
-	g.remove_all_nodes();
+	gg.remove_all_nodes();
 	level = init_level;
 	for (int i = 1; i < level; i++)
-		g.add_edge(i, i * 2, i).add_edge(i, i * 2 + 1, i);
-	g.set_every_node_color(Color::LIGHT_YELLOW).set_every_edge_color(Color::BLUE);
+		gg.add_edge(i, i * 2, i).add_edge(i, i * 2 + 1, i);
+	gg.set_every_node_color(Color::LIGHT_YELLOW).set_every_edge_color(Color::BLUE);
 	for (int i = level; i < level * 2; i++)
-		g.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
+		gg.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
 	pres.add_slide(sb.build().set_title("remove\\_node"));
 	while (level != 1) {
 		for (int i = level; i < level * 2; i++)
-			g.remove_node(i);
+			gg.remove_node(i);
 		for (int i = level / 2; i < level; i++)
-			g.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
+			gg.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
 		pres.add_slide(sb.build().set_title("remove\\_node"));
 		level /= 2;
 	}
@@ -220,7 +272,7 @@ int main() {
 
 	szukamy.set(sz);
 
-	int l = 0, r = b.size() - 1, ans = -1;
+	int l = 0, r = b.size() - 1;
 	while (l < r) {
 		lewy.set(l);
 		prawy.set(r);
@@ -252,3 +304,14 @@ int main() {
 	pres.institute("MIMUW");
 	cout << pres.to_str() << endl;
 }
+/*
+6 8
+0 1 8
+0 3 7
+3 4 2
+0 4 10
+1 4 3
+4 2 3
+4 5 1
+5 2 1
+*/

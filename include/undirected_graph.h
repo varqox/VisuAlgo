@@ -390,6 +390,7 @@ inline LatexCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>
 	// configuration
 	ss << "digraph {\n";
 	ss << " overlap=false;\n";
+	ss << " sep=\"+15,15\"\n";
 	ss << " size=\"8,4.8\";\n";
 	ss << " node [style=\"rounded,filled\", shape=record, fontsize=11];\n";
 	ss << " edge [arrowhead=none];\n";
