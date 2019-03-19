@@ -29,7 +29,7 @@ vector<int> dijkstra(int n, const vector<vector<pair<int, int>>> &g, int source)
 	while (!s.empty()) {
 		int v = s.begin()->second;
 		s.erase(s.begin());
-		visu_g.set_node_color(v, Color::LIGHT_GREEN);
+		visu_g.set_node_color(v, Color::GREEN);
 		pres.add_slide(sb.build());
 
 		for (auto&& neighbor : g[v]) {
@@ -45,6 +45,7 @@ vector<int> dijkstra(int n, const vector<vector<pair<int, int>>> &g, int source)
 				s.emplace(dist[u], u);
 			}
 		}
+		visu_g.set_node_color(v, Color::LIGHT_GREEN);
 		pres.add_slide(sb.build());
 	}
 	return dist;
