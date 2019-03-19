@@ -7,6 +7,7 @@
 #include "../include/array_1d.h"
 #include "../include/variable.h"
 #include "../include/array_2d.h"
+#include "../include/undirected_graph.h"
 
 #include <iostream>
 #include <vector>
@@ -40,6 +41,40 @@ int main() {
 	}
 
 	SlideBuilder sb;
+
+	constexpr int N = 12;
+	Array1D<bool> vtab("pierwsza");
+	sb.add_elem(vtab);
+	vtab.resize(N);
+
+	vector<bool> is_prime(N, true);
+	is_prime[0] = is_prime[1] = false;
+	vtab.set_color(0, Color::LIGHT_RED);
+	vtab.set_color(1, Color::LIGHT_RED);
+	pres.add_slide(sb.build());
+	Variable<int> wyk("wykreślmy wielokrotności");
+	sb.add_elem(wyk);
+
+	for (int i = 2; i < N; ++i) {
+		if (is_prime[i]) {
+			wyk.set(i);
+			vtab.set_color(i, Color::LIGHT_YELLOW);
+			pres.add_slide(sb.build());
+			for (int j = i + i; j < N; j += i) {
+				Variable<int> wyk2("teraz wykreśliliśmy");
+				wyk2.set(j);
+				sb.add_elem(wyk2);
+				is_prime[j] = false;
+				vtab.set_color(j, Color::LIGHT_RED);
+				vtab.set_elem(j, false);
+				pres.add_slide(sb.build());
+				sb.remove_elem(wyk2);
+			}
+		}
+	}
+
+	sb.remove_all_elements();
+
 	Latex le;
 	sb.add_elem(le);
 	for (int i = 0; i < 4; ++i) {
@@ -85,6 +120,132 @@ int main() {
 	sb.add_elem(arr3);
 	pres.add_slide(sb.build());
 
+	sb.remove_all_elements();
+	UndirectedGraph<int, string, int> g;
+	sb.add_elem(g);
+
+	constexpr int init_level = 8;
+	int level = init_level;
+	for (int i = 1; i < level; i++)
+		g.add_edge(i, i * 2, i).add_edge(i, i * 2 + 1, i);
+	g.set_every_node_color(Color::LIGHT_YELLOW).set_every_edge_color(Color::BLUE);
+	for (int i = level; i < level * 2; i++)
+		g.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
+	pres.add_slide(sb.build().set_title("hide\\_node"));
+	while (level != 1) {
+		for (int i = level; i < level * 2; i++)
+			g.hide_node(i);
+		for (int i = level / 2; i < level; i++)
+			g.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
+		pres.add_slide(sb.build().set_title("hide\\_node"));
+		level /= 2;
+	}
+
+	g.remove_all_nodes();
+	level = init_level;
+	for (int i = 1; i < level; i++)
+		g.add_edge(i, i * 2, i).add_edge(i, i * 2 + 1, i);
+	g.set_every_node_color(Color::LIGHT_YELLOW).set_every_edge_color(Color::BLUE);
+	for (int i = level; i < level * 2; i++)
+		g.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
+	pres.add_slide(sb.build().set_title("remove\\_node"));
+	while (level != 1) {
+		for (int i = level; i < level * 2; i++)
+			g.remove_node(i);
+		for (int i = level / 2; i < level; i++)
+			g.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
+		pres.add_slide(sb.build().set_title("remove\\_node"));
+		level /= 2;
+	}
+
+	sb.remove_all_elements();
+	UndirectedGraph<int, string, int> h;
+	sb.add_elem(h);
+
+	h.add_edge(1, 2)
+	 .add_edge(3, 2)
+	 .add_edge(2, 4)
+	 .add_edge(4, 5)
+	 .add_edge(4, 6)
+	 .add_edge(4, 7)
+	 .add_edge(10, 5)
+	 .add_edge(9, 6)
+	 .add_edge(9, 8)
+	 .add_edge(3, 8)
+	 .add_edge(3, 9)
+	 .add_edge(2, 10)
+	 .add_edge(10, 11)
+	 .add_edge(11, 11)
+	 .set_node_color(1, Color::RED)
+	 .set_node_color(2, Color::GREEN)
+	 .set_node_color(3, Color::LIGHT_BLUE)
+	 .set_node_color(4, Color::YELLOW)
+	 .set_node_color(5, Color::LIGHT_BROWN)
+	 .set_node_color(6, Color::RED)
+	 .set_node_color(7, Color::GREEN)
+	 .set_node_color(8, Color::LIGHT_BLUE)
+	 .set_node_color(9, Color::YELLOW)
+	 .set_node_color(10, Color::LIGHT_BROWN)
+	 .set_node_color(11, Color::RED)
+	 .set_node_info(1, "hejka1\\nxxx")
+	 .set_node_info(2, "hejka2\\nxxx")
+	 .set_node_info(3, "hejka3\\nxxx")
+	 .set_node_info(4, "hejka4\\nxxx")
+	 .set_node_info(5, "hejka5\\nxxx")
+	 .set_node_info(6, "hejka6\\nxxx")
+	 .set_node_info(7, "hejka7\\nxxx")
+	 .set_node_info(8, "hejka8\\nxxx")
+	 .set_node_info(9, "hejka9\\nxxx")
+	 .set_node_info(10, "hejka10\\nxxx")
+	 .set_node_info(11, "hejka11\\nxxx");
+
+	pres.add_slide(sb.build());
+
+	sb.remove_all_elements();
+
+	int sz = 4;
+	Array1D<int> bins("binsearch");
+	Variable<int> szukamy("szukamy");
+	Variable<int> lewy("lewy");
+	Variable<int> prawy("prawy");
+	sb.add_elem(bins);
+	sb.add_elem(szukamy);
+	sb.add_elem(lewy);
+	sb.add_elem(prawy);
+
+	vector<int> b = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+	bins.resize(11);
+	for (size_t i = 0; i < b.size(); i++)
+		bins.set_elem(i, b[i]);
+
+	szukamy.set(sz);
+
+	int l = 0, r = b.size() - 1, ans = -1;
+	while (l < r) {
+		lewy.set(l);
+		prawy.set(r);
+		int mid = (l + r + 1) / 2;
+		bins.set_whole_array_color(std::nullopt);
+		bins.set_range_color(l, r, Color::LIGHT_GREEN);
+		pres.add_slide(sb.build());
+		bins.set_color(mid, Color::LIGHT_YELLOW);
+		pres.add_slide(sb.build());
+		if (b[mid] <= sz) {
+			l = mid;
+		}
+		else {
+			r = mid - 1;
+		}
+	}
+
+	lewy.set(l);
+	prawy.set(r);
+	int mid = (l + r + 1) / 2;
+	bins.set_whole_array_color(std::nullopt);
+	bins.set_range_color(l, r, Color::LIGHT_GREEN);
+	pres.add_slide(sb.build());
+	bins.set_color(mid, Color::LIGHT_YELLOW);
+	pres.add_slide(sb.build());
 
 	pres.author("Dream team");
 	pres.date("12.03.2019");
