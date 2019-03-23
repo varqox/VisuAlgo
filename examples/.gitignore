@@ -1,0 +1,9 @@
+# Generated files
+*.pdf
+
+# Others
+arrays
+binsearch
+dijkstra
+graph
+sieve

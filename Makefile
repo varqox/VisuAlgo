@@ -1,7 +1,7 @@
 include Makefile.config
 
 .PHONY: all
-all: visualgo.a hierarchy.svg foo dijkstra arrays sieve binsearch graph
+all: visualgo.a hierarchy.svg examples
 	@printf "\033[32mBuild finished\033[0m\n"
 
 VISUALGO_SRCS := \
@@ -25,34 +25,49 @@ hierarchy.svg: hierarchy.dot
 		$(call TIME_CMD,DOT) \
 		dot -Tsvg -o $@ $^
 
-$(eval $(call load_dependencies, src/foo.cc))
-foo: src/foo.o visualgo.a
+EXAMPLES_SRCS := \
+	examples/arrays.cc \
+	examples/binsearch.cc \
+	examples/dijkstra.cc \
+	examples/graph.cc \
+	examples/sieve.cc
+
+$(eval $(call load_dependencies, $(EXAMPLES_SRCS)))
+EXAMPLES_OBJS := $(call SRCS_TO_OBJS, $(EXAMPLES_SRCS))
+EXAMPLES_EXECS := $(patsubst %.o, %, $(EXAMPLES_OBJS))
+
+$(EXAMPLES_EXECS): %: %.o visualgo.a
 	$(LINK)
 
-$(eval $(call load_dependencies, examples/dijkstra.cc))
-dijkstra: examples/dijkstra.o visualgo.a
-	$(LINK)
+.PHONY:
+examples: $(EXAMPLES_EXECS)
 
-$(eval $(call load_dependencies, examples/binsearch.cc))
-binsearch: examples/binsearch.o visualgo.a
-	$(LINK)
+EXAMPLES_PDFS := $(patsubst %, %.pdf, $(EXAMPLES_EXECS))
 
-$(eval $(call load_dependencies, examples/arrays.cc))
-arrays: examples/arrays.o visualgo.a
-	$(LINK)
+.ONESHELL:
+$(EXAMPLES_PDFS): %.pdf: %
+	DEST_DIR=$$(pwd)/examples/
+	TMP_DIR=$$(mktemp -d)
+	NAME=$(patsubst examples/%,%, $*)
+	$(Q)cd "$$TMP_DIR"
+	$(Q)"$$DEST_DIR$$NAME" > "$$NAME.tex"
+	# Need to run latex twice to get the correct page numbers
+	$(Q)echo | pdflatex --shell-escape "$$NAME.tex" && \
+		$(Q)echo | pdflatex --shell-escape "$$NAME.tex"
+	RET=$$?
+	$(Q)if [ "$$RET" = "0" ]; then cp "$$NAME.pdf" "$$DEST_DIR"; fi
+	$(Q)rm -rf "$$TMP_DIR"
+	$(Q)exit $$RET
 
-$(eval $(call load_dependencies, examples/sieve.cc))
-sieve: examples/sieve.o visualgo.a
-	$(LINK)
-
-$(eval $(call load_dependencies, examples/graph.cc))
-graph: examples/graph.o visualgo.a
-	$(LINK)
+examples/examples.pdf: $(EXAMPLES_PDFS)
+	$(Q)pdfunite $(EXAMPLES_PDFS) $@
+	@printf "\033[32mCombined generated pdfs into \033[1;32m$@\033[0m\n"
 
 .PHONY: clean
-clean: OBJS := $(VISUALGO_OBJS) src/foo.o examples/dijkstra.o examples/binsearch.o examples/arrays.o examples/sieve.o examples/graph.o
+clean: OBJS := $(VISUALGO_OBJS) $(EXAMPLES_OBJS)
 clean:
-	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo) visualgo.a dijkstra binsearch arrays sieve graph
+	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo) visualgo.a $(EXAMPLES_EXECS) $(EXAMPLES_PDFS) examples/examples.pdf
+	$(Q)find examples -type f -name '*.tex' | xargs rm -f
 	$(Q)find src -type f -name '*.deps' | xargs rm -f
 
 .PHONY: help
