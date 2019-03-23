@@ -29,30 +29,30 @@ $(eval $(call load_dependencies, src/foo.cc))
 foo: src/foo.o visualgo.a
 	$(LINK)
 
-$(eval $(call load_dependencies, src/dijkstra.cc))
-dijkstra: src/dijkstra.o visualgo.a
+$(eval $(call load_dependencies, src/dijkstra_example.cc))
+dijkstra_example: src/dijkstra_example.o visualgo.a
 	$(LINK)
 
-$(eval $(call load_dependencies, src/binsearch.cc))
-binsearch: src/binsearch.o visualgo.a
+$(eval $(call load_dependencies, src/binsearch_example.cc))
+binsearch_example: src/binsearch_example.o visualgo.a
 	$(LINK)
 
-$(eval $(call load_dependencies, src/arrays.cc))
-arrays: src/arrays.o visualgo.a
+$(eval $(call load_dependencies, src/arrays_example.cc))
+arrays_example: src/arrays_example.o visualgo.a
 	$(LINK)
 
-$(eval $(call load_dependencies, src/sieve.cc))
-sieve: src/sieve.o visualgo.a
+$(eval $(call load_dependencies, src/sieve_example.cc))
+sieve_example: src/sieve_example.o visualgo.a
 	$(LINK)
 
-$(eval $(call load_dependencies, src/graph.cc))
-graph: src/graph.o visualgo.a
+$(eval $(call load_dependencies, src/graph_example.cc))
+graph_example: src/graph_example.o visualgo.a
 	$(LINK)
 
 .PHONY: clean
-clean: OBJS := $(VISUALGO_OBJS) src/foo.o src/dijkstra.o src/binsearch.o src/arrays.o src/sieve.o src/graph.o
+clean: OBJS := $(VISUALGO_OBJS) src/foo.o src/dijkstra_example.o src/binsearch_example.o src/arrays_example.o src/sieve_example.o src/graph_example.o
 clean:
-	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo) visualgo.a foo dijkstra tablice binsearch sieve graph
+	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo) visualgo.a foo dijkstra_example tablice_example binsearch_example sieve_example graph_example
 	$(Q)find src -type f -name '*.deps' | xargs rm -f
 
 .PHONY: help
