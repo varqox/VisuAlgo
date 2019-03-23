@@ -1,6 +1,6 @@
 # VisuAlgo
 
-Wymagane narzędzia:
+Wymagane narzędzia:<br />
 -LaTeX (wraz z biblioteką beamer)<br />
 -graphviz<br />
 -pdfunite
@@ -13,8 +13,7 @@ stworzyć prezentację w pdfie, która obrazuje ich działanie w wybranym algory
  
 Przykłady użycia biblioteki znajdują się w katalogu examples w plikach .cc
 
-Spis przykładowych prezentacji (wszystkie w folderze examples):
-
+Spis przykładowych prezentacji (wszystkie w folderze examples):<br />
 -arrays.pdf - demonstruje przykłady tablic jedno- i dwuwymiarowych oraz kolorowanie pól<br />
 -binsearch.pdf - demonstruje działanie algorytmu binsearch<br />
 -dijkstra.pdf - demonstruje wizualizację grafów na przykładzie algorytmu dijkstry <br />
