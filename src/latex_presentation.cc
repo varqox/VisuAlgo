@@ -48,7 +48,9 @@ void LatexPresentation::add_slide(const Slide& slide) {
 }
 
 std::string LatexPresentation::to_str() const {
-	std::string ret(concat("\\documentclass[table]{beamer}\n"
+	std::string ret(concat(
+		"\\pdfminorversion=5\n"
+		"\\documentclass[table]{beamer}\n"
 		"%\n"
 		"% Choose how your presentation looks.\n"
 		"%\n"

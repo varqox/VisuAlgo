@@ -7,7 +7,7 @@ namespace valgo {
 
 std::string Color::to_hex() const {
 	std::stringstream s;
-	s << std::hex
+	s << std::uppercase << std::hex
 	  << std::setw(2) << std::setfill('0') << (int)r_
 	  << std::setw(2) << std::setfill('0') << (int)g_
 	  << std::setw(2) << std::setfill('0') << (int)b_;
