@@ -16,7 +16,7 @@ make
 ```
 
 ## Przykłady 
-W folderze examples znajdują się przykłady ilustrujące sposoby użycia biblioteki. Aby je zbudować, należy użyć komendy:
+W folderze `examples/` znajdują się przykłady ilustrujące sposoby użycia biblioteki. Aby je zbudować, należy użyć komendy:
 ```sh
 make examples
 ```
