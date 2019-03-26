@@ -1,7 +1,8 @@
 digraph {
 	// overlap = false
-	node [style="rounded", shape=record, fontsize=12]
-	edge [dir=back]
+	outputorder="edgesfirst"
+	node [style="rounded,filled", shape=record, fontsize=12, fillcolor=white]
+	edge [dir=back, headclip=false]
 
 	Drawable -> SlideElement, Slide
 	SlideElement -> Array1D, Array2D, Latex, Graph_
