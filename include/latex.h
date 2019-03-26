@@ -6,17 +6,17 @@ namespace valgo {
 
 class Latex : public SlideElement {
 private:
-	std::string latex_;
+	LatexCode latex_;
 
 public:
 	Latex() = default;
 
-	explicit Latex(std::string latex) noexcept;
+	explicit Latex(LatexCode latex) noexcept;
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
 	// Returns *this to allow chaining
-	Latex& set(std::string latex) noexcept;
+	Latex& set(LatexCode latex) noexcept;
 
 	virtual LatexCode draw_as_latex() const override;
 

@@ -9,7 +9,7 @@ namespace valgo {
 
 class Block : public SlideElement {
 private:
-	std::string title_;
+	LatexCode title_;
 	Color color_;
 	std::vector<std::unique_ptr<SlideElement>> elems_;
 
@@ -20,19 +20,19 @@ public:
 	Block(Block&&) noexcept = default;
 	Block& operator=(Block&&) noexcept = default;
 
-	explicit Block(std::string title, Color color = Color::BLUE) noexcept;
+	explicit Block(LatexCode title, Color color = Color::BLUE) noexcept;
 
 	template<class... Elem>
-	explicit Block(std::string title, Color color, const SlideElement& first_elem,
+	explicit Block(LatexCode title, Color color, const SlideElement& first_elem,
 		const Elem&... elems);
 
 	template<class... Elem>
-	explicit Block(std::string title, const SlideElement& first_elem, const Elem&... elems);
+	explicit Block(LatexCode title, const SlideElement& first_elem, const Elem&... elems);
 
 	std::unique_ptr<SlideElement> clone() const override;
 
 	// Returns *this to allow chaining
-	Block& set_title(std::string title) noexcept;
+	Block& set_title(LatexCode title) noexcept;
 
 	// Returns *this to allow chaining
 	Block& set_color(Color color) noexcept;
@@ -47,11 +47,11 @@ public:
 
 /****************** Implementation ******************/
 
-inline Block::Block(std::string title, Color color) noexcept
+inline Block::Block(LatexCode title, Color color) noexcept
 	: title_(std::move(title)), color_(color) {}
 
 template<class... Elem>
-inline Block::Block(std::string title, const SlideElement& first_elem, const Elem&... elems)
+inline Block::Block(LatexCode title, const SlideElement& first_elem, const Elem&... elems)
 	: Block(std::move(title))
 {
 	elems_.reserve(1 + sizeof...(elems));
@@ -60,7 +60,7 @@ inline Block::Block(std::string title, const SlideElement& first_elem, const Ele
 }
 
 template<class... Elem>
-inline Block::Block(std::string title, Color color, const SlideElement& first_elem,
+inline Block::Block(LatexCode title, Color color, const SlideElement& first_elem,
 		const Elem&... elems)
 	: Block(std::move(title), color)
 {
@@ -69,7 +69,7 @@ inline Block::Block(std::string title, Color color, const SlideElement& first_el
 	(elems_.emplace_back(elems.clone()), ...);
 }
 
-inline Block& Block::set_title(std::string title) noexcept {
+inline Block& Block::set_title(LatexCode title) noexcept {
 	title_ = std::move(title);
 	return *this;
 }

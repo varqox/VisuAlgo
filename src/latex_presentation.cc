@@ -3,43 +3,43 @@
 
 namespace valgo {
 
-std::string LatexPresentation::title() const {
+LatexCode LatexPresentation::title() const {
 	return title_;
 }
 
-void LatexPresentation::title(std::string new_title) {
+void LatexPresentation::title(LatexCode new_title) {
 	title_ = std::move(new_title);
 }
 
-std::string LatexPresentation::footer_title() const {
+LatexCode LatexPresentation::footer_title() const {
 	return footer_title_;
 }
 
-void LatexPresentation::footer_title(std::string new_footer_title) {
+void LatexPresentation::footer_title(LatexCode new_footer_title) {
 	footer_title_ = std::move(new_footer_title);
 }
 
-std::optional<std::string> LatexPresentation::author() const {
+std::optional<LatexCode> LatexPresentation::author() const {
 	return author_;
 }
 
-void LatexPresentation::author(std::optional<std::string> new_author) {
+void LatexPresentation::author(std::optional<LatexCode> new_author) {
 	author_ = std::move(new_author);
 }
 
-std::optional<std::string> LatexPresentation::date() const {
+std::optional<LatexCode> LatexPresentation::date() const {
 	return date_;
 }
 
-void LatexPresentation::date(std::optional<std::string> new_date) {
+void LatexPresentation::date(std::optional<LatexCode> new_date) {
 	date_ = std::move(new_date);
 }
 
-std::optional<std::string> LatexPresentation::institute() const {
+std::optional<LatexCode> LatexPresentation::institute() const {
 	return institute_;
 }
 
-void LatexPresentation::institute(std::optional<std::string> new_institute) {
+void LatexPresentation::institute(std::optional<LatexCode> new_institute) {
 	institute_ = std::move(new_institute);
 }
 

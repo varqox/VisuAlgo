@@ -5,7 +5,7 @@
 namespace valgo {
 
 class HTMLPresentation : public Presentation {
-	std::string content_;
+	HTMLCode content_;
 
 public:
 	HTMLPresentation() = default;

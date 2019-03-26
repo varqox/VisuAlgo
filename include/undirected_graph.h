@@ -23,7 +23,7 @@ protected:
 
 		Node(NodeId id, std::optional<NodeInfo> info = std::nullopt);
 
-		std::string to_dot() const;
+		DOTCode to_dot() const;
 	};
 
 	struct Edge {
@@ -35,7 +35,7 @@ protected:
 
 		Edge(NodeId from, NodeId to, std::optional<EdgeInfo> info = std::nullopt);
 
-		std::string to_dot(const std::map<NodeId, Node>& nodes, bool reversed = false) const;
+		DOTCode to_dot(const std::map<NodeId, Node>& nodes, bool reversed = false) const;
 	};
 
 	std::map<NodeId, Node> nodes_;
@@ -104,7 +104,7 @@ inline UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::Node::Node(NodeId id, std::o
 	: id_(std::move(id)), info_(std::move(info)) {}
 
 template<class NodeId, class NodeInfo, class EdgeInfo>
-inline std::string UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::Node::to_dot() const {
+inline DOTCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::Node::to_dot() const {
 	std::stringstream ss;
 	ss << id_ << " [";
 
@@ -128,8 +128,8 @@ inline UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::Edge::Edge(NodeId from, Node
     : from_(std::move(from)), to_(std::move(to)), info_(std::move(info)) {}
 
 template<class NodeId, class NodeInfo, class EdgeInfo>
-inline std::string UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::Edge::to_dot(const std::map<NodeId, Node>& nodes,
-                                                                             bool reversed) const {
+inline DOTCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::Edge::to_dot(const std::map<NodeId, Node>& nodes,
+                                                                         bool reversed) const {
 	std::stringstream ss;
 	if (reversed)
 		ss << to_ << " -> " << from_;

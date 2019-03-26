@@ -2,6 +2,7 @@
 
 #include "slide_element.h"
 
+#include <sstream>
 #include <vector>
 
 namespace valgo {
@@ -9,11 +10,11 @@ namespace valgo {
 template<class T>
 class Variable : public SlideElement {
 private:
-	const std::string name_;
+	const LatexCode name_;
 	T var_;
 
 public:
-	Variable(std::string name);
+	Variable(LatexCode name);
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
@@ -27,7 +28,7 @@ public:
 /****************** Implementation ******************/
 
 template<class T>
-inline Variable<T>::Variable(std::string name) : name_(std::move(name)) {}
+inline Variable<T>::Variable(LatexCode name) : name_(std::move(name)) {}
 
 template<class T>
 inline void Variable<T>::set(T var) {

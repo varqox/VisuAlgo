@@ -7,7 +7,7 @@ std::unique_ptr<SlideElement> SourceCode::clone() const {
 	return std::make_unique<SourceCode>(*this);
 }
 
-SourceCode& SourceCode::set_title(std::optional<std::string> title) {
+SourceCode& SourceCode::set_title(std::optional<LatexCode> title) {
 	title_ = std::move(title);
 	return *this;
 }

@@ -10,7 +10,7 @@ namespace valgo {
 class Slide : public Drawable {
 private:
 	std::vector<std::unique_ptr<SlideElement>> elems_;
-	std::string title_; // Empty title means no title
+	LatexCode title_; // Empty title means no title
 	bool allow_multi_slide_ = false;
 	bool shrink_ = false;
 
@@ -20,7 +20,7 @@ public:
 	template<class... Elem>
 	explicit Slide(const Elem&... elems);
 
-	Slide& set_title(std::string title) noexcept;
+	Slide& set_title(LatexCode title) noexcept;
 
 	// Sets whether it is allowed to put overflowing contents on many slides.
 	// Returns *this to allow chaining
@@ -46,7 +46,7 @@ inline Slide::Slide(const Elem&... elems) {
 	(elems_.emplace_back(elems.clone()), ...);
 }
 
-inline Slide& Slide::set_title(std::string title) noexcept {
+inline Slide& Slide::set_title(LatexCode title) noexcept {
 	title_ = std::move(title);
 	return *this;
 }

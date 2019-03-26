@@ -16,7 +16,7 @@ template <class T>
 class Array2D : public SlideElement {
 private:
 	size_t n_, m_;
-	std::string name_;
+	LatexCode name_;
 	bool is_labeled_;
 	std::vector<T> vec_; // n_ x m_
 	std::vector<std::optional<Color>> colors_; // n_ x m_
@@ -27,7 +27,7 @@ private:
 public:
 	Array2D();
 
-	Array2D(std::string name);
+	Array2D(LatexCode name);
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
@@ -56,7 +56,7 @@ public:
 	inline Array2D<T>::Array2D() : is_labeled_(false) {}
 
 	template <class T>
-	inline Array2D<T>::Array2D(std::string name) : name_(std::move(name)), is_labeled_(true) {}
+	inline Array2D<T>::Array2D(LatexCode name) : name_(std::move(name)), is_labeled_(true) {}
 
 	template <class T>
 	inline std::unique_ptr<SlideElement> Array2D<T>::clone() const {

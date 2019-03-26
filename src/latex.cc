@@ -2,13 +2,13 @@
 
 namespace valgo {
 
-Latex::Latex(std::string latex) noexcept : latex_(std::move(latex)) {}
+Latex::Latex(LatexCode latex) noexcept : latex_(std::move(latex)) {}
 
 std::unique_ptr<SlideElement> Latex::clone() const {
 	return std::make_unique<Latex>(*this);
 }
 
-Latex& Latex::set(std::string latex) noexcept {
+Latex& Latex::set(LatexCode latex) noexcept {
 	latex_ = std::move(latex);
 	return *this;
 }

@@ -9,7 +9,7 @@ namespace valgo {
 
 class SourceCode : public SlideElement {
 private:
-	std::optional<std::string> title_;
+	std::optional<LatexCode> title_;
 	std::string lang_;
 	std::string code_;
 
@@ -18,7 +18,7 @@ public:
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
-	SourceCode& set_title(std::optional<std::string> title);
+	SourceCode& set_title(std::optional<LatexCode> title);
 
 	// Returns *this to allow chaining
 	SourceCode& set_code(std::string source_code) noexcept;

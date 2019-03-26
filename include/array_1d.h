@@ -13,7 +13,7 @@ template<class T>
 class Array1D : public SlideElement {
 private:
 	std::vector<T> vec_;
-	std::string name_;
+	LatexCode name_;
 	bool is_labeled_;
 	std::vector<std::optional<Color>> colors_;
 
@@ -24,7 +24,7 @@ private:
 public:
 	Array1D();
 
-	Array1D(std::string name);
+	Array1D(LatexCode name);
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
@@ -98,7 +98,7 @@ template <class T>
 inline Array1D<T>::Array1D() : is_labeled_(false) {}
 
 template <class T>
-inline Array1D<T>::Array1D(std::string name) : name_(std::move(name)), is_labeled_(true)  {}
+inline Array1D<T>::Array1D(LatexCode name) : name_(std::move(name)), is_labeled_(true)  {}
 
 template <class T>
 inline std::unique_ptr<SlideElement> Array1D<T>::clone() const {
