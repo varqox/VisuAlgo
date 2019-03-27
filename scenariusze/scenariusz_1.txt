@@ -1,0 +1,7 @@
+Scenariusz 1 - generowanie prezentacji przez stronę www
+1. Użytkownik chce z kodu w C++ wygenerować prezentację
+2. Użytkownik wysyła kod na stronę www przez (opcjonalnie)
+    a) wklejenie kodu
+    b) wybranie pliku z kodem
+3. System kompiluje i uruchamia kod
+4. Strona udostępnia stworzone pliki LaTeXa i PDF.

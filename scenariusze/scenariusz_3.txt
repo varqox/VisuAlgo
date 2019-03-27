@@ -1,0 +1,15 @@
+Scenariusz 3 - generowanie kodu LaTeXa wizualizacji algorytmu DFS
+1. Użytkownik biblioteki chce zwizualizować działanie algorytmu DFS (chce stworzyć po jednym slajdzie na każdą fazę algorytmu,
+   zaznaczyć aktualnie odwiedzany wierzchołek każdej fazy oraz wszystkie wierzchołki odwiedzone w poprzednich fazach).
+2. Użytkownik tworzy obiekty LatexPresentation i SlideBuilder.
+3. Użytkownik tworzy obiekt UndirectedGraph, tworzy wierzchołki za pomocą metody UndirectedGraph::add_node, dodaje krawędzie metodą UndirectedGraph::add_edge.
+4. Użytkownik dodaje graf do SlideBuildera używając metody SlideBuilder::add_elem.
+5. Użytkownik wykonuje następującą procedurę rekurencyjną zaczynając od wierzchołka początkowego:
+    1. ustawia kolor aktualnego wierzchołka używając metody UndirectedGraph::set_color
+       (np. na kolor zielony, co by mogło oznaczać, że dany wierzchołek jest obecnie odwiedzany)
+    2. tworzy slajd za pomocą metody SlideBuilder::build
+    3. dodaje slajd do prezentacji używając metody LatexPresentation::add_slide
+    4. ustawia kolor aktualnego wierzchołka używając metody UndirectedGraph::set_color
+       (np. na kolor żółty, co by mogło oznaczać, że dany wierzchołek był odwiedzony, ale już nie jest aktualny)
+    5. wywołuje się rekurencyjnie dla nieodwiedzonych sąsiadów aktualnego wierzchołka.
+6. Użytkownik generuje kod LaTeXowy prezentacji używając metody LatexPresentation::to_str.

@@ -1,0 +1,14 @@
+Scenariusz 2 - generowanie kodu LaTeXa wizualizacji algorytmu wyszukiwania binarnego
+1. Użytkownik biblioteki chce zwizualizować działanie algorytmu wyszukiwania binarnego (chce stworzyć po jednym slajdzie na każdą fazę algorytmu,
+   zaznaczyć przedział rozważany przez algorytm oraz element środkowy tego przedziału).
+2. Użytkownik tworzy obiekty LatexPresentation i SlideBuilder.
+3. Użytkownik tworzy obiekt Array1D, ustawia jego wielkość używając metody Array1D::resize i wypełnia wartościami używając metody Array1D::set_elem.
+4. Użytkownik dodaje tablicę do SlideBuildera używając metody SlideBuilder::add_elem.
+5. W celu wygenerowania pojedynczej fazy algorytmu wyszukiwania binarnego użytkownik:
+    1. czyści kolor całej tablicy używając metody Array1D::set_whole_array_color
+    2. zaznacza aktualnie rozważany w algorytmie przedział tablicy używając Array1D::set_range_color
+    3. zaznacza element środkowy używając Array1D::set_color
+    4. tworzy slajd za pomocą metody SlideBuilder::build
+    5. dodaje slajd do prezentacji używając metody LatexPresentation::add_slide
+6. Użytkownik powtarza poprzedni krok do końca działania wyszukiwania binarnego.
+7. Użytkownik generuje kod LaTeXowy prezentacji używając metody LatexPresentation::to_str.
