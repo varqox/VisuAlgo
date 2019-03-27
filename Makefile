@@ -78,7 +78,8 @@ examples/examples.pdf: $(EXAMPLES_PDFS)
 VISUALGO_TEST_SRCS := \
 	test/latex.cc \
 	test/array_1d.cc \
-	test/variable.cc
+	test/variable.cc \
+	test/source_code.cc
 
 $(eval $(call load_dependencies, $(VISUALGO_TEST_SRCS)))
 VISUALGO_TEST_OBJS := $(call SRCS_TO_OBJS, $(VISUALGO_TEST_SRCS))
