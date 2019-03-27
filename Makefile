@@ -76,10 +76,11 @@ examples/examples.pdf: $(EXAMPLES_PDFS)
 	@printf "\033[32mCombined generated pdfs into \033[1;32m$@\033[0m\n"
 
 VISUALGO_TEST_SRCS := \
-	test/latex.cc \
 	test/array_1d.cc \
-	test/variable.cc \
-	test/source_code.cc
+	test/block.cc \
+	test/latex.cc \
+	test/source_code.cc \
+	test/variable.cc
 
 $(eval $(call load_dependencies, $(VISUALGO_TEST_SRCS)))
 VISUALGO_TEST_OBJS := $(call SRCS_TO_OBJS, $(VISUALGO_TEST_SRCS))
