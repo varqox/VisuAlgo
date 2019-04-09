@@ -16,7 +16,7 @@ SlideBuilder sb;
 
 int main() {
 	int sz = 9;
-	Array1D<int> bins("binsearch");
+	Array1D<int> bins("Binary Search");
 	Variable<int> szukamy("szukamy");
 	Variable<int> lewy("lewy");
 	Variable<int> prawy("prawy");
@@ -39,9 +39,9 @@ int main() {
 		int mid = (l + r + 1) / 2;
 		bins.set_whole_array_color(std::nullopt);
 		bins.set_range_color(l, r, Color::LIGHT_GREEN);
-		pres.add_slide(sb.build().set_title("binsearch"));
+		pres.add_slide(sb.build().set_title("Binary Search"));
 		bins.set_color(mid, Color::LIGHT_YELLOW);
-		pres.add_slide(sb.build().set_title("binsearch"));
+		pres.add_slide(sb.build().set_title("Binary Search"));
 		if (b[mid] <= sz) {
 			l = mid;
 		}

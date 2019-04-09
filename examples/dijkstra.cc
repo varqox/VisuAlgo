@@ -46,32 +46,30 @@ vector<int> dijkstra(int n, const vector<vector<pair<int, int>>> &g, int source)
 }
 
 int main() {
-	{ // dijkstra
-		sb.add_elem(visu_g);
-		int n = 6;
+	sb.add_elem(visu_g);
+	int n = 6;
 
-		for (int i = 0; i < n; i++)
-			visu_g.add_node(i, "dist=inf").set_node_color(i, Color::LIGHT_RED);
+	for (int i = 0; i < n; i++)
+		visu_g.add_node(i, "dist=inf").set_node_color(i, Color::LIGHT_RED);
 
-		vector<vector<pair<int, int>>> g(n);
-		auto add_edge = [&](int a, int b, int c) {
-			g[a].emplace_back(b, c);
-			g[b].emplace_back(a, c);
-			visu_g.add_edge(a, b, c);
-		};
-		add_edge(0, 1, 8);
-		add_edge(0, 3, 7);
-		add_edge(3, 4, 2);
-		add_edge(0, 4, 10);
-		add_edge(1, 4, 3);
-		add_edge(4, 2, 3);
-		add_edge(4, 5, 1);
-		add_edge(5, 2, 1);
+	vector<vector<pair<int, int>>> g(n);
+	auto add_edge = [&](int a, int b, int c) {
+		g[a].emplace_back(b, c);
+		g[b].emplace_back(a, c);
+		visu_g.add_edge(a, b, c);
+	};
+	add_edge(0, 1, 8);
+	add_edge(0, 3, 7);
+	add_edge(3, 4, 2);
+	add_edge(0, 4, 10);
+	add_edge(1, 4, 3);
+	add_edge(4, 2, 3);
+	add_edge(4, 5, 1);
+	add_edge(5, 2, 1);
 
-		dijkstra(n, g, 0);
+	dijkstra(n, g, 0);
 
-		sb.remove_all_elements();
-	}
+	sb.remove_all_elements();
 
 	pres.author("Dream team");
 	pres.date("12.03.2019");

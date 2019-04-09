@@ -14,6 +14,8 @@ namespace valgo {
 template<class NodeId, class NodeInfo, class EdgeInfo>
 class UndirectedGraph : public Graph<NodeId, NodeInfo, EdgeInfo> {
 protected:
+	virtual std::string tool_name() const override;
+
 	struct Node {
 		NodeId id_;
 		std::optional<NodeInfo> info_;
@@ -23,7 +25,7 @@ protected:
 
 		Node(NodeId id, std::optional<NodeInfo> info = std::nullopt);
 
-		DOTCode to_dot() const;
+		DotCode to_dot() const;
 	};
 
 	struct Edge {
@@ -35,7 +37,7 @@ protected:
 
 		Edge(NodeId from, NodeId to, std::optional<EdgeInfo> info = std::nullopt);
 
-		DOTCode to_dot(const std::map<NodeId, Node>& nodes, bool reversed = false) const;
+		DotCode to_dot(const std::map<NodeId, Node>& nodes, bool reversed = false) const;
 	};
 
 	std::map<NodeId, Node> nodes_;
@@ -92,7 +94,7 @@ public:
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
-	virtual DOTCode draw_as_dot() const;
+	virtual DotCode draw_as_dot() const override;
 	virtual LatexCode draw_as_latex() const override;
 	virtual HTMLCode draw_as_html() const override;
 };
@@ -100,20 +102,25 @@ public:
 /****************** Implementation ******************/
 
 template<class NodeId, class NodeInfo, class EdgeInfo>
+inline std::string UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::tool_name() const {
+	return "neato";
+}
+
+template<class NodeId, class NodeInfo, class EdgeInfo>
 inline UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::Node::Node(NodeId id, std::optional<NodeInfo> info)
 	: id_(std::move(id)), info_(std::move(info)) {}
 
 template<class NodeId, class NodeInfo, class EdgeInfo>
-inline DOTCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::Node::to_dot() const {
+inline DotCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::Node::to_dot() const {
 	std::stringstream ss;
 	ss << id_ << " [";
 
-	ss << "label=<<table style=\"rounded\" border=\"1\" cellborder=\"0\" cellspacing=\"4\"";
+	ss << "label=<<table width=\"50\" style=\"rounded\" border=\"1\" cellborder=\"0\" cellspacing=\"4\"";
 	if (color_.has_value())
 		ss << " bgcolor=\"#" << color_.value().to_hex() << "\"";
-	ss << "><tr><td>   " << id_ << "   </td></tr>"; // TODO: ogarnac szerokosc wierzcholka
+	ss << "><tr><td width=\"50\">" << id_ << "</td></tr>";
 	if (info_.has_value())
-		ss << "<hr/><tr><td>" << info_.value() << "</td></tr>"; // TODO: ogarnac html entities
+		ss << "<hr/><tr><td width=\"50\">" << info_.value() << "</td></tr>"; // TODO: ogarnac string to html
 	ss << "</table>>";
 	if (hidden_)
 		ss << ", style=invis";
@@ -129,13 +136,14 @@ inline UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::Edge::Edge(NodeId from, Node
     : from_(std::move(from)), to_(std::move(to)), info_(std::move(info)) {}
 
 template<class NodeId, class NodeInfo, class EdgeInfo>
-inline DOTCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::Edge::to_dot(const std::map<NodeId, Node>& nodes,
+inline DotCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::Edge::to_dot(const std::map<NodeId, Node>& nodes,
                                                                          bool reversed) const {
 	std::stringstream ss;
+	std::string side = to_ == from_ ? ":n" : "";
 	if (reversed)
-		ss << to_ << " -> " << from_;
+		ss << to_ << side << " -> " << from_ << side;
 	else
-		ss << from_ << " -> " << to_;
+		ss << from_ << side << " -> " << to_ << side;
 	ss << " [";
 
 	auto is_hidden = [&](const NodeId &id) {
@@ -385,7 +393,7 @@ inline std::unique_ptr<SlideElement> UndirectedGraph<NodeId, NodeInfo, EdgeInfo>
 }
 
 template<class NodeId, class NodeInfo, class EdgeInfo>
-inline DOTCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_dot() const {
+inline DotCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_dot() const {
 	std::stringstream ss;
 
 	// configuration
@@ -397,8 +405,9 @@ inline DOTCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_dot() const 
 	ss << " splines = true;\n";
 	ss << " sep=\"+15,15\"\n";
 	ss << " size=\"8,4.8\";\n";
-	ss << " node [shape=plain, fontsize=11];\n";
-	ss << " edge [arrowhead=none, headclip=false, tailclip=false];\n";
+	ss << " graph [fontname = \"Monospace\"];\n";
+	ss << " node [fontname = \"Monospace\", shape=plain, fontsize=11];\n";
+	ss << " edge [fontname = \"Monospace\", arrowhead=none, headclip=false, tailclip=false];\n";
 
 	// edges
 	for (const auto& [id, edge] : edges_)
@@ -419,7 +428,7 @@ inline LatexCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_latex() co
 
 	ss << "\\begin{figure}\n";
 	// name of a tool
-	ss << "\\begin{graphviz}{neato}\n";
+	ss << "\\begin{graphviz}{" << tool_name() << "}\n";
 
 	// graph
 	ss << draw_as_dot();

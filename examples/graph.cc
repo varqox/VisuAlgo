@@ -1,7 +1,7 @@
 #include "../include/latex.h"
 #include "../include/latex_presentation.h"
 #include "../include/slide_builder.h"
-#include "../include/undirected_graph.h"
+#include "../include/rooted_graph.h"
 
 #include <iostream>
 #include <vector>
@@ -13,7 +13,7 @@ LatexPresentation pres("Graphs", "Visualization of graphs");
 SlideBuilder sb;
 
 int main() {
-	UndirectedGraph<int, string, int> gg;
+	RootedGraph<int, string, int> gg;
 	sb.add_elem(gg);
 
 	constexpr int init_level = 8;
@@ -50,52 +50,84 @@ int main() {
 		level /= 2;
 	}
 
-	sb.remove_all_elements();
+	gg.remove_all_nodes();
 
-	UndirectedGraph<int, string, int> h;
-	sb.add_elem(h);
-
-	h.add_edge(1, 2)
-			.add_edge(3, 2)
-			.add_edge(2, 4)
-			.add_edge(4, 5)
-			.add_edge(4, 6)
-			.add_edge(4, 7)
-			.add_edge(10, 5)
-			.add_edge(9, 6)
-			.add_edge(9, 8)
-			.add_edge(3, 8)
-			.add_edge(3, 9)
-			.add_edge(2, 10)
-			.add_edge(10, 11)
-			.add_edge(11, 11)
-			.set_node_color(1, Color::RED)
-			.set_node_color(2, Color::GREEN)
-			.set_node_color(3, Color::LIGHT_BLUE)
-			.set_node_color(4, Color::YELLOW)
-			.set_node_color(5, Color::LIGHT_BROWN)
-			.set_node_color(6, Color::RED)
-			.set_node_color(7, Color::GREEN)
-			.set_node_color(8, Color::LIGHT_BLUE)
-			.set_node_color(9, Color::YELLOW)
-			.set_node_color(10, Color::LIGHT_BROWN)
-			.set_node_color(11, Color::RED)
-			.set_node_info(1, "hejka1\\nxxx")
-			.set_node_info(2, "hejka2\\nxxx")
-			.set_node_info(3, "hejka3\\nxxx")
-			.set_node_info(4, "hejka4\\nxxx")
-			.set_node_info(5, "hejka5\\nxxx")
-			.set_node_info(6, "hejka6\\nxxx")
-			.set_node_info(7, "hejka7\\nxxx")
-			.set_node_info(8, "hejka8\\nxxx")
-			.set_node_info(9, "hejka9\\nxxx")
-			.set_node_info(10, "hejka10\\nxxx")
-			.set_node_info(11, "hejka11\\nxxx");
+	gg.add_edge(1, 2)
+	  .add_edge(3, 2)
+	  .add_edge(2, 4)
+	  .add_edge(4, 5)
+	  .add_edge(4, 6)
+	  .add_edge(4, 7)
+	  .add_edge(10, 5)
+	  .add_edge(9, 6)
+	  .add_edge(9, 8)
+	  .add_edge(3, 8)
+	  .add_edge(3, 9)
+	  .add_edge(2, 10)
+	  .add_edge(10, 11)
+	  .add_edge(11, 11)
+	  .set_node_color(1, Color::RED)
+	  .set_node_color(2, Color::GREEN)
+	  .set_node_color(3, Color::LIGHT_BLUE)
+	  .set_node_color(4, Color::YELLOW)
+	  .set_node_color(5, Color::LIGHT_BROWN)
+	  .set_node_color(6, Color::RED)
+	  .set_node_color(7, Color::GREEN)
+	  .set_node_color(8, Color::LIGHT_BLUE)
+	  .set_node_color(9, Color::YELLOW)
+	  .set_node_color(10, Color::LIGHT_BROWN)
+	  .set_node_color(11, Color::RED)
+	  .set_node_info(1, "hejka1<br/>xxx")
+	  .set_node_info(2, "hejka2<br/>xxx")
+	  .set_node_info(3, "hejka3<br/>xxx")
+	  .set_node_info(4, "hejka4<br/>xxx")
+	  .set_node_info(5, "hejka5<br/>xxx")
+	  .set_node_info(6, "hejka6<br/>xxx")
+	  .set_node_info(7, "hejka7<br/>xxx")
+	  .set_node_info(8, "hejka8<br/>xxx")
+	  .set_node_info(9, "hejka9<br/>xxx")
+	  .set_node_info(10, "hejka10<br/>xxx")
+	  .set_node_info(11, "hejka11<br/>xxx");
 
 	pres.add_slide(sb.build().set_title("grafy"));
 
-	sb.remove_all_elements();
+	gg.remove_all_nodes();
 
+	gg.add_edge(1, 2)
+	  .add_edge(1, 3)
+	  .add_edge(1, 4)
+	  .add_edge(3, 5)
+	  .add_edge(3, 6)
+	  .add_edge(4, 7)
+	  .add_edge(7, 8)
+	  .add_edge(8, 9)
+	  .add_edge(10, 11)
+	  .add_edge(11, 12)
+	  .add_edge(12, 13)
+	  .add_edge(13, 14)
+	  .add_edge(13, 15)
+	  .add_edge(13, 16)
+	  .add_edge(15, 17)
+	  .set_node_color(1, Color::RED)
+	  .set_node_color(2, Color::GREEN)
+	  .set_node_color(3, Color::LIGHT_BLUE)
+	  .set_node_color(4, Color::YELLOW)
+	  .set_node_color(5, Color::LIGHT_BROWN)
+	  .set_node_color(6, Color::RED)
+	  .set_node_color(7, Color::GREEN)
+	  .set_node_color(8, Color::LIGHT_BLUE)
+	  .set_node_color(9, Color::YELLOW)
+	  .set_node_color(10, Color::LIGHT_BROWN)
+	  .set_node_color(11, Color::MAGENTA)
+	  .set_node_color(12, Color::GREEN)
+	  .set_node_color(13, Color::LIGHT_BLUE)
+	  .set_node_color(14, Color::CYAN)
+	  .set_node_color(15, Color::LIGHT_YELLOW)
+	  .set_node_color(16, Color::RED)
+	  .set_node_color(17, Color::LIGHT_BROWN);
+	gg.set_roots({11, 4});
+
+	pres.add_slide(sb.build().set_title("grafy"));
 
 	pres.author("Dream team");
 	pres.date("12.03.2019");

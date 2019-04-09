@@ -9,10 +9,12 @@
 
 namespace valgo {
 
-using DOTCode = std::string;
+using DotCode = std::string;
 
 template<class NodeId, class NodeInfo, class EdgeInfo>
 class Graph : public SlideElement {
+protected:
+	virtual std::string tool_name() const = 0;
 public:
 	Graph() = default;
 
@@ -43,6 +45,8 @@ public:
 
 	virtual Graph& remove_edge(const NodeId& from, const NodeId& to) = 0;
 	virtual Graph& remove_all_edges() = 0;
+
+	virtual DotCode draw_as_dot() const = 0;
 };
 
 } // namespace valgo
