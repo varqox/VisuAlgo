@@ -108,12 +108,13 @@ inline DOTCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::Node::to_dot() const
 	std::stringstream ss;
 	ss << id_ << " [";
 
-	ss << "label=\"{\\N";
-	if (info_.has_value())
-		ss << "|" << info_.value();
-	ss << "}\"";
+	ss << "label=<<table style=\"rounded\" border=\"1\" cellborder=\"0\" cellspacing=\"4\"";
 	if (color_.has_value())
-		ss << ", fillcolor=\"#" << color_.value().to_hex() << "\"";
+		ss << " bgcolor=\"#" << color_.value().to_hex() << "\"";
+	ss << "><tr><td>   " << id_ << "   </td></tr>"; // TODO: ogarnac szerokosc wierzcholka
+	if (info_.has_value())
+		ss << "<hr/><tr><td>" << info_.value() << "</td></tr>"; // TODO: ogarnac html entities
+	ss << "</table>>";
 	if (hidden_)
 		ss << ", style=invis";
 
@@ -396,7 +397,7 @@ inline DOTCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_dot() const 
 	ss << " splines = true;\n";
 	ss << " sep=\"+15,15\"\n";
 	ss << " size=\"8,4.8\";\n";
-	ss << " node [style=\"rounded,filled\", shape=record, fontsize=11];\n";
+	ss << " node [shape=plain, fontsize=11];\n";
 	ss << " edge [arrowhead=none, headclip=false, tailclip=false];\n";
 
 	// edges
