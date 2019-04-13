@@ -42,7 +42,8 @@ EXAMPLES_SRCS := \
 	examples/binsearch.cc \
 	examples/dijkstra.cc \
 	examples/graph.cc \
-	examples/sieve.cc
+	examples/sieve.cc \
+	examples/matrix.cc
 
 $(eval $(call load_dependencies, $(EXAMPLES_SRCS)))
 EXAMPLES_OBJS := $(call SRCS_TO_OBJS, $(EXAMPLES_SRCS))
