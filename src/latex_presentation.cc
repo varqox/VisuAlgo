@@ -73,6 +73,7 @@ std::string LatexPresentation::to_str() const {
 		"\\usepackage{lmodern}\n"
 		"\\usepackage{xcolor}\n"
 		"\\usepackage{hhline}\n"
+		"\\usepackage{graphicx}\n"
 		"\\usepackage{fancyvrb}\n"
 		"\\selectlanguage{polish}\n"
 		"\\usepackage{tikz}"

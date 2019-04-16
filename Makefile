@@ -24,7 +24,9 @@ VISUALGO_SRCS := \
 	src/latex_presentation.cc \
 	src/slide.cc \
 	src/slide_builder.cc \
-	src/source_code.cc
+	src/source_code.cc \
+	src/image.cc \
+	src/image_set.cc
 
 $(eval $(call load_dependencies, $(VISUALGO_SRCS)))
 VISUALGO_OBJS := $(call SRCS_TO_OBJS, $(VISUALGO_SRCS))
@@ -43,7 +45,8 @@ EXAMPLES_SRCS := \
 	examples/dijkstra.cc \
 	examples/graph.cc \
 	examples/sieve.cc \
-	examples/matrix.cc
+	examples/matrix.cc \
+	examples/pictures.cc 
 
 $(eval $(call load_dependencies, $(EXAMPLES_SRCS)))
 EXAMPLES_OBJS := $(call SRCS_TO_OBJS, $(EXAMPLES_SRCS))
