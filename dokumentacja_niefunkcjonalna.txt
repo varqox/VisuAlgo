@@ -1,0 +1,36 @@
+Wymagania niefunkcjonalne:
+
+Bezpieczeństwo:
+- Aby uniknąć przejęcia kontroli nad systemem przez użytkownika, będziemy sandboxować proces kompilacji LaTeXa na stronie online.
+- limit czasu generowania na stronie online zapewni dostępność
+
+Rozszerzalność:
+- Możliwość dodawania kolenych klas drawable do biblioteki.
+- Możliwość zrobienia prezentacji w formie html zamiast w LaTeXu.
+
+Wydajność:
+- Generowanie kodu w bibliotece + kompilacja: 1 slajd w około 0.03 sek 
+- Generowanie strony (1 slajd): całkiem szybko tak ok w miare
+
+Szacowanie danych liczbowych:
+-użytkownicy: kilkanaście/kilkadziesiąt
+-przepływ: nie dotyczy?
+-Równoległe żądania: kilka (2-5)
+-kompilator clang 7.0.1, system linux x86 (ubuntu, arch, manjaro)
+-graphviz 2.40.1
+-pdfTeX 3.1415926-1.40.9-2.2
+
+Z czego to wynika?
+Z wersji języka C++ i zapytań systemowych, które są dostępne pod linuxem oraz pakietów dostępnych w dystrybucjach x86
+
+-----------------------------------------------------------------------------
+model 4+1
+specyfikacja w postaci diagramu użycia
+deployment view - wezły fizyczne i rozmieszczenie komponentów na nich
+logical view ciagram klas modułów pakiety nejmspejsy - wymagane
+development view komponenty można jako osobną binarke traktować, przydaje się dla większych systemów
+prosess view bardzo się przydaje do wymagań niefunkcjonalnych, mówi o skalowanlości wydajności bezpieczeństwie, przedstawia widok procesów i wątków (jak się komunikują i jak są rozmieszczone)
+
+zrobić development view + jeden z pozostałych(najhardkorowszy) + diagram uml
+
+
