@@ -15,11 +15,9 @@ namespace valgo {
 template<class T>
 class Container : public SlideElement {
 public:
-	Container(const T&) = default;
+	Container(const T&);
 
-	virtual std::unique_ptr<SlideElement> clone() const override {
-		return std::make_unique<Container>(*this);
-	}
+	virtual std::unique_ptr<SlideElement> clone() const override;
 
 	virtual LatexCode draw_as_latex() const override;
 
