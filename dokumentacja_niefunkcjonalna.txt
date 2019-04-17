@@ -9,8 +9,9 @@ Rozszerzalność:
 - Możliwość zrobienia prezentacji w formie html zamiast w LaTeXu.
 
 Wydajność:
-- Generowanie kodu w bibliotece + kompilacja: 1 slajd w około 0.03 sek 
-- Generowanie strony (1 slajd): całkiem szybko tak ok w miare
+- Generowanie kodu latexowego: 1 slajd w średnio 0.001 sek
+- Kompilacja kodu latexowego do pliku pdf: 1 slajd w średnio 0.3 sek 
+
 
 Szacowanie danych liczbowych:
 -użytkownicy: kilkanaście/kilkadziesiąt
