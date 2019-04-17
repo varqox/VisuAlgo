@@ -14,7 +14,7 @@
 using namespace std;
 using namespace valgo;
 
-LatexPresentation pres("Sieve", "Visualization of Sieve of Erathostenes");
+LatexPresentation pres("Visualization of Sieve of Erathostenes", "Sieve");
 SlideBuilder sb;
 
 int main() {

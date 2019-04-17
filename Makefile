@@ -19,14 +19,14 @@ $(GOOGLETEST_OBJS): override EXTRA_CXX_FLAGS += -isystem '$(CURDIR)/googletest/g
 VISUALGO_SRCS := \
 	src/block.cc \
 	src/color.cc \
+	src/image.cc \
+	src/image_set.cc \
 	src/itemize.cc \
 	src/latex.cc \
 	src/latex_presentation.cc \
 	src/slide.cc \
 	src/slide_builder.cc \
-	src/source_code.cc \
-	src/image.cc \
-	src/image_set.cc
+	src/source_code.cc
 
 $(eval $(call load_dependencies, $(VISUALGO_SRCS)))
 VISUALGO_OBJS := $(call SRCS_TO_OBJS, $(VISUALGO_SRCS))
@@ -42,11 +42,12 @@ hierarchy.svg: hierarchy.dot
 EXAMPLES_SRCS := \
 	examples/arrays.cc \
 	examples/binsearch.cc \
+	examples/containers.cc \
 	examples/dijkstra.cc \
 	examples/graph.cc \
-	examples/sieve.cc \
 	examples/matrix.cc \
-	examples/pictures.cc 
+	examples/pictures.cc \
+	examples/sieve.cc
 
 $(eval $(call load_dependencies, $(EXAMPLES_SRCS)))
 EXAMPLES_OBJS := $(call SRCS_TO_OBJS, $(EXAMPLES_SRCS))

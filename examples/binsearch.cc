@@ -11,7 +11,7 @@
 using namespace std;
 using namespace valgo;
 
-LatexPresentation pres("Binary search", "Visualization of Binary Search");
+LatexPresentation pres("Visualization of Binary Search", "Binary search");
 SlideBuilder sb;
 
 int main() {

@@ -117,7 +117,7 @@ std::string LatexPresentation::to_str() const {
 		"}\n"
 		"\\makeatother\n"
 		"\n"
-		"\\title[", title_, "]{", footer_title_, "}\n"));
+		"\\title[", footer_title_, "]{", title_, "}\n"));
 
 	if (author_.has_value())
 		back_insert(ret, "\\author{", author_.value(), "}\n");

@@ -15,7 +15,7 @@
 using namespace std;
 using namespace valgo;
 
-LatexPresentation pres("Arrays", "Visualization of arrays");
+LatexPresentation pres("Visualization of arrays", "Arrays");
 SlideBuilder sb;
 
 int main() {

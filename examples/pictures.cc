@@ -17,7 +17,7 @@
 using namespace std;
 using namespace valgo;
 
-LatexPresentation pres("Images", "Visualization of images");
+LatexPresentation pres("Visualization of images", "Images");
 SlideBuilder sb;
 
 int main () {

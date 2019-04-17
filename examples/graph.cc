@@ -9,7 +9,7 @@
 using namespace std;
 using namespace valgo;
 
-LatexPresentation pres("Graphs", "Visualization of graphs");
+LatexPresentation pres("Visualization of graphs", "Graphs");
 SlideBuilder sb;
 
 int main() {

@@ -10,7 +10,7 @@
 using namespace std;
 using namespace valgo;
 
-LatexPresentation pres("Matrices", "Visualization of matrices");
+LatexPresentation pres("Visualization of matrices", "Matrices");
 SlideBuilder sb;
 
 int main() {

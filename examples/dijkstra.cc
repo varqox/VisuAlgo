@@ -9,7 +9,7 @@
 using namespace std;
 using namespace valgo;
 
-LatexPresentation pres("Dijkstra", "Visualization of Dijkstra's Algorithm");
+LatexPresentation pres("Visualization of Dijkstra's Algorithm", "Dijkstra");
 SlideBuilder sb;
 UndirectedGraph<int, string, int> visu_g;
 
