@@ -38,6 +38,6 @@ Pojedyncze prezentacje odpowiadają przykładowym programom np. dla `arrays.cc` 
 | arrays | demonstruje przykłady tablic jedno- i dwuwymiarowych oraz kolorowanie pól |
 | binsearch | demonstruje działanie algorytmu wyszukiwania binarnego |
 | dijkstra | demonstruje wizualizację grafów na przykładzie algorytmu dijkstry |
-| graph | wizualizuje wybrane operacje na grafach |
+| graph | wizualizuje wybrane operacje na grafach ukorzenionych (w tym drzewa, drzewa binarne) |
 | sieve | prezentacja prezentująca działanie sita Eratostenesa |
 
