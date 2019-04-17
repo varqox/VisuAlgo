@@ -42,6 +42,7 @@ hierarchy.svg: hierarchy.dot
 EXAMPLES_SRCS := \
 	examples/arrays.cc \
 	examples/binsearch.cc \
+	examples/containers.cc \
 	examples/dijkstra.cc \
 	examples/graph.cc \
 	examples/matrix.cc \

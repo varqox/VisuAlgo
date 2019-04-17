@@ -37,9 +37,10 @@ Pojedyncze prezentacje odpowiadają przykładowym programom np. dla `arrays.cc` 
 |------|------|
 | arrays | demonstruje przykłady tablic jedno- i dwuwymiarowych oraz kolorowanie pól |
 | binsearch | demonstruje działanie algorytmu wyszukiwania binarnego |
+| containers | prezenuje uzycie wizualizacji kontenerów z biblioteki standardowej C++ |
 | dijkstra | demonstruje wizualizację grafów na przykładzie algorytmu dijkstry |
 | graph | wizualizuje wybrane operacje na grafach ukorzenionych (w tym drzewa, drzewa binarne) |
-| sieve | prezentuje działanie sita Eratostenesa |
 | matrix | wizualizacja działania macierzy |
 | pictures | przykład dodawania obrazków o zadanej wielkości i kącie obrotu na wybrane miejsce na slajdzie | 
+| sieve | prezentuje działanie sita Eratostenesa |
 
