@@ -39,5 +39,7 @@ Pojedyncze prezentacje odpowiadają przykładowym programom np. dla `arrays.cc` 
 | binsearch | demonstruje działanie algorytmu wyszukiwania binarnego |
 | dijkstra | demonstruje wizualizację grafów na przykładzie algorytmu dijkstry |
 | graph | wizualizuje wybrane operacje na grafach ukorzenionych (w tym drzewa, drzewa binarne) |
-| sieve | prezentacja prezentująca działanie sita Eratostenesa |
+| sieve | prezentuje działanie sita Eratostenesa |
+| matrix | wizualizacja działania macierzy |
+| pictures | przykład dodawania obrazków o zadanej wielkości i kącie obrotu na wybrane miejsce na slajdzie | 
 
