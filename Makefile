@@ -65,6 +65,7 @@ $(EXAMPLES_PDFS): %.pdf: %
 	DEST_DIR=$$(pwd)/examples/
 	TMP_DIR=$$(mktemp -d)
 	NAME=$(patsubst examples/%,%, $*)
+	$(Q)cp -r "$$DEST_DIR/sample_images" "$$TMP_DIR"
 	$(Q)cd "$$TMP_DIR"
 	$(Q)"$$DEST_DIR$$NAME" > "$$NAME.tex"
 	# Need to run latex twice to get the correct page numbers
