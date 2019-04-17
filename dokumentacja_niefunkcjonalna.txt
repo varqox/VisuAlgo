@@ -2,7 +2,7 @@ Wymagania niefunkcjonalne:
 
 Bezpieczeństwo:
 - Aby uniknąć przejęcia kontroli nad systemem przez użytkownika, będziemy sandboxować proces kompilacji LaTeXa na stronie online.
-- limit czasu generowania na stronie online zapewni dostępność
+- Limit czasu generowania na stronie online zapewni dostępność.
 
 Rozszerzalność:
 - Możliwość dodawania kolenych klas drawable do biblioteki.
@@ -12,10 +12,8 @@ Wydajność:
 - Generowanie kodu latexowego: 1 slajd w średnio 0.001 sek
 - Kompilacja kodu latexowego do pliku pdf: 1 slajd w średnio 0.3 sek 
 
-
 Szacowanie danych liczbowych:
 -użytkownicy: kilkanaście/kilkadziesiąt
--przepływ: nie dotyczy?
 -Równoległe żądania: kilka (2-5)
 -kompilator clang 7.0.1, system linux x86 (ubuntu, arch, manjaro)
 -graphviz 2.40.1
