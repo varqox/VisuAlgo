@@ -5,6 +5,7 @@
 
 #include <array>
 #include <deque>
+#include <list>
 #include <map>
 #include <set>
 #include <sstream>
@@ -154,6 +155,108 @@ public:
 };
 
 template<class T>
+class Container<std::deque<T>> : public SlideElement {
+private:
+	const std::deque<T>* deq_;
+	std::vector<std::optional<Color>> colors_;
+
+public:
+	Container(const std::deque<T>& deq) : deq_(std::addressof(deq)) {}
+
+	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
+
+	Container& set_color(size_t n, std::optional<Color> color) {
+		colors_.resize(deq_->size());
+		colors_[n] = std::move(color);
+		return *this;
+	}
+
+	// Sets color of elements in range [beg, end)
+	Container& set_range_color(size_t beg, size_t end, std::optional<Color> color) {
+		colors_.resize(deq_->size());
+		std::fill(colors_.begin() + beg, colors_.begin() + end, std::move(color));
+		return *this;
+	}
+
+	// Sets color of every element
+	Container& set_whole_color(std::optional<Color> color) {
+		colors_.assign(deq_->size(), std::move(color));
+		return *this;
+	}
+
+	virtual LatexCode draw_as_latex() const override {
+		return ContainerImplDetails::draw_as_latex(deq_->begin(), deq_->end(), colors_.begin(), colors_.end());
+	}
+
+	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
+};
+
+template<class T>
+class Container<std::list<T>> : public SlideElement {
+private:
+	const std::list<T>* list_;
+	std::map<const T*, std::optional<Color>> colors_;
+
+public:
+	Container(const std::list<T>& list) : list_(std::addressof(list)) {}
+
+	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
+
+	Container& set_color(typename std::list<T>::const_iterator it, std::optional<Color> color) {
+		if (color.has_value())
+			colors_[&*it] = std::move(color);
+		else
+			colors_.erase(&*it);
+
+		return *this;
+	}
+
+	Container& set_color(size_t n, std::optional<Color> color) {
+		if (n < list_->size()) {
+			auto it = list_->begin();
+			std::advance(it, n);
+			set_color(it, std::move(color));
+		}
+
+		return *this;
+	}
+
+	// Sets color of elements in range [beg, end)
+	Container& set_range_color(typename std::list<T>::const_iterator beg, typename std::list<T>::const_iterator end,
+	                           std::optional<Color> color) {
+		while (beg != end)
+			set_color(beg++, color);
+
+		return *this;
+	}
+
+	// Sets color of elements in range [beg, end)
+	Container& set_range_color(size_t beg, size_t end, std::optional<Color> color) {
+		auto it = list_->begin();
+		advance(it, beg);
+		auto it2 = it;
+		advance(it2, end - beg);
+		set_range_color(it, it2, std::move(color));
+		return *this;
+	}
+
+	// Sets color of every element
+	Container& set_whole_color(std::optional<Color> color) {
+		if (color.has_value())
+			return set_range_color(list_->begin(), list_->end(), std::move(color));
+
+		colors_.clear();
+		return *this;
+	}
+
+	virtual LatexCode draw_as_latex() const override {
+		return ContainerImplDetails::draw_as_latex("[", "]", list_->begin(), list_->end(), colors_);
+	}
+
+	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
+};
+
+template<class T>
 class Container<std::set<T>> : public SlideElement {
 private:
 	const std::set<T>* set_;
@@ -161,11 +264,6 @@ private:
 
 public:
 	Container(const std::set<T>& set) : set_(std::addressof(set)) {}
-
-	Container(Container&& cont) = default;
-	Container(const Container& cont) = default;
-	Container& operator=(Container&& cont) = default;
-	Container& operator=(const Container& cont) = default;
 
 	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
 
@@ -219,11 +317,6 @@ private:
 
 public:
 	Container(const std::multiset<T>& mset) : mset_(std::addressof(mset)) {}
-
-	Container(Container&& cont) = default;
-	Container(const Container& cont) = default;
-	Container& operator=(Container&& cont) = default;
-	Container& operator=(const Container& cont) = default;
 
 	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
 

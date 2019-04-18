@@ -38,6 +38,36 @@ int main() {
 	pres.add_slide(sb.build().set_title("std::array<short>"));
 	sb.remove_all_elements();
 
+	std::deque<char> deq;
+	Container deq_elem(deq);
+	sb.add_elem(deq_elem);
+	deq.push_back('a');
+	deq_elem.set_color(0, Color::GREEN);
+	pres.add_slide(sb.build().set_title("std::deque<char>"));
+	deq.push_front('b');
+	deq.push_back('c');
+	deq.push_back('d');
+	deq.push_back('e');
+	pres.add_slide(sb.build().set_title("std::deque<char>"));
+	deq_elem.set_range_color(2, 4, Color::BLUE);
+	pres.add_slide(sb.build().set_title("std::deque<char>"));
+	sb.remove_all_elements();
+
+	std::list<char> list;
+	Container list_elem(list);
+	sb.add_elem(list_elem);
+	list.push_back('a');
+	list_elem.set_color(0, Color::GREEN);
+	pres.add_slide(sb.build().set_title("std::list<char>"));
+	list.push_front('b');
+	list.push_back('c');
+	list.push_back('d');
+	list.push_back('e');
+	pres.add_slide(sb.build().set_title("std::list<char>"));
+	list_elem.set_range_color(2, 4, Color::BLUE);
+	pres.add_slide(sb.build().set_title("std::list<char>"));
+	sb.remove_all_elements();
+
 	std::set<char> myset;
 	Container set_elem(myset);
 	sb.add_elem(set_elem);
