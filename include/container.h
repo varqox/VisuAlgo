@@ -29,7 +29,8 @@ private:
 	template<class T>
 	friend class Container;
 
-	// prints elements [beg, end) with corresponding colors [color_beg, color_end) - *(beg + i) with color *(color_beg + i)
+	// prints elements [beg, end) with corresponding colors [color_beg, color_end) - *(beg + i) with color
+	// *(color_beg + i)
 	template<class Iter, class ColorIter>
 	static LatexCode draw_as_latex(Iter beg, Iter end, ColorIter color_beg, ColorIter color_end) {
 		std::stringstream res;
@@ -57,7 +58,10 @@ private:
 
 	// prints elements [beg, end) with corresponding colors: *(beg + i) with color colors[color_beg + i]
 	template<class Iter>
-	static LatexCode draw_as_latex(const char* beg_str, const char* end_str, Iter beg, Iter end, const std::map<typename std::iterator_traits<Iter>::value_type, std::optional<Color>>& colors) {
+	static LatexCode draw_as_latex(
+		const char* beg_str, const char* end_str, Iter beg, Iter end,
+		const std::map<const typename std::iterator_traits<Iter>::value_type*, std::optional<Color>>& colors)
+	{
 		std::stringstream res;
 		res << "\\begin{equation*}\n" << beg_str;
 
@@ -65,7 +69,7 @@ private:
 			if (i != beg)
 				res << ',';
 
-			auto it = colors.find(*i);
+			auto it = colors.find(&*i);
 			if (it != colors.end())
 				res << "\\textcolor[HTML]{" << it->second.value().to_hex() << "}{" << *i << "}";
 			else
@@ -86,9 +90,7 @@ private:
 public:
 	Container(const std::array<T, N>& arr) : arr_(std::addressof(arr)) {}
 
-	virtual std::unique_ptr<SlideElement> clone() const override {
-		return std::make_unique<Container>(*this);
-	}
+	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
 
 	Container& set_color(size_t n, std::optional<Color> color) {
 		colors_[n] = std::move(color);
@@ -111,9 +113,7 @@ public:
 		return ContainerImplDetails::draw_as_latex(arr_->begin(), arr_->end(), colors_.begin(), colors_.end());
 	}
 
-	virtual HTMLCode draw_as_html() const override {
-		throw NotImplemented();
-	}
+	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
 };
 
 template<class T>
@@ -125,9 +125,7 @@ private:
 public:
 	Container(const std::vector<T>& vec) : vec_(std::addressof(vec)) {}
 
-	virtual std::unique_ptr<SlideElement> clone() const override {
-		return std::make_unique<Container>(*this);
-	}
+	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
 
 	Container& set_color(size_t n, std::optional<Color> color) {
 		colors_.resize(vec_->size());
@@ -152,48 +150,49 @@ public:
 		return ContainerImplDetails::draw_as_latex(vec_->begin(), vec_->end(), colors_.begin(), colors_.end());
 	}
 
-	virtual HTMLCode draw_as_html() const override {
-		throw NotImplemented();
-	}
+	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
 };
 
 template<class T>
 class Container<std::set<T>> : public SlideElement {
 private:
 	const std::set<T>* set_;
-	std::map<T, std::optional<Color>> colors_;
+	std::map<const T*, std::optional<Color>> colors_;
 
 public:
-	Container(const std::set<T>& vec) : set_(std::addressof(vec)) {}
+	Container(const std::set<T>& set) : set_(std::addressof(set)) {}
 
-	virtual std::unique_ptr<SlideElement> clone() const override {
-		return std::make_unique<Container>(*this);
-	}
+	Container(Container&& cont) = default;
+	Container(const Container& cont) = default;
+	Container& operator=(Container&& cont) = default;
+	Container& operator=(const Container& cont) = default;
+
+	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
 
 	Container& set_color(typename std::set<T>::const_iterator it, std::optional<Color> color) {
-		return set_color(*it, std::move(color));
+		if (color.has_value())
+			colors_[&*it] = std::move(color);
+		else
+			colors_.erase(&*it);
+
+		return *this;
 	}
 
 	Container& set_color(const T& elem, std::optional<Color> color) {
-		if (color.has_value())
-			colors_[elem] = std::move(color);
-		else
-			colors_.erase(elem);
+		auto it = set_->find(elem);
+		if (it != set_->end())
+			set_color(std::move(it), std::move(color));
 
 		return *this;
 	}
 
 	// Sets color of elements in range [beg, end)
-	Container& set_range_color(typename std::set<T>::const_iterator beg, typename std::set<T>::const_iterator end, std::optional<Color> color) {
+	Container& set_range_color(typename std::set<T>::const_iterator beg, typename std::set<T>::const_iterator end,
+	                           std::optional<Color> color) {
 		while (beg != end)
 			set_color(beg++, color);
 
 		return *this;
-	}
-
-	// Sets color of elements in range [beg, end)
-	Container& set_range_color(const T& lower_bound, const T& upper_bound, std::optional<Color> color) {
-		return set_range_color(set_->lower_bound(lower_bound), set_->upper_bound(upper_bound), std::move(color));
 	}
 
 	// Sets color of every element
@@ -209,9 +208,61 @@ public:
 		return ContainerImplDetails::draw_as_latex("\\{", "\\}", set_->begin(), set_->end(), colors_);
 	}
 
-	virtual HTMLCode draw_as_html() const override {
-		throw NotImplemented();
+	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
+};
+
+template<class T>
+class Container<std::multiset<T>> : public SlideElement {
+private:
+	const std::multiset<T>* mset_;
+	std::map<const T*, std::optional<Color>> colors_;
+
+public:
+	Container(const std::multiset<T>& mset) : mset_(std::addressof(mset)) {}
+
+	Container(Container&& cont) = default;
+	Container(const Container& cont) = default;
+	Container& operator=(Container&& cont) = default;
+	Container& operator=(const Container& cont) = default;
+
+	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
+
+	Container& set_color(typename std::multiset<T>::const_iterator it, std::optional<Color> color) {
+		if (color.has_value())
+			colors_[&*it] = std::move(color);
+		else
+			colors_.erase(&*it);
+
+		return *this;
 	}
+
+	// Sets color of elements in range [beg, end)
+	Container& set_range_color(typename std::multiset<T>::const_iterator beg,
+	                           typename std::multiset<T>::const_iterator end, std::optional<Color> color) {
+		while (beg != end)
+			set_color(beg++, color);
+
+		return *this;
+	}
+
+	Container& set_color(const T& elem, std::optional<Color> color) {
+		return set_range_color(mset_->lower_bound(elem), mset_->upper_bound(elem), std::move(color));
+	}
+
+	// Sets color of every element
+	Container& set_whole_color(std::optional<Color> color) {
+		if (color.has_value())
+			return set_range_color(mset_->begin(), mset_->end(), std::move(color));
+
+		colors_.clear();
+		return *this;
+	}
+
+	virtual LatexCode draw_as_latex() const override {
+		return ContainerImplDetails::draw_as_latex("\\{", "\\}", mset_->begin(), mset_->end(), colors_);
+	}
+
+	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
 };
 
 } // namespace valgo

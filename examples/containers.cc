@@ -41,17 +41,37 @@ int main() {
 	std::set<char> myset;
 	Container set_elem(myset);
 	sb.add_elem(set_elem);
-	myset.emplace('b');
-	set_elem.set_color('b', Color::GREEN);
+	myset.emplace('k');
+	set_elem.set_color('k', Color::GREEN);
 	pres.add_slide(sb.build().set_title("std::set<char>"));
-	myset.emplace('a');
+	myset.emplace('f');
 	pres.add_slide(sb.build().set_title("std::set<char>"));
-	myset.emplace('c');
+	myset.emplace('p');
 	pres.add_slide(sb.build().set_title("std::set<char>"));
-	myset.erase('b');
+	myset.erase('k');
 	pres.add_slide(sb.build().set_title("std::set<char>"));
-	myset.emplace('b');
+	myset.emplace('k');
+	pres.add_slide(sb.build().set_title("std::set<char> "));
+	for (char c : std::string("abcdefghijklmnopqrstuvwxyz"))
+		myset.emplace(c);
 	pres.add_slide(sb.build().set_title("std::set<char>"));
+	set_elem.set_range_color(myset.lower_bound('c'), myset.upper_bound('o'), Color::RED);
+	pres.add_slide(sb.build().set_title("std::set<char>"));
+	sb.remove_all_elements();
+
+	std::multiset<char> mymset;
+	Container mset_elem(mymset);
+	sb.add_elem(mset_elem);
+	for (char c : std::string("aaabbcccdeeefff"))
+		mymset.emplace(c);
+	mset_elem.set_color('c', Color::GREEN);
+	pres.add_slide(sb.build().set_title("std::multiset<char> "));
+	mset_elem.set_color(mymset.begin(), Color::RED);
+	pres.add_slide(sb.build().set_title("std::multiset<char>"));
+	mset_elem.set_color(mymset.find('e'), Color::BLUE);
+	pres.add_slide(sb.build().set_title("std::multiset<char>"));
+	mset_elem.set_color(++mymset.lower_bound('f'), Color::MAGENTA);
+	pres.add_slide(sb.build().set_title("std::multiset<char>"));
 	sb.remove_all_elements();
 
 	pres.author("Dream team");
