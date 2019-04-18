@@ -49,7 +49,7 @@ int main() {
 	deq.push_back('d');
 	deq.push_back('e');
 	pres.add_slide(sb.build().set_title("std::deque<char>"));
-	deq_elem.set_range_color(2, 4, Color::BLUE);
+	deq_elem.set_range_color(2, 4, Color::RED);
 	pres.add_slide(sb.build().set_title("std::deque<char>"));
 	sb.remove_all_elements();
 
@@ -64,8 +64,23 @@ int main() {
 	list.push_back('d');
 	list.push_back('e');
 	pres.add_slide(sb.build().set_title("std::list<char>"));
-	list_elem.set_range_color(2, 4, Color::BLUE);
+	list_elem.set_range_color(2, 4, Color::RED);
 	pres.add_slide(sb.build().set_title("std::list<char>"));
+	sb.remove_all_elements();
+
+	std::forward_list<char> flist;
+	Container flist_elem(flist);
+	sb.add_elem(flist_elem);
+	flist.emplace_front('e');
+	flist.emplace_front('d');
+	flist.emplace_front('c');
+	flist.emplace_front('b');
+	flist_elem.set_color(0, Color::GREEN);
+	pres.add_slide(sb.build().set_title("std::forward\\_list<char>"));
+	flist.emplace_front('a');
+	pres.add_slide(sb.build().set_title("std::forward\\_list<char>"));
+	flist_elem.set_range_color(2, 4, Color::RED);
+	pres.add_slide(sb.build().set_title("std::forward\\_list<char>"));
 	sb.remove_all_elements();
 
 	std::set<char> myset;
@@ -81,7 +96,7 @@ int main() {
 	myset.erase('k');
 	pres.add_slide(sb.build().set_title("std::set<char>"));
 	myset.emplace('k');
-	pres.add_slide(sb.build().set_title("std::set<char> "));
+	pres.add_slide(sb.build().set_title("std::set<char>"));
 	for (char c : std::string("abcdefghijklmnopqrstuvwxyz"))
 		myset.emplace(c);
 	pres.add_slide(sb.build().set_title("std::set<char>"));
@@ -95,7 +110,7 @@ int main() {
 	for (char c : std::string("aaabbcccdeeefff"))
 		mymset.emplace(c);
 	mset_elem.set_color('c', Color::GREEN);
-	pres.add_slide(sb.build().set_title("std::multiset<char> "));
+	pres.add_slide(sb.build().set_title("std::multiset<char>"));
 	mset_elem.set_color(mymset.begin(), Color::RED);
 	pres.add_slide(sb.build().set_title("std::multiset<char>"));
 	mset_elem.set_color(mymset.find('e'), Color::BLUE);

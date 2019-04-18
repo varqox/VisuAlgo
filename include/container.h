@@ -5,6 +5,7 @@
 
 #include <array>
 #include <deque>
+#include <forward_list>
 #include <list>
 #include <map>
 #include <set>
@@ -223,6 +224,73 @@ public:
 
 	// Sets color of elements in range [beg, end)
 	Container& set_range_color(typename std::list<T>::const_iterator beg, typename std::list<T>::const_iterator end,
+	                           std::optional<Color> color) {
+		while (beg != end)
+			set_color(beg++, color);
+
+		return *this;
+	}
+
+	// Sets color of elements in range [beg, end)
+	Container& set_range_color(size_t beg, size_t end, std::optional<Color> color) {
+		auto it = list_->begin();
+		advance(it, beg);
+		auto it2 = it;
+		advance(it2, end - beg);
+		set_range_color(it, it2, std::move(color));
+		return *this;
+	}
+
+	// Sets color of every element
+	Container& set_whole_color(std::optional<Color> color) {
+		if (color.has_value())
+			return set_range_color(list_->begin(), list_->end(), std::move(color));
+
+		colors_.clear();
+		return *this;
+	}
+
+	virtual LatexCode draw_as_latex() const override {
+		return ContainerImplDetails::draw_as_latex("[", "]", list_->begin(), list_->end(), colors_);
+	}
+
+	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
+};
+
+template<class T>
+class Container<std::forward_list<T>> : public SlideElement {
+private:
+	const std::forward_list<T>* list_;
+	std::map<const T*, std::optional<Color>> colors_;
+
+public:
+	Container(const std::forward_list<T>& list) : list_(std::addressof(list)) {}
+
+	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
+
+	Container& set_color(typename std::forward_list<T>::const_iterator it, std::optional<Color> color) {
+		if (color.has_value())
+			colors_[&*it] = std::move(color);
+		else
+			colors_.erase(&*it);
+
+		return *this;
+	}
+
+	Container& set_color(size_t n, std::optional<Color> color) {
+		auto it = list_->begin();
+		// advance(it, n) but check for end()
+		while (n-- > 0 && it != list_->end())
+			++it;
+
+		if (it != list_->end())
+			set_color(it, std::move(color));
+
+		return *this;
+	}
+
+	// Sets color of elements in range [beg, end)
+	Container& set_range_color(typename std::forward_list<T>::const_iterator beg, typename std::forward_list<T>::const_iterator end,
 	                           std::optional<Color> color) {
 		while (beg != end)
 			set_color(beg++, color);
