@@ -105,7 +105,7 @@ clean: OBJS := $(GOOGLETEST_OBJS) $(VISUALGO_OBJS) $(EXAMPLES_OBJS) $(VISUALGO_T
 clean:
 	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo) gtest_main.a visualgo.a $(EXAMPLES_EXECS) $(EXAMPLES_PDFS) examples/examples.pdf
 	$(Q)find examples -type f -name '*.tex' | xargs rm -f
-	$(Q)find src googletest test -type f -name '*.deps' | xargs rm -f
+	$(Q)find src googletest test examples -type f -name '*.deps' | xargs rm -f
 
 .PHONY: help
 help:
