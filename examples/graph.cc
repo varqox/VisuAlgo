@@ -124,8 +124,8 @@ int main() {
 	  .set_node_color(14, Color::CYAN)
 	  .set_node_color(15, Color::LIGHT_YELLOW)
 	  .set_node_color(16, Color::RED)
-	  .set_node_color(17, Color::LIGHT_BROWN);
-	gg.set_roots({11, 4});
+	  .set_node_color(17, Color::LIGHT_BROWN)
+	  .set_roots({11, 4});
 
 	pres.add_slide(sb.build().set_title("grafy"));
 

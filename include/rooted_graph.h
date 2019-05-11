@@ -39,13 +39,63 @@ public:
 	RootedGraph(NodeId root);
 	RootedGraph(std::vector<NodeId> roots);
 
-	RootedGraph& set_root(NodeId root);
-	RootedGraph& set_roots(std::vector<NodeId> roots);
-	RootedGraph& unset_root();
+	virtual RootedGraph& set_root(NodeId root);
+	virtual RootedGraph& set_roots(std::vector<NodeId> roots);
+	virtual RootedGraph& unset_root();
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
 	virtual DotCode draw_as_dot() const override;
+
+	// fixing chaining
+	virtual RootedGraph& add_node(const NodeId& node, std::optional<NodeInfo> node_info = std::nullopt) {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_node(node, node_info), *this;
+	}
+	virtual RootedGraph& add_edge(const NodeId& from, const NodeId& to, std::optional<EdgeInfo> edge_info = std::nullopt) {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_edge(from, to, edge_info), *this;
+	}
+	virtual RootedGraph& set_node_info(const NodeId& node, std::optional<NodeInfo> node_info) {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::set_node_info(node, node_info), *this;
+	}
+	virtual RootedGraph& set_edge_info(const NodeId& from, const NodeId& to, std::optional<EdgeInfo> edge_info) {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::set_edge_info(from, to, edge_info), *this;
+	}
+	virtual RootedGraph& set_node_color(const NodeId& node, std::optional<Color> color) {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::set_node_color(node, color), *this;
+	}
+	virtual RootedGraph& set_every_node_color(const std::optional<Color>& color) {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::set_every_node_color(color), *this;
+	}
+	virtual RootedGraph& set_edge_color(const NodeId& from, const NodeId& to, std::optional<Color> color) {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::set_edge_color(from, to, color), *this;
+	}
+	virtual RootedGraph& set_every_edge_color(const std::optional<Color>& color) {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::set_every_edge_color(color), *this;
+	}
+	virtual RootedGraph& hide_node(const NodeId& node) {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::hide_node(node), *this;
+	}
+	virtual RootedGraph& hide_edge(const NodeId& from, const NodeId& to) {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::hide_edge(from, to), *this;
+	}
+	virtual RootedGraph& unhide_node(const NodeId& node) {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::unhide_node(node), *this;
+	}
+	virtual RootedGraph& unhide_edge(const NodeId& from, const NodeId& to) {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::unhide_edge(from, to), *this;
+	}
+	virtual RootedGraph& remove_node(const NodeId& node) {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::remove_node(node), *this;
+	}
+	virtual RootedGraph& remove_all_nodes() {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::remove_all_nodes(), *this;
+	}
+	virtual RootedGraph& remove_edge(const NodeId& from, const NodeId& to) {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::remove_edge(from, to), *this;
+	}
+	virtual RootedGraph& remove_all_edges() {
+		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::remove_all_edges(), *this;
+	}
 };
 
 /****************** Implementation ******************/
