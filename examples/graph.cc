@@ -2,6 +2,7 @@
 #include "../include/latex_presentation.h"
 #include "../include/slide_builder.h"
 #include "../include/rooted_graph.h"
+#include "../include/directed_graph.h"
 
 #include <iostream>
 #include <vector>
@@ -108,7 +109,7 @@ int main() {
 	  .add_edge(13, 15)
 	  .add_edge(13, 16)
 	  .add_edge(15, 17)
-	  .set_node_color(1, Color::RED)
+	  .set_node_color(1, std::nullopt)
 	  .set_node_color(2, Color::GREEN)
 	  .set_node_color(3, Color::LIGHT_BLUE)
 	  .set_node_color(4, Color::YELLOW)
@@ -128,6 +129,32 @@ int main() {
 	  .set_roots({11, 4});
 
 	pres.add_slide(sb.build().set_title("grafy"));
+
+	sb.remove_all_elements();
+
+	DirectedGraph<int, string, int> gg_dir;
+	sb.add_elem(gg_dir);
+	gg_dir.add_edge(0, 1)
+	      .add_edge(1, 2)
+	      .add_edge(2, 3)
+	      .add_edge(3, 4)
+	      .add_edge(4, 5)
+	      .add_edge(5, 2)
+	      .set_node_color(1, Color::RED);
+	pres.add_slide(sb.build().set_title("grafy skierowane"));
+
+	gg_dir.remove_edge(0, 1);
+	pres.add_slide(sb.build().set_title("grafy skierowane - remove\\_edge(0, 1)"));
+
+	gg_dir.remove_edge(2, 1);
+	pres.add_slide(sb.build().set_title("grafy skierowane - remove\\_edge(2, 1)"));
+
+	gg_dir.hide_edge(1, 2);
+	pres.add_slide(sb.build().set_title("grafy skierowane - hide\\_edge(1, 2)"));
+
+	gg_dir.set_edge_color(2, 3, Color::GREEN);
+	pres.add_slide(sb.build().set_title("grafy skierowane - set\\_edge\\_color(2, 3, Color::GREEN)"));
+
 
 	pres.author("Dream team");
 	pres.date("12.03.2019");
