@@ -85,6 +85,7 @@ VISUALGO_TEST_SRCS := \
 	test/array_1d.cc \
 	test/block.cc \
 	test/graphs.cc \
+	test/image.cc \
 	test/latex.cc \
 	test/source_code.cc \
 	test/variable.cc

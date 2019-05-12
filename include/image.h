@@ -20,14 +20,19 @@ public:
 
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
+	// set width of image in cm
 	Image& set_width(double witdh);
 
+	// set height of image in cm
 	Image& set_height(double height);
 
+	// set rotation angle in degrees
 	Image& set_angle(int angle);
 
+	// set horizontal shift (default position is center of the page)
 	Image& set_right_shift(double val);
 
+	// set vertical shift (default position is center of the page)
 	Image& set_top_shift(double val);
 
 	virtual LatexCode draw_as_latex() const override;

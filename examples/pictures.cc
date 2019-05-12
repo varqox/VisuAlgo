@@ -27,34 +27,42 @@ int main () {
 	Image im4("./sample_images/" ,"kon2.jpg");
 	Image im5("./sample_images/" ,"konik.jpeg");
 
+	// we set the size of images im1, im2, im3, im4 to 3x3cm and size of im5 to 2x2cm
+
+	// first image is moved to point (0, -3)
 	im.set_angle(0);
 	im.set_height(3);
 	im.set_right_shift(0);
 	im.set_top_shift(-3);
 	im.set_width(3);
 
+	// second image is moved to point (4, 0) and rotated by 90 degrees
 	im2.set_angle(90);
 	im2.set_height(3);
 	im2.set_right_shift(4);
 	im2.set_top_shift(0);
 	im2.set_width(3);
 
+	// third image is moved to point (0, 2) and rotated by 180 degrees
 	im3.set_angle(180);
 	im3.set_height(3);
 	im3.set_right_shift(0);
 	im3.set_top_shift(2);
 	im3.set_width(3);
 
+	// fourth image is moved to point (-4, 0) and rotated by 270 degrees
 	im4.set_angle(270);
 	im4.set_height(3);
 	im4.set_right_shift(-4);
 	im4.set_top_shift(0);
 	im4.set_width(3);
 
+	// last image is moved to point (-0.5, 0)
 	im5.set_height(2);
 	im5.set_top_shift(-0.5);
 	im5.set_width(2);
 
+	// adding images to a set, and returning the latex code
 	ImageSet imset;
 
 	imset.add_image(im3);

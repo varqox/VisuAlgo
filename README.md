@@ -15,6 +15,9 @@ Aby zbudować bibliotekę, należy użyć komendy:
 make
 ```
 
+## Architektura
+W katalogu `architecture/` znajdują się 2 diagramy logical view. Ze względu na czytleność, w szczegółowym diagramie umieściliśmy wszystkie klasy użyte w projekcie, a w ogólnym uproszczony diagram z uwzględnieniem kluczowych funkcji najważniejszych klas projektu.
+
 ## Przykłady 
 W folderze `examples/` znajdują się przykłady ilustrujące sposoby użycia biblioteki. Aby je zbudować, należy użyć komendy:
 ```sh
