@@ -117,9 +117,15 @@ template<class NodeId, class NodeInfo, class EdgeInfo>
 inline DirectedGraph<NodeId, NodeInfo, EdgeInfo>&
 DirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_edge(const NodeId& from, const NodeId& to,
                                                     std::optional<EdgeInfo> edge_info) {
-	edges_.emplace(std::pair{from, to}, Edge(from, to, std::move(edge_info)));
-	Node& it_from = find_or_add(from)->second;
-	it_from.nei_.emplace(to);
+	auto it = find_edge(from, to);
+	if (it == edges_.end()) {
+		edges_.emplace(std::pair{from, to}, Edge(from, to, std::move(edge_info)));
+		Node& it_from = find_or_add(from)->second;
+		it_from.nei_.emplace(to);
+	}
+	else
+		it->second.info_ = edge_info;
+
 	return *this;
 }
 

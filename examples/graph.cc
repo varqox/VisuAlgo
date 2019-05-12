@@ -135,6 +135,7 @@ int main() {
 	DirectedGraph<int, string, int> gg_dir;
 	sb.add_elem(gg_dir);
 	gg_dir.add_edge(0, 1)
+	      .add_edge(1, 0)
 	      .add_edge(1, 2)
 	      .add_edge(2, 3)
 	      .add_edge(3, 4)

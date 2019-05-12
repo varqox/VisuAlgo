@@ -128,11 +128,17 @@ template<class NodeId, class NodeInfo, class EdgeInfo>
 inline UndirectedGraph<NodeId, NodeInfo, EdgeInfo>&
 UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_edge(const NodeId& from, const NodeId& to,
                                                       std::optional<EdgeInfo> edge_info) {
-	edges_.emplace(std::pair{from, to}, Edge(from, to, std::move(edge_info)));
-	Node& it_from = find_or_add(from)->second;
-	it_from.nei_.emplace(to);
-	Node& it_to = find_or_add(to)->second;
-	it_to.nei_.emplace(from);
+	auto it = find_edge(from, to);
+	if (it == edges_.end()) {
+		edges_.emplace(std::pair{from, to}, Edge(from, to, std::move(edge_info)));
+		Node& it_from = find_or_add(from)->second;
+		it_from.nei_.emplace(to);
+		Node& it_to = find_or_add(to)->second;
+		it_to.nei_.emplace(from);
+	}
+	else
+		it->second.info_ = edge_info;
+
 	return *this;
 }
 
