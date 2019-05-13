@@ -6,6 +6,7 @@
 #include <array>
 #include <deque>
 #include <forward_list>
+#include <functional>
 #include <list>
 #include <map>
 #include <set>
@@ -34,7 +35,11 @@ private:
 	// prints elements [beg, end) with corresponding colors [color_beg, color_end) - *(beg + i) with color
 	// *(color_beg + i)
 	template<class Iter, class ColorIter>
-	static LatexCode draw_as_latex(Iter beg, Iter end, ColorIter color_beg, ColorIter color_end) {
+	static LatexCode draw_as_latex(
+		Iter beg, Iter end, ColorIter color_beg, ColorIter color_end,
+		const std::function<void(std::stringstream&, const typename
+			std::iterator_traits<Iter>::value_type&)>& printer =
+			[](auto& ss, auto&& val) { ss << val; }) {
 		std::stringstream res;
 		res << "\\begin{equation*}\n[";
 
@@ -42,15 +47,18 @@ private:
 			if (i != beg)
 				res << ',';
 			if (color_beg != color_end) {
-				if (color_beg->has_value())
-					res << "\\textcolor[HTML]{" << color_beg->value().to_hex() << "}{" << *i << "}";
-				else
-					res << *i;
+				if (color_beg->has_value()) {
+					res << "\\textcolor[HTML]{" << color_beg->value().to_hex() << "}{";
+					printer(res, *i);
+					res << "}";
+				} else {
+					printer(res, *i);
+				}
 
 				++color_beg;
 
 			} else {
-				res << *i;
+				printer(res, *i);
 			}
 		}
 
@@ -58,12 +66,15 @@ private:
 		return res.str();
 	}
 
-	// prints elements [beg, end) with corresponding colors: *(beg + i) with color colors[color_beg + i]
-	template<class Iter>
+	// prints elements [beg, end) with corresponding colors: *(beg + i) with color colors[key_of(*(beg + i))]
+	template<class Iter, class Key, class KeyOf, class Printer>
 	static LatexCode draw_as_latex(
 		const char* beg_str, const char* end_str, Iter beg, Iter end,
-		const std::map<const typename std::iterator_traits<Iter>::value_type*, std::optional<Color>>& colors)
-	{
+		const std::map<const Key*, std::optional<Color>>& colors, KeyOf&& key_of, Printer&& printer) {
+		static_assert(std::is_invocable_r_v<const Key*, KeyOf, Iter>);
+		static_assert(std::is_invocable_r_v<void, Printer, std::stringstream&,
+			const typename std::iterator_traits<Iter>::value_type&>);
+
 		std::stringstream res;
 		res << "\\begin{equation*}\n" << beg_str;
 
@@ -71,15 +82,28 @@ private:
 			if (i != beg)
 				res << ',';
 
-			auto it = colors.find(&*i);
-			if (it != colors.end())
-				res << "\\textcolor[HTML]{" << it->second.value().to_hex() << "}{" << *i << "}";
-			else
-				res << *i;
+			auto it = colors.find(key_of(i));
+			if (it != colors.end()) {
+				res << "\\textcolor[HTML]{" << it->second.value().to_hex() << "}{";
+				printer(res, *i);
+				res << "}";
+			} else {
+				printer(res, *i);
+			}
 		}
 
 		res << end_str << "\n\\end{equation*}\n";
 		return res.str();
+	}
+
+
+	// prints elements [beg, end) with corresponding colors: *(beg + i) with color colors[key_of(*(beg + i))]
+	template<class Iter, class Key>
+	static LatexCode draw_as_latex(
+		const char* beg_str, const char* end_str, Iter beg, Iter end,
+		const std::map<const Key*, std::optional<Color>>& colors) {
+		return draw_as_latex(beg_str, end_str, beg, end, colors, [](auto&& iter) { return &*iter; },
+			[](auto& ss, auto&& val) { ss << val; });
 	}
 };
 
@@ -421,6 +445,116 @@ public:
 
 	virtual LatexCode draw_as_latex() const override {
 		return ContainerImplDetails::draw_as_latex("\\{", "\\}", mset_->begin(), mset_->end(), colors_);
+	}
+
+	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
+};
+
+template<class K, class V>
+class Container<std::map<K, V>> : public SlideElement {
+private:
+	const std::map<K, V>* map_;
+	std::map<const K*, std::optional<Color>> colors_;
+
+public:
+	Container(const std::map<K, V>& map) : map_(std::addressof(map)) {}
+
+	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
+
+	Container& set_color(typename std::map<K, V>::const_iterator it, std::optional<Color> color) {
+		if (color.has_value())
+			colors_[&it->first] = std::move(color);
+		else
+			colors_.erase(&it->first);
+
+		return *this;
+	}
+
+	Container& set_color(const K& key, std::optional<Color> color) {
+		auto it = map_->find(key);
+		if (it != map_->end())
+			set_color(std::move(it), std::move(color));
+
+		return *this;
+	}
+
+	// Sets color of elements in range [beg, end)
+	Container& set_range_color(typename std::map<K, V>::const_iterator beg, typename std::map<K, V>::const_iterator end,
+	                           std::optional<Color> color) {
+		while (beg != end)
+			set_color(beg++, color);
+
+		return *this;
+	}
+
+	// Sets color of every element
+	Container& set_whole_color(std::optional<Color> color) {
+		if (color.has_value())
+			return set_range_color(map_->begin(), map_->end(), std::move(color));
+
+		colors_.clear();
+		return *this;
+	}
+
+	virtual LatexCode draw_as_latex() const override {
+		return ContainerImplDetails::draw_as_latex("\\{", "\\}", map_->begin(), map_->end(), colors_,
+			[](auto&& iter) { return &iter->first; },
+			[](auto& ss, auto&& pk) {
+				ss << pk.first << " \\mapsto " << pk.second;
+			});
+	}
+
+	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
+};
+
+template<class K, class V>
+class Container<std::multimap<K, V>> : public SlideElement {
+private:
+	const std::multimap<K, V>* mmap_;
+	std::map<const K*, std::optional<Color>> colors_;
+
+public:
+	Container(const std::multimap<K, V>& mmap) : mmap_(std::addressof(mmap)) {}
+
+	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
+
+	Container& set_color(typename std::multimap<K, V>::const_iterator it, std::optional<Color> color) {
+		if (color.has_value())
+			colors_[&it->first] = std::move(color);
+		else
+			colors_.erase(&it->first);
+
+		return *this;
+	}
+
+	// Sets color of elements in range [beg, end)
+	Container& set_range_color(typename std::multimap<K, V>::const_iterator beg,
+	                           typename std::multimap<K, V>::const_iterator end, std::optional<Color> color) {
+		while (beg != end)
+			set_color(beg++, color);
+
+		return *this;
+	}
+
+	Container& set_color(const K& key, std::optional<Color> color) {
+		return set_range_color(mmap_->lower_bound(key), mmap_->upper_bound(key), std::move(color));
+	}
+
+	// Sets color of every element
+	Container& set_whole_color(std::optional<Color> color) {
+		if (color.has_value())
+			return set_range_color(mmap_->begin(), mmap_->end(), std::move(color));
+
+		colors_.clear();
+		return *this;
+	}
+
+	virtual LatexCode draw_as_latex() const override {
+		return ContainerImplDetails::draw_as_latex("\\{", "\\}", mmap_->begin(), mmap_->end(), colors_,
+			[](auto&& iter) { return &iter->first; },
+			[](auto& ss, auto&& pk) {
+				ss << pk.first << " \\mapsto " << pk.second;
+			});
 	}
 
 	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }

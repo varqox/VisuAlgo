@@ -119,6 +119,43 @@ int main() {
 	pres.add_slide(sb.build().set_title("std::multiset<char>"));
 	sb.remove_all_elements();
 
+	std::map<char, int> mymap;
+	Container map_elem(mymap);
+	sb.add_elem(map_elem);
+	mymap.emplace('k', 'k' - 'a');
+	map_elem.set_color('k', Color::GREEN);
+	pres.add_slide(sb.build().set_title("std::map<char, int>"));
+	mymap.emplace('f', 'f' - 'a');
+	pres.add_slide(sb.build().set_title("std::map<char, int>"));
+	mymap.emplace('p', 'p' - 'a');
+	pres.add_slide(sb.build().set_title("std::map<char, int>"));
+	mymap.erase('k');
+	// TODO: remove unused colors when (multi)?(set|map) is drawn
+	pres.add_slide(sb.build().set_title("std::map<char, int>"));
+	mymap.emplace('k', 'k' - 'a');
+	pres.add_slide(sb.build().set_title("std::map<char, int>"));
+	for (char c : std::string("abcdefgh"))
+		mymap.emplace(c, int(c - 'a'));
+	pres.add_slide(sb.build().set_title("std::map<char, int>"));
+	map_elem.set_range_color(mymap.lower_bound('c'), mymap.upper_bound('f'), Color::RED);
+	pres.add_slide(sb.build().set_title("std::map<char, int>"));
+	sb.remove_all_elements();
+
+	std::multimap<char, int> mymmap;
+	Container mmap_elem(mymmap);
+	sb.add_elem(mmap_elem);
+	for (char c : std::string("aabccdeeff"))
+		mymmap.emplace(c, int(c - 'a'));
+	mmap_elem.set_color('c', Color::GREEN);
+	pres.add_slide(sb.build().set_title("std::multimap<char, int>"));
+	mmap_elem.set_color(mymmap.begin(), Color::RED);
+	pres.add_slide(sb.build().set_title("std::multimap<char, int>"));
+	mmap_elem.set_color(mymmap.find('e'), Color::BLUE);
+	pres.add_slide(sb.build().set_title("std::multimap<char, int>"));
+	mmap_elem.set_color(++mymmap.lower_bound('f'), Color::MAGENTA);
+	pres.add_slide(sb.build().set_title("std::multimap<char, int>"));
+	sb.remove_all_elements();
+
 	pres.author("Dream team");
 	pres.date("17.04.2019");
 	pres.institute("MIMUW");
