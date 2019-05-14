@@ -60,15 +60,16 @@ HARMONOGRAM:
 3. 15.05
   - grafy
   - kontenery (ciąg dalszy)
-  - DAGi
-  - strzałki
-  - grafy funkcyjne
   - dokumentacja (diagramy użycia)
   - poprawianie dokumentacji
-  - poprawianie architektury
+  - poprawianie architektury (poprawić logical view)
+  - reszta architektury
+  - poprawić obrazki
 
 4. 12.06
   - prezentacja
+  - DAGi
+  - grafy funkcyjne
   - plakat
   - strona
   - geometria

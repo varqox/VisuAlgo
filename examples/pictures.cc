@@ -25,30 +25,35 @@ int main () {
 	Image im2("./sample_images/" ,"kon2.jpg");
 	Image im3("./sample_images/" ,"kon2.jpg");
 	Image im4("./sample_images/" ,"kon2.jpg");
-	im.set_height(3);
-	im.set_width(3);
-	im2.set_height(3);
-	im2.set_width(3);
-	im3.set_height(3);
-	im3.set_width(3);
-	im4.set_height(3);
-	im4.set_width(3);
-	im.set_angle(0);
-	im2.set_angle(90);
-	im3.set_angle(180);
-	im4.set_angle(270);
-	im.set_top_shift(-3);
-	im2.set_top_shift(0);
-	im3.set_top_shift(2);
-	im4.set_top_shift(0);
-	im.set_right_shift(0);
-	im2.set_right_shift(4);
-	im3.set_right_shift(0);
-	im4.set_right_shift(-4);
 	Image im5("./sample_images/" ,"konik.jpeg");
-	im5.set_width(2);
+
+	im.set_angle(0);
+	im.set_height(3);
+	im.set_right_shift(0);
+	im.set_top_shift(-3);
+	im.set_width(3);
+
+	im2.set_angle(90);
+	im2.set_height(3);
+	im2.set_right_shift(4);
+	im2.set_top_shift(0);
+	im2.set_width(3);
+
+	im3.set_angle(180);
+	im3.set_height(3);
+	im3.set_right_shift(0);
+	im3.set_top_shift(2);
+	im3.set_width(3);
+
+	im4.set_angle(270);
+	im4.set_height(3);
+	im4.set_right_shift(-4);
+	im4.set_top_shift(0);
+	im4.set_width(3);
+
 	im5.set_height(2);
 	im5.set_top_shift(-0.5);
+	im5.set_width(2);
 
 	ImageSet imset;
 
