@@ -6,159 +6,148 @@
 #include <numeric>
 #include <vector>
 
-using namespace std;
 using namespace valgo;
 
 LatexPresentation pres("Containers", "Containers");
 SlideBuilder sb;
 
 int main() {
-	vector vec = {1, 2, 3};
-	Container vec_elem(vec);
-	sb.add_elem(vec_elem);
+	Container<std::vector<int>> vector = {1, 2, 3};
+	sb.add_elem(vector);
 
 	pres.add_slide(sb.build().set_title("std::vector<int>"));
-	vec_elem.set_color(0, Color::RED);
+	vector.set_color(0, Color::RED);
 	pres.add_slide(sb.build().set_title("std::vector<int>"));
-	vec_elem.set_color(2, Color::GREEN);
+	vector.set_color(2, Color::GREEN);
 	pres.add_slide(sb.build().set_title("std::vector<int>"));
-	vec.pop_back();
+	vector.pop_back();
 	pres.add_slide(sb.build().set_title("std::vector<int>"));
-	vec.emplace_back(4);
+	vector.emplace_back(4);
 	pres.add_slide(sb.build().set_title("std::vector<int>"));
 	sb.remove_all_elements();
 
-	array<short, 20> arr;
-	std::iota(arr.begin(), arr.end(), 0);
-	Container arr_elem(arr);
-	sb.add_elem(arr_elem);
-	arr_elem.set_whole_color(Color::RED);
-	arr_elem.set_range_color(5, 12, Color::BLACK);
-	arr_elem.set_color(8, Color::GREEN);
+	Container<std::array<short, 20>> array;
+	std::iota(array.begin(), array.end(), 0);
+	sb.add_elem(array);
+	array.set_whole_color(Color::RED);
+	array.set_range_color(5, 12, Color::BLACK);
+	array.set_color(8, Color::GREEN);
 	pres.add_slide(sb.build().set_title("std::array<short>"));
 	sb.remove_all_elements();
 
-	std::deque<char> deq;
-	Container deq_elem(deq);
-	sb.add_elem(deq_elem);
-	deq.push_back('a');
-	deq_elem.set_color(0, Color::GREEN);
+	Container<std::deque<char>> deque;
+	sb.add_elem(deque);
+	deque.push_back('a');
+	deque.set_color(0, Color::GREEN);
 	pres.add_slide(sb.build().set_title("std::deque<char>"));
-	deq.push_front('b');
-	deq.push_back('c');
-	deq.push_back('d');
-	deq.push_back('e');
+	deque.push_front('b');
+	deque.push_back('c');
+	deque.push_back('d');
+	deque.push_back('e');
 	pres.add_slide(sb.build().set_title("std::deque<char>"));
-	deq_elem.set_range_color(2, 4, Color::RED);
+	deque.set_range_color(2, 4, Color::RED);
 	pres.add_slide(sb.build().set_title("std::deque<char>"));
 	sb.remove_all_elements();
 
-	std::list<char> list;
-	Container list_elem(list);
-	sb.add_elem(list_elem);
+	Container<std::list<char>> list;
+	sb.add_elem(list);
 	list.push_back('a');
-	list_elem.set_color(0, Color::GREEN);
+	list.set_color(0, Color::GREEN);
 	pres.add_slide(sb.build().set_title("std::list<char>"));
 	list.push_front('b');
 	list.push_back('c');
 	list.push_back('d');
 	list.push_back('e');
 	pres.add_slide(sb.build().set_title("std::list<char>"));
-	list_elem.set_range_color(2, 4, Color::RED);
+	list.set_range_color(2, 4, Color::RED);
 	pres.add_slide(sb.build().set_title("std::list<char>"));
 	sb.remove_all_elements();
 
-	std::forward_list<char> flist;
-	Container flist_elem(flist);
-	sb.add_elem(flist_elem);
-	flist.emplace_front('e');
-	flist.emplace_front('d');
-	flist.emplace_front('c');
-	flist.emplace_front('b');
-	flist_elem.set_color(0, Color::GREEN);
+	Container<std::forward_list<char>> frd_list;
+	sb.add_elem(frd_list);
+	frd_list.emplace_front('e');
+	frd_list.emplace_front('d');
+	frd_list.emplace_front('c');
+	frd_list.emplace_front('b');
+	frd_list.set_color(0, Color::GREEN);
 	pres.add_slide(sb.build().set_title("std::forward\\_list<char>"));
-	flist.emplace_front('a');
+	frd_list.emplace_front('a');
 	pres.add_slide(sb.build().set_title("std::forward\\_list<char>"));
-	flist_elem.set_range_color(2, 4, Color::RED);
+	frd_list.set_range_color(2, 4, Color::RED);
 	pres.add_slide(sb.build().set_title("std::forward\\_list<char>"));
 	sb.remove_all_elements();
 
-	std::set<char> myset;
-	Container set_elem(myset);
-	sb.add_elem(set_elem);
-	myset.emplace('k');
-	set_elem.set_color('k', Color::GREEN);
+	Container<std::set<char>> set;
+	sb.add_elem(set);
+	set.emplace('k');
+	set.set_color('k', Color::GREEN);
 	pres.add_slide(sb.build().set_title("std::set<char>"));
-	myset.emplace('f');
+	set.emplace('f');
 	pres.add_slide(sb.build().set_title("std::set<char>"));
-	myset.emplace('p');
+	set.emplace('p');
 	pres.add_slide(sb.build().set_title("std::set<char>"));
-	myset.erase('k');
+	set.erase('k');
 	pres.add_slide(sb.build().set_title("std::set<char>"));
-	myset.emplace('k');
+	set.emplace('k');
 	pres.add_slide(sb.build().set_title("std::set<char>"));
 	for (char c : std::string("abcdefghijklmnopqrstuvwxyz"))
-		myset.emplace(c);
+		set.emplace(c);
 	pres.add_slide(sb.build().set_title("std::set<char>"));
-	set_elem.set_range_color(myset.lower_bound('c'), myset.upper_bound('o'), Color::RED);
+	set.set_range_color(set.lower_bound('c'), set.upper_bound('o'), Color::RED);
 	pres.add_slide(sb.build().set_title("std::set<char>"));
 	sb.remove_all_elements();
 
-	std::multiset<char> mymset;
-	Container mset_elem(mymset);
-	sb.add_elem(mset_elem);
+	Container<std::multiset<char>> multiset;
+	sb.add_elem(multiset);
 	for (char c : std::string("aaabbcccdeeefff"))
-		mymset.emplace(c);
-	mset_elem.set_color('c', Color::GREEN);
+		multiset.emplace(c);
+	multiset.set_color('c', Color::GREEN);
 	pres.add_slide(sb.build().set_title("std::multiset<char>"));
-	mset_elem.set_color(mymset.begin(), Color::RED);
+	multiset.set_color(multiset.begin(), Color::RED);
 	pres.add_slide(sb.build().set_title("std::multiset<char>"));
-	mset_elem.set_color(mymset.find('e'), Color::BLUE);
+	multiset.set_color(multiset.find('e'), Color::BLUE);
 	pres.add_slide(sb.build().set_title("std::multiset<char>"));
-	mset_elem.set_color(++mymset.lower_bound('f'), Color::MAGENTA);
+	multiset.set_color(++multiset.lower_bound('f'), Color::MAGENTA);
 	pres.add_slide(sb.build().set_title("std::multiset<char>"));
 	sb.remove_all_elements();
 
-	std::map<char, int> mymap;
-	Container map_elem(mymap);
-	sb.add_elem(map_elem);
-	mymap.emplace('k', 'k' - 'a');
-	map_elem.set_color('k', Color::GREEN);
+	Container<std::map<char, int>> map;
+	sb.add_elem(map);
+	map.emplace('k', 'k' - 'a');
+	map.set_color('k', Color::GREEN);
 	pres.add_slide(sb.build().set_title("std::map<char, int>"));
-	mymap.emplace('f', 'f' - 'a');
+	map.emplace('f', 'f' - 'a');
 	pres.add_slide(sb.build().set_title("std::map<char, int>"));
-	mymap.emplace('p', 'p' - 'a');
+	map.emplace('p', 'p' - 'a');
 	pres.add_slide(sb.build().set_title("std::map<char, int>"));
-	mymap.erase('k');
-	// TODO: remove unused colors when (multi)?(set|map) is drawn
+	map.erase('k');
 	pres.add_slide(sb.build().set_title("std::map<char, int>"));
-	mymap.emplace('k', 'k' - 'a');
+	map.emplace('k', 'k' - 'a');
 	pres.add_slide(sb.build().set_title("std::map<char, int>"));
 	for (char c : std::string("abcdefgh"))
-		mymap.emplace(c, int(c - 'a'));
+		map.emplace(c, int(c - 'a'));
 	pres.add_slide(sb.build().set_title("std::map<char, int>"));
-	map_elem.set_range_color(mymap.lower_bound('c'), mymap.upper_bound('f'), Color::RED);
+	map.set_range_color(map.lower_bound('c'), map.upper_bound('f'), Color::RED);
 	pres.add_slide(sb.build().set_title("std::map<char, int>"));
 	sb.remove_all_elements();
 
-	std::multimap<char, int> mymmap;
-	Container mmap_elem(mymmap);
-	sb.add_elem(mmap_elem);
+	Container<std::multimap<char, int>> multimap;
+	sb.add_elem(multimap);
 	for (char c : std::string("aabccdeeff"))
-		mymmap.emplace(c, int(c - 'a'));
-	mmap_elem.set_color('c', Color::GREEN);
+		multimap.emplace(c, int(c - 'a'));
+	multimap.set_color('c', Color::GREEN);
 	pres.add_slide(sb.build().set_title("std::multimap<char, int>"));
-	mmap_elem.set_color(mymmap.begin(), Color::RED);
+	multimap.set_color(multimap.begin(), Color::RED);
 	pres.add_slide(sb.build().set_title("std::multimap<char, int>"));
-	mmap_elem.set_color(mymmap.find('e'), Color::BLUE);
+	multimap.set_color(multimap.find('e'), Color::BLUE);
 	pres.add_slide(sb.build().set_title("std::multimap<char, int>"));
-	mmap_elem.set_color(++mymmap.lower_bound('f'), Color::MAGENTA);
+	multimap.set_color(++multimap.lower_bound('f'), Color::MAGENTA);
 	pres.add_slide(sb.build().set_title("std::multimap<char, int>"));
 	sb.remove_all_elements();
 
 	pres.author("Dream team");
 	pres.date("17.04.2019");
 	pres.institute("MIMUW");
-	cout << pres.to_str() << endl;
+	std::cout << pres.to_str() << std::endl;
 	return 0;
 }

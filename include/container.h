@@ -15,23 +15,8 @@
 
 namespace valgo {
 
-template<class T>
-class Container : public SlideElement {
-public:
-	Container(const T&);
-
-	virtual std::unique_ptr<SlideElement> clone() const override;
-
-	virtual LatexCode draw_as_latex() const override;
-
-	virtual HTMLCode draw_as_html() const override;
-};
-
-class ContainerImplDetails {
-private:
-	template<class T>
-	friend class Container;
-
+class ContainerBase : public SlideElement {
+protected:
 	// prints elements [beg, end) with corresponding colors [color_beg, color_end) - *(beg + i) with color
 	// *(color_beg + i)
 	template<class Iter, class ColorIter>
@@ -65,13 +50,28 @@ private:
 		res << "]\n\\end{equation*}\n";
 		return res.str();
 	}
+};
 
-	// prints elements [beg, end) with corresponding colors: *(beg + i) with color colors[key_of(*(beg + i))]
-	template<class Iter, class Key, class KeyOf, class Printer>
-	static LatexCode draw_as_latex(
-		const char* beg_str, const char* end_str, Iter beg, Iter end,
-		const std::map<const Key*, std::optional<Color>>& colors, KeyOf&& key_of, Printer&& printer) {
-		static_assert(std::is_invocable_r_v<const Key*, KeyOf, Iter>);
+class ContainerWithColorsMap : public ContainerBase {
+public:
+	using ColorMap = std::map<const void*, std::optional<Color>>;
+
+protected:
+	ColorMap colors_;
+
+	template<class Iter>
+	void copy_colors(const ColorMap& other_colors, Iter my_beg, Iter my_end, Iter other_beg) {
+		colors_.clear();
+		for (; my_beg != my_end; ++my_beg, ++other_beg) {
+			auto col = other_colors.find(&*other_beg);
+			if (col != other_colors.end())
+				colors_.emplace(&*my_beg, col->second);
+		}
+	}
+
+	// prints elements [beg, end) with corresponding colors: *(beg + i) with color colors_[&*(beg + i)]
+	template<class Iter, class Printer>
+	LatexCode draw_as_latex(const char* beg_str, const char* end_str, Iter beg, Iter end, Printer&& printer) const {
 		static_assert(std::is_invocable_r_v<void, Printer, std::stringstream&,
 			const typename std::iterator_traits<Iter>::value_type&>);
 
@@ -82,8 +82,8 @@ private:
 			if (i != beg)
 				res << ',';
 
-			auto it = colors.find(key_of(i));
-			if (it != colors.end()) {
+			auto it = colors_.find(&*i);
+			if (it != colors_.end()) {
 				res << "\\textcolor[HTML]{" << it->second.value().to_hex() << "}{";
 				printer(res, *i);
 				res << "}";
@@ -96,25 +96,91 @@ private:
 		return res.str();
 	}
 
-
-	// prints elements [beg, end) with corresponding colors: *(beg + i) with color colors[key_of(*(beg + i))]
-	template<class Iter, class Key>
-	static LatexCode draw_as_latex(
-		const char* beg_str, const char* end_str, Iter beg, Iter end,
-		const std::map<const Key*, std::optional<Color>>& colors) {
-		return draw_as_latex(beg_str, end_str, beg, end, colors, [](auto&& iter) { return &*iter; },
-			[](auto& ss, auto&& val) { ss << val; });
+	// prints elements [beg, end) with corresponding colors: *(beg + i) with color colors_[&*(beg + i)]
+	template<class Iter>
+	LatexCode draw_as_latex(
+		const char* beg_str, const char* end_str, Iter beg, Iter end) const {
+		return draw_as_latex(beg_str, end_str, beg, end, [](auto& ss, auto&& val) { ss << val; });
 	}
 };
 
-template<class T, size_t N>
-class Container<std::array<T, N>> : public SlideElement {
+template<class T>
+class ColorWiseAllocator : private std::allocator<T> {
 private:
-	const std::array<T, N>* arr_;
+	using ColorsPtr = ContainerWithColorsMap::ColorMap*;
+	ColorsPtr colors_;
+	using Alloc = std::allocator<T>;
+
+	template<class U>
+	friend class ColorWiseAllocator;
+
+public:
+	using value_type = typename Alloc::value_type;
+	using propagate_on_container_move_assignment = std::true_type;
+	using propagate_on_container_swap = std::true_type;
+	using is_always_equal = std::false_type;
+
+	ColorWiseAllocator(ColorsPtr colors) noexcept : colors_(colors) {}
+
+	ColorWiseAllocator(const ColorWiseAllocator&) noexcept = default;
+	ColorWiseAllocator(ColorWiseAllocator&&) noexcept = default;
+	ColorWiseAllocator& operator=(const ColorWiseAllocator&) noexcept = default;
+	ColorWiseAllocator& operator=(ColorWiseAllocator&&) noexcept = default;
+
+	template<class U>
+	ColorWiseAllocator(const ColorWiseAllocator<U>& m) noexcept : Alloc(m), colors_(m.colors_) {}
+
+	ColorWiseAllocator select_on_container_copy_construction() const noexcept {
+		return ColorWiseAllocator(nullptr);
+	}
+
+	using Alloc::allocate;
+
+	void deallocate(T* p, std::size_t n) noexcept {
+		auto it = colors_->lower_bound(p);
+		while (it != colors_->end() and it->first < p + n) {
+			// Found colored address in the deallocated memory segment
+			colors_->erase(it++);
+		}
+
+		Alloc::deallocate(p, n);
+	}
+
+	template<class A, class B>
+	friend bool operator==(const ColorWiseAllocator<A>& a, const ColorWiseAllocator<B>& b) noexcept;
+
+	template<class A, class B>
+	friend bool operator!=(const ColorWiseAllocator<A>& a, const ColorWiseAllocator<B>& b) noexcept;
+};
+
+template<class A, class B>
+inline bool operator==(const ColorWiseAllocator<A>& a, const ColorWiseAllocator<B>& b) noexcept {
+	return (Alloc(a) == Alloc(b) and a.colors_ == b.colors_);
+}
+
+template<class A, class B>
+inline bool operator!=(const ColorWiseAllocator<A>& a, const ColorWiseAllocator<B>& b) noexcept {
+	return (Alloc(a) != Alloc(b) or a.colors_ != b.colors_);
+}
+
+template<class T>
+class Container;
+
+template<class T, size_t N>
+class Container<std::array<T, N>> : public ContainerBase, public std::array<T, N> {
+private:
+	using Array = std::array<T, N>;
 	std::array<std::optional<Color>, N> colors_ = {{}};
 
 public:
-	Container(const std::array<T, N>& arr) : arr_(std::addressof(arr)) {}
+	Container() = default;
+
+	Container(const Array& a) : Array(a) {}
+
+	Container& operator=(const Array& a) {
+		Array::operator=(a);
+		return *this;
+	}
 
 	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
 
@@ -136,98 +202,138 @@ public:
 	}
 
 	virtual LatexCode draw_as_latex() const override {
-		return ContainerImplDetails::draw_as_latex(arr_->begin(), arr_->end(), colors_.begin(), colors_.end());
+		return ContainerBase::draw_as_latex(Array::begin(), Array::end(), colors_.begin(), colors_.end());
 	}
 
 	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
 };
 
 template<class T>
-class Container<std::vector<T>> : public SlideElement {
+class Container<std::vector<T>> : public ContainerBase, public std::vector<T> {
 private:
-	const std::vector<T>* vec_;
+	using Vector = std::vector<T>;
 	std::vector<std::optional<Color>> colors_;
 
 public:
-	Container(const std::vector<T>& vec) : vec_(std::addressof(vec)) {}
+	Container() = default;
+
+	using Vector::Vector;
+
+	Container& operator=(std::initializer_list<T> ilist) {
+		Vector::operator=(std::move(ilist));
+		return *this;
+	}
 
 	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
 
 	Container& set_color(size_t n, std::optional<Color> color) {
-		colors_.resize(vec_->size());
+		colors_.resize(Vector::size());
 		colors_[n] = std::move(color);
 		return *this;
 	}
 
 	// Sets color of elements in range [beg, end)
 	Container& set_range_color(size_t beg, size_t end, std::optional<Color> color) {
-		colors_.resize(vec_->size());
+		colors_.resize(Vector::size());
 		std::fill(colors_.begin() + beg, colors_.begin() + end, std::move(color));
 		return *this;
 	}
 
 	// Sets color of every element
 	Container& set_whole_color(std::optional<Color> color) {
-		colors_.assign(vec_->size(), std::move(color));
+		colors_.assign(Vector::size(), std::move(color));
 		return *this;
 	}
 
 	virtual LatexCode draw_as_latex() const override {
-		return ContainerImplDetails::draw_as_latex(vec_->begin(), vec_->end(), colors_.begin(), colors_.end());
+		return ContainerBase::draw_as_latex(Vector::begin(), Vector::end(), colors_.begin(), colors_.end());
 	}
 
 	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
 };
 
 template<class T>
-class Container<std::deque<T>> : public SlideElement {
+class Container<std::deque<T>> : public ContainerBase, public std::deque<T> {
 private:
-	const std::deque<T>* deq_;
+	using Deque = std::deque<T>;
 	std::vector<std::optional<Color>> colors_;
 
 public:
-	Container(const std::deque<T>& deq) : deq_(std::addressof(deq)) {}
+	Container() = default;
+
+	using Deque::Deque;
+
+	Container& operator=(std::initializer_list<T> ilist) {
+		Deque::operator=(std::move(ilist));
+		return *this;
+	}
 
 	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
 
 	Container& set_color(size_t n, std::optional<Color> color) {
-		colors_.resize(deq_->size());
+		colors_.resize(Deque::size());
 		colors_[n] = std::move(color);
 		return *this;
 	}
 
 	// Sets color of elements in range [beg, end)
 	Container& set_range_color(size_t beg, size_t end, std::optional<Color> color) {
-		colors_.resize(deq_->size());
+		colors_.resize(Deque::size());
 		std::fill(colors_.begin() + beg, colors_.begin() + end, std::move(color));
 		return *this;
 	}
 
 	// Sets color of every element
 	Container& set_whole_color(std::optional<Color> color) {
-		colors_.assign(deq_->size(), std::move(color));
+		colors_.assign(Deque::size(), std::move(color));
 		return *this;
 	}
 
 	virtual LatexCode draw_as_latex() const override {
-		return ContainerImplDetails::draw_as_latex(deq_->begin(), deq_->end(), colors_.begin(), colors_.end());
+		return ContainerBase::draw_as_latex(Deque::begin(), Deque::end(), colors_.begin(), colors_.end());
 	}
 
 	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
 };
 
 template<class T>
-class Container<std::list<T>> : public SlideElement {
+class Container<std::list<T>> :
+	public ContainerWithColorsMap, // Important: has to appear before std::list below, because ColorWiseAllocator uses it
+	public std::list<T, ColorWiseAllocator<T>> {
 private:
-	const std::list<T>* list_;
-	std::map<const T*, std::optional<Color>> colors_;
+	using List = std::list<T, ColorWiseAllocator<T>>;
+	using Allocator = typename List::allocator_type;
 
 public:
-	Container(const std::list<T>& list) : list_(std::addressof(list)) {}
+	Container() : List(Allocator(&colors_)) {}
+
+	Container(typename List::size_type count, const T& value) : List(count, value, Allocator(&colors_)) {}
+
+	explicit Container(typename List::size_type count) : List(count, Allocator(&colors_)) {}
+
+	template<class Iter>
+	Container(Iter first, Iter last) : List(first, last, Allocator(&colors_)) {}
+
+	Container(std::initializer_list<T> ilist) : List(std::move(ilist), Allocator(&colors_)) {}
+
+	Container(const Container& c) : List(c, Allocator(&colors_)) {
+		ContainerWithColorsMap::copy_colors(c.colors_, List::cbegin(), List::cend(), c.cbegin());
+	}
+
+	Container(Container&&) = default;
+
+	Container& operator=(const Container& c) { *this = Container(c); }
+
+	Container& operator=(Container&&) = default;
+
+	Container& operator=(std::initializer_list<T> ilist) {
+		List::operator=(std::move(ilist));
+		return *this;
+	}
 
 	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
 
-	Container& set_color(typename std::list<T>::const_iterator it, std::optional<Color> color) {
+	Container& set_color(typename List::const_iterator it, std::optional<Color> color) {
 		if (color.has_value())
 			colors_[&*it] = std::move(color);
 		else
@@ -237,8 +343,8 @@ public:
 	}
 
 	Container& set_color(size_t n, std::optional<Color> color) {
-		if (n < list_->size()) {
-			auto it = list_->begin();
+		if (n < List::size()) {
+			auto it = List::begin();
 			std::advance(it, n);
 			set_color(it, std::move(color));
 		}
@@ -247,7 +353,7 @@ public:
 	}
 
 	// Sets color of elements in range [beg, end)
-	Container& set_range_color(typename std::list<T>::const_iterator beg, typename std::list<T>::const_iterator end,
+	Container& set_range_color(typename List::const_iterator beg, typename List::const_iterator end,
 	                           std::optional<Color> color) {
 		while (beg != end)
 			set_color(beg++, color);
@@ -257,7 +363,7 @@ public:
 
 	// Sets color of elements in range [beg, end)
 	Container& set_range_color(size_t beg, size_t end, std::optional<Color> color) {
-		auto it = list_->begin();
+		auto it = List::begin();
 		advance(it, beg);
 		auto it2 = it;
 		advance(it2, end - beg);
@@ -268,31 +374,57 @@ public:
 	// Sets color of every element
 	Container& set_whole_color(std::optional<Color> color) {
 		if (color.has_value())
-			return set_range_color(list_->begin(), list_->end(), std::move(color));
+			return set_range_color(List::begin(), List::end(), std::move(color));
 
 		colors_.clear();
 		return *this;
 	}
 
 	virtual LatexCode draw_as_latex() const override {
-		return ContainerImplDetails::draw_as_latex("[", "]", list_->begin(), list_->end(), colors_);
+		return ContainerWithColorsMap::draw_as_latex("[", "]", List::begin(), List::end());
 	}
 
 	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
 };
 
 template<class T>
-class Container<std::forward_list<T>> : public SlideElement {
+class Container<std::forward_list<T>> :
+	public ContainerWithColorsMap, // Important: has to appear before std::forward_list below, because ColorWiseAllocator uses it
+	public std::forward_list<T, ColorWiseAllocator<T>> {
 private:
-	const std::forward_list<T>* list_;
-	std::map<const T*, std::optional<Color>> colors_;
+	using FList = std::forward_list<T, ColorWiseAllocator<T>>;
+	using Allocator = typename FList::allocator_type;
 
 public:
-	Container(const std::forward_list<T>& list) : list_(std::addressof(list)) {}
+	Container() : FList(Allocator(&colors_)) {}
+
+	Container(typename FList::size_type count, const T& value) : FList(count, value, Allocator(&colors_)) {}
+
+	explicit Container(typename FList::size_type count) : FList(count, Allocator(&colors_)) {}
+
+	template<class Iter>
+	Container(Iter first, Iter last) : FList(first, last, Allocator(&colors_)) {}
+
+	Container(std::initializer_list<T> ilist) : FList(std::move(ilist), Allocator(&colors_)) {}
+
+	Container(const Container& c) : FList(c, Allocator(&colors_)) {
+		ContainerWithColorsMap::copy_colors(c.colors_, FList::cbegin(), FList::cend(), c.cbegin());
+	}
+
+	Container(Container&&) = default;
+
+	Container& operator=(const Container& c) { *this = Container(c); }
+
+	Container& operator=(Container&&) = default;
+
+	Container& operator=(std::initializer_list<T> ilist) {
+		FList::operator=(std::move(ilist));
+		return *this;
+	}
 
 	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
 
-	Container& set_color(typename std::forward_list<T>::const_iterator it, std::optional<Color> color) {
+	Container& set_color(typename FList::const_iterator it, std::optional<Color> color) {
 		if (color.has_value())
 			colors_[&*it] = std::move(color);
 		else
@@ -302,19 +434,19 @@ public:
 	}
 
 	Container& set_color(size_t n, std::optional<Color> color) {
-		auto it = list_->begin();
+		auto it = FList::begin();
 		// advance(it, n) but check for end()
-		while (n-- > 0 && it != list_->end())
+		while (n-- > 0 && it != FList::end())
 			++it;
 
-		if (it != list_->end())
+		if (it != FList::end())
 			set_color(it, std::move(color));
 
 		return *this;
 	}
 
 	// Sets color of elements in range [beg, end)
-	Container& set_range_color(typename std::forward_list<T>::const_iterator beg, typename std::forward_list<T>::const_iterator end,
+	Container& set_range_color(typename FList::const_iterator beg, typename FList::const_iterator end,
 	                           std::optional<Color> color) {
 		while (beg != end)
 			set_color(beg++, color);
@@ -324,7 +456,7 @@ public:
 
 	// Sets color of elements in range [beg, end)
 	Container& set_range_color(size_t beg, size_t end, std::optional<Color> color) {
-		auto it = list_->begin();
+		auto it = FList::begin();
 		advance(it, beg);
 		auto it2 = it;
 		advance(it2, end - beg);
@@ -335,31 +467,53 @@ public:
 	// Sets color of every element
 	Container& set_whole_color(std::optional<Color> color) {
 		if (color.has_value())
-			return set_range_color(list_->begin(), list_->end(), std::move(color));
+			return set_range_color(FList::begin(), FList::end(), std::move(color));
 
 		colors_.clear();
 		return *this;
 	}
 
 	virtual LatexCode draw_as_latex() const override {
-		return ContainerImplDetails::draw_as_latex("[", "]", list_->begin(), list_->end(), colors_);
+		return ContainerWithColorsMap::draw_as_latex("[", "]", FList::begin(), FList::end());
 	}
 
 	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
 };
 
-template<class T>
-class Container<std::set<T>> : public SlideElement {
+template<class T, class Compare>
+class Container<std::set<T, Compare>> :
+	public ContainerWithColorsMap, // Important: has to appear before std::set below, because ColorWiseAllocator uses it
+	public std::set<T, Compare, ColorWiseAllocator<T>> {
 private:
-	const std::set<T>* set_;
-	std::map<const T*, std::optional<Color>> colors_;
+	using Set = std::set<T, Compare, ColorWiseAllocator<T>>;
+	using Allocator = typename Set::allocator_type;
 
 public:
-	Container(const std::set<T>& set) : set_(std::addressof(set)) {}
+	explicit Container(const Compare& comp = Compare()) : Set(comp, Allocator(&colors_)) {}
+
+	template<class Iter>
+	Container(Iter first, Iter last, const Compare& comp = Compare()) : Set(first, last, comp, Allocator(&colors_)) {}
+
+	Container(std::initializer_list<typename Set::value_type> ilist, const Compare& comp = Compare()) : Set(std::move(ilist), comp, Allocator(&colors_)) {}
+
+	Container(const Container& c) : Set(c, Allocator(&colors_)) {
+		ContainerWithColorsMap::copy_colors(c.colors_, Set::cbegin(), Set::cend(), c.cbegin());
+	}
+
+	Container(Container&&) = default;
+
+	Container& operator=(const Container& c) { *this = Container(c); }
+
+	Container& operator=(Container&&) = default;
+
+	Container& operator=(std::initializer_list<typename Set::value_type> ilist) {
+		Set::operator=(std::move(ilist));
+		return *this;
+	}
 
 	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
 
-	Container& set_color(typename std::set<T>::const_iterator it, std::optional<Color> color) {
+	Container& set_color(typename Set::const_iterator it, std::optional<Color> color) {
 		if (color.has_value())
 			colors_[&*it] = std::move(color);
 		else
@@ -369,15 +523,15 @@ public:
 	}
 
 	Container& set_color(const T& elem, std::optional<Color> color) {
-		auto it = set_->find(elem);
-		if (it != set_->end())
+		auto it = Set::find(elem);
+		if (it != Set::end())
 			set_color(std::move(it), std::move(color));
 
 		return *this;
 	}
 
 	// Sets color of elements in range [beg, end)
-	Container& set_range_color(typename std::set<T>::const_iterator beg, typename std::set<T>::const_iterator end,
+	Container& set_range_color(typename Set::const_iterator beg, typename Set::const_iterator end,
 	                           std::optional<Color> color) {
 		while (beg != end)
 			set_color(beg++, color);
@@ -388,31 +542,53 @@ public:
 	// Sets color of every element
 	Container& set_whole_color(std::optional<Color> color) {
 		if (color.has_value())
-			return set_range_color(set_->begin(), set_->end(), std::move(color));
+			return set_range_color(Set::begin(), Set::end(), std::move(color));
 
 		colors_.clear();
 		return *this;
 	}
 
 	virtual LatexCode draw_as_latex() const override {
-		return ContainerImplDetails::draw_as_latex("\\{", "\\}", set_->begin(), set_->end(), colors_);
+		return ContainerWithColorsMap::draw_as_latex("\\{", "\\}", Set::begin(), Set::end());
 	}
 
 	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
 };
 
-template<class T>
-class Container<std::multiset<T>> : public SlideElement {
+template<class T, class Compare>
+class Container<std::multiset<T, Compare>> :
+	public ContainerWithColorsMap, // Important: has to appear before std::multiset below, because ColorWiseAllocator uses it
+	public std::multiset<T, Compare, ColorWiseAllocator<T>> {
 private:
-	const std::multiset<T>* mset_;
-	std::map<const T*, std::optional<Color>> colors_;
+	using MSet = std::multiset<T, Compare, ColorWiseAllocator<T>>;
+	using Allocator = typename MSet::allocator_type;
 
 public:
-	Container(const std::multiset<T>& mset) : mset_(std::addressof(mset)) {}
+	explicit Container(const Compare& comp = Compare()) : MSet(comp, Allocator(&colors_)) {}
+
+	template<class Iter>
+	Container(Iter first, Iter last, const Compare& comp = Compare()) : MSet(first, last, comp, Allocator(&colors_)) {}
+
+	Container(std::initializer_list<typename MSet::value_type> ilist, const Compare& comp = Compare()) : MSet(std::move(ilist), comp, Allocator(&colors_)) {}
+
+	Container(const Container& c) : MSet(c, Allocator(&colors_)) {
+		ContainerWithColorsMap::copy_colors(c.colors_, MSet::cbegin(), MSet::cend(), c.cbegin());
+	}
+
+	Container(Container&&) = default;
+
+	Container& operator=(const Container& c) { *this = Container(c); }
+
+	Container& operator=(Container&&) = default;
+
+	Container& operator=(std::initializer_list<typename MSet::value_type> ilist) {
+		MSet::operator=(std::move(ilist));
+		return *this;
+	}
 
 	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
 
-	Container& set_color(typename std::multiset<T>::const_iterator it, std::optional<Color> color) {
+	Container& set_color(typename MSet::const_iterator it, std::optional<Color> color) {
 		if (color.has_value())
 			colors_[&*it] = std::move(color);
 		else
@@ -422,8 +598,8 @@ public:
 	}
 
 	// Sets color of elements in range [beg, end)
-	Container& set_range_color(typename std::multiset<T>::const_iterator beg,
-	                           typename std::multiset<T>::const_iterator end, std::optional<Color> color) {
+	Container& set_range_color(typename MSet::const_iterator beg,
+	                           typename MSet::const_iterator end, std::optional<Color> color) {
 		while (beg != end)
 			set_color(beg++, color);
 
@@ -431,55 +607,77 @@ public:
 	}
 
 	Container& set_color(const T& elem, std::optional<Color> color) {
-		return set_range_color(mset_->lower_bound(elem), mset_->upper_bound(elem), std::move(color));
+		return set_range_color(MSet::lower_bound(elem), MSet::upper_bound(elem), std::move(color));
 	}
 
 	// Sets color of every element
 	Container& set_whole_color(std::optional<Color> color) {
 		if (color.has_value())
-			return set_range_color(mset_->begin(), mset_->end(), std::move(color));
+			return set_range_color(MSet::begin(), MSet::end(), std::move(color));
 
 		colors_.clear();
 		return *this;
 	}
 
 	virtual LatexCode draw_as_latex() const override {
-		return ContainerImplDetails::draw_as_latex("\\{", "\\}", mset_->begin(), mset_->end(), colors_);
+		return ContainerWithColorsMap::draw_as_latex("\\{", "\\}", MSet::begin(), MSet::end());
 	}
 
 	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
 };
 
-template<class K, class V>
-class Container<std::map<K, V>> : public SlideElement {
+template<class K, class V, class Compare>
+class Container<std::map<K, V, Compare>> :
+	public ContainerWithColorsMap, // Important: has to appear before std::map below, because ColorWiseAllocator uses it
+	public std::map<K, V, Compare, ColorWiseAllocator<std::pair<const K, V>>> {
 private:
-	const std::map<K, V>* map_;
-	std::map<const K*, std::optional<Color>> colors_;
+	using Map = std::map<K, V, Compare, ColorWiseAllocator<std::pair<const K, V>>>;
+	using Allocator = typename Map::allocator_type;
 
 public:
-	Container(const std::map<K, V>& map) : map_(std::addressof(map)) {}
+	explicit Container(const Compare& comp = Compare()) : Map(comp, Allocator(&colors_)) {}
+
+	template<class Iter>
+	Container(Iter first, Iter last, const Compare& comp = Compare()) : Map(first, last, comp, Allocator(&colors_)) {}
+
+	Container(std::initializer_list<typename Map::value_type> ilist, const Compare& comp = Compare()) : Map(std::move(ilist), comp, Allocator(&colors_)) {}
+
+	Container(const Container& c) : Map(c, Allocator(&colors_)) {
+		ContainerWithColorsMap::copy_colors(c.colors_, Map::cbegin(), Map::cend(), c.cbegin());
+	}
+
+	Container(Container&&) = default;
+
+	Container& operator=(const Container& c) { *this = Container(c); }
+
+	Container& operator=(Container&&) = default;
+
+	Container& operator=(std::initializer_list<typename Map::value_type> ilist) {
+		Map::operator=(std::move(ilist));
+		return *this;
+	}
 
 	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
 
-	Container& set_color(typename std::map<K, V>::const_iterator it, std::optional<Color> color) {
+	Container& set_color(typename Map::const_iterator it, std::optional<Color> color) {
 		if (color.has_value())
-			colors_[&it->first] = std::move(color);
+			colors_[&*it] = std::move(color);
 		else
-			colors_.erase(&it->first);
+			colors_.erase(&*it);
 
 		return *this;
 	}
 
 	Container& set_color(const K& key, std::optional<Color> color) {
-		auto it = map_->find(key);
-		if (it != map_->end())
+		auto it = Map::find(key);
+		if (it != Map::end())
 			set_color(std::move(it), std::move(color));
 
 		return *this;
 	}
 
 	// Sets color of elements in range [beg, end)
-	Container& set_range_color(typename std::map<K, V>::const_iterator beg, typename std::map<K, V>::const_iterator end,
+	Container& set_range_color(typename Map::const_iterator beg, typename Map::const_iterator end,
 	                           std::optional<Color> color) {
 		while (beg != end)
 			set_color(beg++, color);
@@ -490,16 +688,14 @@ public:
 	// Sets color of every element
 	Container& set_whole_color(std::optional<Color> color) {
 		if (color.has_value())
-			return set_range_color(map_->begin(), map_->end(), std::move(color));
+			return set_range_color(Map::begin(), Map::end(), std::move(color));
 
 		colors_.clear();
 		return *this;
 	}
 
 	virtual LatexCode draw_as_latex() const override {
-		return ContainerImplDetails::draw_as_latex("\\{", "\\}", map_->begin(), map_->end(), colors_,
-			[](auto&& iter) { return &iter->first; },
-			[](auto& ss, auto&& pk) {
+		return ContainerWithColorsMap::draw_as_latex("\\{", "\\}", Map::begin(), Map::end(), [](auto& ss, auto&& pk) {
 				ss << pk.first << " \\mapsto " << pk.second;
 			});
 	}
@@ -507,18 +703,40 @@ public:
 	virtual HTMLCode draw_as_html() const override { throw NotImplemented(); }
 };
 
-template<class K, class V>
-class Container<std::multimap<K, V>> : public SlideElement {
+template<class K, class V, class Compare>
+class Container<std::multimap<K, V, Compare>> :
+	public ContainerWithColorsMap, // Important: has to appear before std::multimap below, because ColorWiseAllocator uses it
+	public std::multimap<K, V, Compare, ColorWiseAllocator<std::pair<const K, V>>> {
 private:
-	const std::multimap<K, V>* mmap_;
-	std::map<const K*, std::optional<Color>> colors_;
+	using MMap = std::multimap<K, V, Compare, ColorWiseAllocator<std::pair<const K, V>>>;
+	using Allocator = typename MMap::allocator_type;
 
 public:
-	Container(const std::multimap<K, V>& mmap) : mmap_(std::addressof(mmap)) {}
+	explicit Container(const Compare& comp = Compare()) : MMap(comp, Allocator(&colors_)) {}
+
+	template<class Iter>
+	Container(Iter first, Iter last, const Compare& comp = Compare()) : MMap(first, last, comp, Allocator(&colors_)) {}
+
+	Container(std::initializer_list<typename MMap::value_type> ilist, const Compare& comp = Compare()) : MMap(std::move(ilist), comp, Allocator(&colors_)) {}
+
+	Container(const Container& c) : MMap(c, Allocator(&colors_)) {
+		ContainerWithColorsMap::copy_colors(c.colors_, MMap::cbegin(), MMap::cend(), c.cbegin());
+	}
+
+	Container(Container&&) = default;
+
+	Container& operator=(const Container& c) { *this = Container(c); }
+
+	Container& operator=(Container&&) = default;
+
+	Container& operator=(std::initializer_list<typename MMap::value_type> ilist) {
+		MMap::operator=(std::move(ilist));
+		return *this;
+	}
 
 	virtual std::unique_ptr<SlideElement> clone() const override { return std::make_unique<Container>(*this); }
 
-	Container& set_color(typename std::multimap<K, V>::const_iterator it, std::optional<Color> color) {
+	Container& set_color(typename MMap::const_iterator it, std::optional<Color> color) {
 		if (color.has_value())
 			colors_[&it->first] = std::move(color);
 		else
@@ -528,8 +746,8 @@ public:
 	}
 
 	// Sets color of elements in range [beg, end)
-	Container& set_range_color(typename std::multimap<K, V>::const_iterator beg,
-	                           typename std::multimap<K, V>::const_iterator end, std::optional<Color> color) {
+	Container& set_range_color(typename MMap::const_iterator beg,
+	                           typename MMap::const_iterator end, std::optional<Color> color) {
 		while (beg != end)
 			set_color(beg++, color);
 
@@ -537,22 +755,20 @@ public:
 	}
 
 	Container& set_color(const K& key, std::optional<Color> color) {
-		return set_range_color(mmap_->lower_bound(key), mmap_->upper_bound(key), std::move(color));
+		return set_range_color(MMap::lower_bound(key), MMap::upper_bound(key), std::move(color));
 	}
 
 	// Sets color of every element
 	Container& set_whole_color(std::optional<Color> color) {
 		if (color.has_value())
-			return set_range_color(mmap_->begin(), mmap_->end(), std::move(color));
+			return set_range_color(MMap::begin(), MMap::end(), std::move(color));
 
 		colors_.clear();
 		return *this;
 	}
 
 	virtual LatexCode draw_as_latex() const override {
-		return ContainerImplDetails::draw_as_latex("\\{", "\\}", mmap_->begin(), mmap_->end(), colors_,
-			[](auto&& iter) { return &iter->first; },
-			[](auto& ss, auto&& pk) {
+		return ContainerWithColorsMap::draw_as_latex("\\{", "\\}", MMap::begin(), MMap::end(), [](auto& ss, auto&& pk) {
 				ss << pk.first << " \\mapsto " << pk.second;
 			});
 	}

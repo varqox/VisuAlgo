@@ -18,6 +18,10 @@
 # GNU Make dependences
 *.deps
 
+# Doxygen generated files
+html/
+latex/
+
 # Generated files
 
 # Others
