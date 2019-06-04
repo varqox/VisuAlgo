@@ -96,6 +96,7 @@ VISUALGO_TEST_SRCS := \
 
 $(eval $(call load_dependencies, $(VISUALGO_TEST_SRCS)))
 VISUALGO_TEST_OBJS := $(call SRCS_TO_OBJS, $(VISUALGO_TEST_SRCS))
+VISUALGO_TEST_EXECS := test/exec
 
 $(VISUALGO_TEST_OBJS): override EXTRA_CXX_FLAGS += -isystem '$(CURDIR)/googletest/googletest/include'
 
@@ -103,13 +104,13 @@ test/exec: $(VISUALGO_TEST_OBJS) visualgo.a gtest_main.a
 	$(LINK) -pthread
 
 .PHONY: test
-test: test/exec
+test: $(VISUALGO_TEST_EXECS)
 	test/exec
 
 .PHONY: clean
 clean: OBJS := $(GOOGLETEST_OBJS) $(VISUALGO_OBJS) $(EXAMPLES_OBJS) $(VISUALGO_TEST_OBJS)
 clean:
-	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo) gtest_main.a visualgo.a $(EXAMPLES_EXECS) $(EXAMPLES_PDFS) $(EXAMPLES_OBJS) examples/examples.pdf
+	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo) gtest_main.a visualgo.a $(EXAMPLES_EXECS) $(EXAMPLES_PDFS) $(VISUALGO_TEST_EXECS) examples/examples.pdf
 	$(Q)find examples -type f -name '*.tex' | xargs rm -f
 	$(Q)find src googletest test examples -type f -name '*.deps' | xargs rm -f
 
