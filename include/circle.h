@@ -5,16 +5,19 @@
 #include "geometry_element.h"
 
 namespace valgo {
-class Point : public GeometryElement {
+class Circle : public GeometryElement {
 private:
-    double _coord_x, _coord_y;
+    double _center_x, _center_y;
+    double _radius;
 
 public:
-    Point(double coord_x, double coord_y);
+    Circle(double center_x, double center_y, double radius);
 
-    Point(double coord_x, double coord_y, std::string label);
+    Circle(double center_x, double center_y, double radius, std::string label);
 
-    void set_coords(double coord_x, double coord_y);
+    void set_center(double coord_x, double coord_y);
+
+    void set_radius(double radius);
 
     void set_label(std::string label);
 

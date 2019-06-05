@@ -12,6 +12,8 @@ private:
 public:
     Line(double begin_x, double begin_y, double end_x, double end_y);
 
+    void set_label(std::string label);
+
     virtual std::unique_ptr<SlideElement> clone() const override;
 
     virtual LatexCode draw_as_latex() const override;

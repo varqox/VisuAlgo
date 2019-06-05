@@ -77,6 +77,7 @@ std::string LatexPresentation::to_str() const {
 		"\\usepackage{fancyvrb}\n"
 		"\\selectlanguage{polish}\n"
 		"\\usepackage{tikz}"
+		"\\usepackage{tkz-euclide}"
 		"\\newcommand\\diag[4]{%\n"
 		"  \\multicolumn{1}{p{#2}}{\\hskip-\\tabcolsep\n"
 		"  $\\vcenter{\\begin{tikzpicture}[baseline=0,anchor=south west,inner sep=#1]\n"

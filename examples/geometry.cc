@@ -20,12 +20,25 @@ int main() {
 
     Line l(1, 1, 5, 5);
 
-    geo.add_elem(p);
-    geo.add_elem(p2);
-    geo.add_elem(p3);
-    geo.add_elem(l);
+    geo.add(p).add(p2);
+    geo.add(p3);
+    geo.add(l);
 
     pres.add_slide(sb.build().set_title("title xd"));
+
+    geo.erase(p3);
+    geo.set_coord_system(-6, 6, -6, 6);
+    p2.set_label("punkcik");
+    l.set_label("prosta");
+
+    Rectangle r(-2, -2, 2, 2, "prostokącik");
+    geo.add(r);
+
+    Circle c(-2, 2, 2, "Kółeczko");
+    geo.add(c);
+
+    pres.add_slide(sb.build().set_title("lel xD"));
+
     cout << pres.to_str() << endl;
     return 0;
 }
