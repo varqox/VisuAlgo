@@ -47,7 +47,7 @@ void Geometry::erase(GeometryElement& geo_elem) {
     _geo_elems.erase(&geo_elem);
 }
 
-void Geometry::clear() {
+void Geometry::remove_all_elements() {
     _geo_elems.clear();
 }
 

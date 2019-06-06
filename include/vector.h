@@ -1,16 +1,21 @@
 #pragma once
 
 #include <sstream>
+#include <string> 
 
 #include "geometry_element.h"
 
 namespace valgo {
-class Line : public GeometryElement {
+class Vector : public GeometryElement {
 private:
     double _begin_x, _begin_y, _end_x, _end_y;
 
 public:
-    Line(double begin_x, double begin_y, double end_x, double end_y);
+    Vector(double begin_x, double begin_y, double end_x, double end_y);
+
+    Vector(double begin_x, double begin_y, double end_x, double end_y, std::string label);
+
+    void set_coords(double begin_x, double begin_y, double end_x, double end_y);
 
     virtual std::unique_ptr<SlideElement> clone() const override;
 

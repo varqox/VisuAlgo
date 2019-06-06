@@ -9,6 +9,8 @@
 #include "line.h"
 #include "rectangle.h"
 #include "circle.h"
+#include "vector.h"
+#include "polygon.h"
 
 
 namespace valgo {
@@ -31,7 +33,7 @@ public:
 
     void erase(GeometryElement& goe_elem);
 
-    void clear();
+    void remove_all_elements();
 
     void set_coord_system(double xmin, double xmax, double ymin, double ymax);
 

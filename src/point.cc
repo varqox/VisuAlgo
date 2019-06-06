@@ -6,7 +6,8 @@ Point::Point(double coord_x, double coord_y) : _coord_x(coord_x), _coord_y(coord
 
 LatexCode Point::draw_as_latex() const {
     std::stringstream ret;
-    ret << "\\filldraw [black] (";
+    ret << "\\filldraw [ ";
+    ret << draw_color(1) << "] (";
     ret << _coord_x << ", " << _coord_y << ")";
     ret << " circle (2pt)";
     ret << draw_label();
@@ -32,10 +33,6 @@ Point::Point(double coord_x, double coord_y, std::string label) {
 void Point::set_coords(double coord_x, double coord_y) {
     _coord_x = coord_x;
     _coord_y = coord_y;
-}
-
-void Point::set_label(std::string label) {
-    _label = label;
 }
 
 } // namespace valgo

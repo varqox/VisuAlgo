@@ -19,8 +19,6 @@ public:
 
     void set_radius(double radius);
 
-    void set_label(std::string label);
-
     virtual std::unique_ptr<SlideElement> clone() const override;
 
     virtual LatexCode draw_as_latex() const override;

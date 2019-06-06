@@ -32,7 +32,9 @@ VISUALGO_SRCS := \
 	src/line.cc \
 	src/rectangle.cc \
 	src/geometry_element.cc \
-	src/circle.cc
+	src/circle.cc \
+	src/vector.cc \
+	src/polygon.cc
 
 $(eval $(call load_dependencies, $(VISUALGO_SRCS)))
 VISUALGO_OBJS := $(call SRCS_TO_OBJS, $(VISUALGO_SRCS))

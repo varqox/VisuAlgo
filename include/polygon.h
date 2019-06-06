@@ -1,16 +1,20 @@
 #pragma once
 
 #include <sstream>
+#include <string>
+#include <vector> 
 
 #include "geometry_element.h"
 
 namespace valgo {
-class Line : public GeometryElement {
+class Polygon : public GeometryElement {
 private:
-    double _begin_x, _begin_y, _end_x, _end_y;
+    std::vector<std::pair<double, double>> _vertices;
 
 public:
-    Line(double begin_x, double begin_y, double end_x, double end_y);
+    Polygon() = default;
+
+    Polygon& add_vertex(double x, double y);
 
     virtual std::unique_ptr<SlideElement> clone() const override;
 

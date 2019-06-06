@@ -4,7 +4,8 @@ namespace valgo {
 
 LatexCode Circle::draw_as_latex() const {
     std::stringstream ret;
-    ret << "\\filldraw [black, fill=white, very thick, fill opacity=0]  (";
+    ret << "\\filldraw [very thick ";
+    ret << draw_color() << "]  (";
     ret << _center_x << ", " << _center_y << ")";
     ret << " circle (" << _radius << ")";
     ret << draw_label();
@@ -41,10 +42,6 @@ void Circle::set_center(double center_x, double center_y) {
 
 void Circle::set_radius(double radius) {
     _radius = radius;
-}
-
-void Circle::set_label(std::string label) {
-    _label = label;
 }
 
 } // namespace valgo

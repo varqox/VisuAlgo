@@ -7,7 +7,8 @@ Rectangle::Rectangle(double left_x, double left_y, double right_x, double right_
 
 LatexCode Rectangle::draw_as_latex() const {
     std::stringstream ret;
-    ret << "\\draw [black, very thick] ";
+    ret << "\\draw [very thick ";
+    ret << draw_color() << "] ";
     ret << "(" << _left_x << ", " << _left_y << ") ";
     ret << "rectangle ";
     ret << "(" << _right_x << ", " << _right_y << ") ";
@@ -35,10 +36,6 @@ void Rectangle::set_coords(double left_x, double left_y, double right_x, double 
     _left_y = left_y;
     _right_x = right_x;
     _right_y = right_y;
-}
-
-void Rectangle::set_label(std::string label) {
-    _label = label;
 }
 
 } // namespace valgo

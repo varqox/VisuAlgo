@@ -16,8 +16,6 @@ public:
 
     void set_coords(double coord_x, double coord_y);
 
-    void set_label(std::string label);
-
     virtual std::unique_ptr<SlideElement> clone() const override;
 
     virtual LatexCode draw_as_latex() const override;
