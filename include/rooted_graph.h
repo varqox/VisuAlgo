@@ -33,8 +33,8 @@ protected:
 
 public:
 	RootedGraph() = default;
-	RootedGraph(NodeId root);
-	RootedGraph(std::vector<NodeId> roots);
+	explicit RootedGraph(NodeId root);
+	explicit RootedGraph(std::vector<NodeId> roots);
 
 	RootedGraph& set_root(NodeId root);
 	RootedGraph& set_roots(std::vector<NodeId> roots);

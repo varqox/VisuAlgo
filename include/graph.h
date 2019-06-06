@@ -28,7 +28,7 @@ protected:
 
 		Node(NodeId id, std::optional<NodeInfo> info = std::nullopt);
 
-		DotCode to_dot() const;
+		virtual DotCode to_dot() const;
 	};
 
 	struct Edge {
@@ -40,7 +40,9 @@ protected:
 
 		Edge(NodeId from, NodeId to, std::optional<EdgeInfo> info = std::nullopt);
 
-		DotCode to_dot(const std::map<NodeId, Node>& nodes, bool reversed = false) const;
+		virtual DotCode to_dot(const std::map<NodeId, Node>& nodes, bool reversed = false) const;
+		virtual DotCode to_dot(const std::map<NodeId, Node>& nodes, std::optional<char> side_from,
+			std::optional<char> side_to, const std::vector<std::string>& opts = {}, bool reversed = false) const;
 	};
 
 	std::map<NodeId, Node> nodes_;
@@ -118,7 +120,7 @@ inline Graph<NodeId, NodeInfo, EdgeInfo>::Node::Node(NodeId id, std::optional<No
 template<class NodeId, class NodeInfo, class EdgeInfo>
 inline DotCode Graph<NodeId, NodeInfo, EdgeInfo>::Node::to_dot() const {
 	std::stringstream ss;
-	ss << id_ << " [";
+	ss << '"' << id_ << "\" [";
 
 	ss << "label=<<table width=\"50\" style=\"rounded\" border=\"1\" cellborder=\"0\" cellspacing=\"4\"";
 	if (color_.has_value())
@@ -143,13 +145,22 @@ inline Graph<NodeId, NodeInfo, EdgeInfo>::Edge::Edge(NodeId from, NodeId to, std
 
 template<class NodeId, class NodeInfo, class EdgeInfo>
 inline DotCode Graph<NodeId, NodeInfo, EdgeInfo>::Edge::to_dot(const std::map<NodeId, Node>& nodes,
-                                                                       bool reversed) const {
+		std::optional<char> side_from, std::optional<char> side_to, const std::vector<std::string>& opts,
+		bool reversed) const {
 	std::stringstream ss;
-	std::string side = to_ == from_ ? ":n" : "";
+
+	auto print_node = [](const Node& node, std::optional<char> side) {
+		std::stringstream sss;
+		sss << '"' << node.id_ << '"';
+		if (side.has_value())
+			sss << ':' << side.value();
+		return sss.str();
+	};
+
 	if (reversed)
-		ss << to_ << side << " -> " << from_ << side;
+		ss << print_node(to_, side_to) << " -> " << print_node(from_, side_from);
 	else
-		ss << from_ << side << " -> " << to_ << side;
+		ss << print_node(from_, side_from) << " -> " << print_node(to_, side_to);
 	ss << " [";
 
 	auto is_hidden = [&](const NodeId &id) {
@@ -157,27 +168,25 @@ inline DotCode Graph<NodeId, NodeInfo, EdgeInfo>::Edge::to_dot(const std::map<No
 		return it->second.hidden_;
 	};
 
-	bool fst = true;
-	if (info_.has_value()) {
-		fst = false;
-		ss << "label=\"" << info_.value() << "\"";
-	}
-	if (color_.has_value()) {
-		if (!fst)
-			ss << ", ";
-		fst = false;
-		ss << "color=\"#" << color_.value().to_hex() << "\"";
-	}
-	if (hidden_ || is_hidden(from_) || is_hidden(to_)) {
-		if (!fst)
-			ss << ", ";
-		fst = false;
-		ss << "style=invis";
-	}
+	if (info_.has_value())
+		ss << "label=\"" << info_.value() << "\",";
+	if (color_.has_value())
+		ss << "color=\"#" << color_.value().to_hex() << "\",";
+	if (hidden_ || is_hidden(from_) || is_hidden(to_))
+		ss << "style=invis,";
+	for (const auto &i : opts)
+		ss << i << ',';
 
 	ss << "];";
 
 	return ss.str();
+}
+
+template<class NodeId, class NodeInfo, class EdgeInfo>
+inline DotCode Graph<NodeId, NodeInfo, EdgeInfo>::Edge::to_dot(const std::map<NodeId, Node>& nodes,
+		bool reversed) const {
+	return from_ == to_ ? to_dot(nodes, 'n', 'n', {}, reversed)
+	                    : to_dot(nodes, std::nullopt, std::nullopt, {}, reversed);
 }
 
 template<class NodeId, class NodeInfo, class EdgeInfo>

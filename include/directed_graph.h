@@ -121,6 +121,7 @@ DirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_edge(const NodeId& from, const No
 	if (it == edges_.end()) {
 		edges_.emplace(std::pair{from, to}, Edge(from, to, std::move(edge_info)));
 		Node& it_from = find_or_add(from)->second;
+		find_or_add(to);
 		it_from.nei_.emplace(to);
 	}
 	else

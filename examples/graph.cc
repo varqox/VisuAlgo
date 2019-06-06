@@ -3,6 +3,8 @@
 #include "../include/slide_builder.h"
 #include "../include/rooted_graph.h"
 #include "../include/directed_graph.h"
+#include "../include/acyclic_graph.h"
+#include "../include/func_graph.h"
 
 #include <iostream>
 #include <vector>
@@ -156,9 +158,74 @@ int main() {
 	gg_dir.set_edge_color(2, 3, Color::GREEN);
 	pres.add_slide(sb.build().set_title("grafy skierowane - set\\_edge\\_color(2, 3, Color::GREEN)"));
 
+	sb.remove_all_elements();
+
+	AcyclicGraph<int, int, int> gg_acy;
+	sb.add_elem(gg_acy);
+	gg_acy.add_edge(7, 8)
+	      .add_edge(2, 5)
+	      .add_edge(2, 4)
+	      .add_edge(3, 7)
+	      .add_edge(4, 6)
+	      .add_edge(1, 2)
+	      .add_edge(3, 5)
+	      .add_edge(8, 9)
+	      .add_edge(5, 9)
+	      .add_edge(6, 7)
+	      .add_edge(4, 3)
+	      .set_node_color(1, Color::RED)
+	      .set_node_color(2, Color::LIGHT_BROWN)
+	      .set_node_color(3, Color::LIGHT_BROWN)
+	      .set_node_color(4, Color::YELLOW)
+	      .set_node_color(5, Color::YELLOW)
+	      .set_node_color(6, Color::LIGHT_BLUE)
+	      .set_node_color(7, Color::LIGHT_BLUE)
+	      .set_node_color(8, Color::GREEN)
+	      .set_node_color(9, Color::LIGHT_GREEN);
+	pres.add_slide(sb.build().set_title("grafy acykliczne - widok sparse"));
+
+	gg_acy.set_view(AcyclicGraphView::list);
+	pres.add_slide(sb.build().set_title("grafy acykliczne - widok list"));
+
+	sb.remove_all_elements();
+
+	FuncGraph<int, int, int> gg_func;
+	sb.add_elem(gg_func);
+
+	gg_func.add_edge(1, 1)
+	       .add_edge(2, 1)
+	       .add_edge(3, 1)
+	       .add_edge(4, 1)
+	       .add_edge(5, 3)
+	       .add_edge(6, 5)
+	       .add_edge(7, 5)
+	       .add_edge(8, 1)
+	       .add_edge(9, 2)
+	       .add_edge(10, 9)
+	       .add_edge(11, 10)
+	       .add_edge(12, 3)
+	       .add_edge(13, 3)
+	       .add_edge(14, 2)
+	       .add_edge(21, 22)
+	       .add_edge(22, 23)
+	       .add_edge(23, 21)
+	       .add_edge(24, 21)
+	       .add_edge(25, 23)
+	       .add_edge(26, 25)
+	       .add_edge(27, 25)
+	       .add_edge(28, 21)
+	       .add_edge(29, 22);
+
+	pres.add_slide(sb.build().set_title("grafy funkcyjny - widok sparse"));
+
+	gg_func.set_view(FuncGraphView::list);
+	pres.add_slide(sb.build().set_title("grafy funkcyjny - widok list"));
 
 	pres.author("Dream team");
 	pres.date("12.03.2019");
 	pres.institute("MIMUW");
 	cout << pres.to_str() << endl;
 }
+/*
+
+*/
