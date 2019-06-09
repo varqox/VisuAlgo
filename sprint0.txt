@@ -71,7 +71,6 @@ HARMONOGRAM:
   - DAGi
   - grafy funkcyjne
   - plakat
-  - strona
   - geometria
   - dokumentacja
   - poprawianie dokumentacji
