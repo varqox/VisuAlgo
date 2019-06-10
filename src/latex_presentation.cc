@@ -27,6 +27,14 @@ void LatexPresentation::author(std::optional<LatexCode> new_author) {
 	author_ = std::move(new_author);
 }
 
+std::optional<LatexCode> LatexPresentation::footer_author() const {
+	return footer_author_;
+}
+
+void LatexPresentation::footer_author(std::optional<LatexCode> new_footer_author) {
+	footer_author_ = std::move(new_footer_author);
+}
+
 std::optional<LatexCode> LatexPresentation::date() const {
 	return date_;
 }
@@ -35,12 +43,28 @@ void LatexPresentation::date(std::optional<LatexCode> new_date) {
 	date_ = std::move(new_date);
 }
 
+std::optional<LatexCode> LatexPresentation::footer_date() const {
+	return footer_date_;
+}
+
+void LatexPresentation::footer_date(std::optional<LatexCode> new_footer_date) {
+	footer_date_ = std::move(new_footer_date);
+}
+
 std::optional<LatexCode> LatexPresentation::institute() const {
 	return institute_;
 }
 
 void LatexPresentation::institute(std::optional<LatexCode> new_institute) {
 	institute_ = std::move(new_institute);
+}
+
+std::optional<LatexCode> LatexPresentation::footer_institute() const {
+	return footer_institute_;
+}
+
+void LatexPresentation::footer_institute(std::optional<LatexCode> new_footer_institute) {
+	footer_institute_ = std::move(new_footer_institute);
 }
 
 void LatexPresentation::add_slide(const Slide& slide) {
@@ -120,14 +144,26 @@ std::string LatexPresentation::to_str() const {
 		"\n"
 		"\\title[", footer_title_, "]{", title_, "}\n"));
 
-	if (author_.has_value())
-		back_insert(ret, "\\author{", author_.value(), "}\n");
+	if (author_.has_value() or footer_author_.has_value()) {
+		back_insert(ret, "\\author");
+		if (footer_author_.has_value())
+			back_insert(ret, '[', footer_author_.value(), ']');
+		back_insert(ret, "{", author_.value_or(""), "}\n");
+	}
 
-	if (institute_.has_value())
-		back_insert(ret, "\\institute{", institute_.value(), "}\n");
+	if (institute_.has_value() or footer_institute_.has_value()) {
+		back_insert(ret, "\\institute");
+		if (footer_institute_.has_value())
+			back_insert(ret, '[', footer_institute_.value(), ']');
+		back_insert(ret, "{", institute_.value_or(""), "}\n");
+	}
 
-	if (date_.has_value())
-		back_insert(ret, "\\date{", date_.value(), "}\n");
+	if (date_.has_value() or footer_date_.has_value()) {
+		back_insert(ret, "\\date");
+		if (footer_date_.has_value())
+			back_insert(ret, '[', footer_date_.value(), ']');
+		back_insert(ret, "{", date_.value_or(""), "}\n");
+	}
 
 	back_insert(ret, "\n"
 		"\\begin{document}\n"
