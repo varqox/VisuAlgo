@@ -68,10 +68,10 @@ EXAMPLES_EXECS := $(patsubst %.o, %, $(EXAMPLES_OBJS))
 $(EXAMPLES_EXECS): %: %.o visualgo.a
 	$(LINK)
 
-.PHONY:
-examples: $(EXAMPLES_EXECS)
-
 EXAMPLES_PDFS := $(patsubst %, %.pdf, $(EXAMPLES_EXECS))
+
+.PHONY:
+examples: $(EXAMPLES_PDFS)
 
 PRESENTATION_SRCS := \
 	presentation/presentation.cc
