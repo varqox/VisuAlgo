@@ -27,10 +27,12 @@ LatexCode SourceCode::draw_as_latex() const {
 		"language=", lang_, ",",
 		title_.has_value() ? concat("title=", title_.value(), ',') : "",
 		"numbers=left,"
-		"xleftmargin=16pt,"
+		"aboveskip=-2pt,"
+		"belowskip=0pt,"
+		"xleftmargin=12pt,"
 		"basicstyle=\\small\\ttfamily,"
 		"showstringspaces=false,"
-		"numbersep=6pt,"
+		"numbersep=5pt,"
 		"numberstyle=\\small\\ttfamily,"
 		"columns=spaceflexible,"
 		"keepspaces=true,"
