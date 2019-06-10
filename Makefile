@@ -1,7 +1,7 @@
 include Makefile.config
 
 .PHONY: all
-all: visualgo.a hierarchy.svg examples
+all: visualgo.a io_stuff examples presentation
 	@printf "\033[32mBuild finished\033[0m\n"
 
 GOOGLETEST_SRCS := \
@@ -42,7 +42,10 @@ VISUALGO_OBJS := $(call SRCS_TO_OBJS, $(VISUALGO_SRCS))
 visualgo.a: $(VISUALGO_OBJS)
 	$(MAKE_STATIC_LIB)
 
-hierarchy.svg: hierarchy.dot
+.PHONY: io_stuff
+io_stuff: io_stuff/hierarchy.svg
+
+%.svg: %.dot
 	$(Q)$(call P,DOT,$@) \
 		$(call TIME_CMD,DOT) \
 		dot -Tsvg -o $@ $^
@@ -52,11 +55,11 @@ EXAMPLES_SRCS := \
 	examples/binsearch.cc \
 	examples/containers.cc \
 	examples/dijkstra.cc \
+	examples/geometry.cc \
 	examples/graph.cc \
 	examples/matrix.cc \
 	examples/pictures.cc \
-	examples/sieve.cc \
-	examples/geometry.cc
+	examples/sieve.cc
 
 $(eval $(call load_dependencies, $(EXAMPLES_SRCS)))
 EXAMPLES_OBJS := $(call SRCS_TO_OBJS, $(EXAMPLES_SRCS))
@@ -70,12 +73,27 @@ examples: $(EXAMPLES_EXECS)
 
 EXAMPLES_PDFS := $(patsubst %, %.pdf, $(EXAMPLES_EXECS))
 
+PRESENTATION_SRCS := \
+	presentation/presentation.cc
+
+$(eval $(call load_dependencies, $(PRESENTATION_SRCS)))
+PRESENTATION_OBJS := $(call SRCS_TO_OBJS, $(PRESENTATION_SRCS))
+PRESENTATION_EXECS := presentation/presentation
+
+$(PRESENTATION_EXECS): $(PRESENTATION_OBJS) visualgo.a
+	$(LINK)
+
+PRESENTATION_PDFS := $(patsubst %, %.pdf, $(PRESENTATION_EXECS))
+
+.PHONY:
+presentation: $(PRESENTATION_PDFS)
+
 .ONESHELL:
-$(EXAMPLES_PDFS): %.pdf: %
-	DEST_DIR=$$(pwd)/examples/
+%.pdf: %
+	DEST_DIR="$(dir $(abspath $@))"
 	TMP_DIR=$$(mktemp -d)
-	NAME=$(patsubst examples/%,%, $*)
-	$(Q)cp -r "$$DEST_DIR/sample_images" "$$TMP_DIR"
+	NAME=$(notdir $*)
+	$(Q)cp -r "$$DEST_DIR" -T "$$TMP_DIR"
 	$(Q)cd "$$TMP_DIR"
 	$(Q)"$$DEST_DIR$$NAME" > "$$NAME.tex"
 	# Need to run latex twice to get the correct page numbers
@@ -83,7 +101,7 @@ $(EXAMPLES_PDFS): %.pdf: %
 		$(Q)echo | pdflatex --shell-escape "$$NAME.tex"
 	RET=$$?
 	$(Q)if [ "$$RET" = "0" ]; then cp "$$NAME.pdf" "$$DEST_DIR"; fi
-	$(Q)rm -rf "$$TMP_DIR"
+# 	$(Q)rm -rf "$$TMP_DIR"
 	$(Q)exit $$RET
 
 examples/examples.pdf: $(EXAMPLES_PDFS)
@@ -113,11 +131,11 @@ test: $(VISUALGO_TEST_EXECS)
 	test/exec
 
 .PHONY: clean
-clean: OBJS := $(GOOGLETEST_OBJS) $(VISUALGO_OBJS) $(EXAMPLES_OBJS) $(VISUALGO_TEST_OBJS)
+clean: OBJS := $(GOOGLETEST_OBJS) $(VISUALGO_OBJS) $(EXAMPLES_OBJS) $(VISUALGO_TEST_OBJS) $(PRESENTATION_OBJS)
 clean:
-	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo) gtest_main.a visualgo.a $(EXAMPLES_EXECS) $(EXAMPLES_PDFS) $(VISUALGO_TEST_EXECS) examples/examples.pdf
+	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo) gtest_main.a visualgo.a $(EXAMPLES_EXECS) $(EXAMPLES_PDFS) $(VISUALGO_TEST_EXECS) $(PRESENTATION_EXECS) examples/examples.pdf
 	$(Q)find examples -type f -name '*.tex' | xargs rm -f
-	$(Q)find src googletest test examples -type f -name '*.deps' | xargs rm -f
+	$(Q)find src googletest test examples io_stuff presentation -type f -name '*.deps' | xargs rm -f
 
 .PHONY: help
 help:
