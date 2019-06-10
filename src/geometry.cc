@@ -2,7 +2,10 @@
 
 namespace valgo {
 
-Geometry::Geometry() : _scale(0.8) {}
+Geometry::Geometry() {
+    _scale = 0.8;
+    _coordinate_system = false;
+}
 
 LatexCode Geometry::draw_coordinate_system() const {
     std::stringstream ret;

@@ -11,8 +11,9 @@ LatexCode GeometryElement::draw_label() const {
     return ret.str();
 }
 
-void GeometryElement::set_color(Color color) {
+GeometryElement& GeometryElement::set_color(Color color) {
     _color = color;
+    return *this;
 }
 
 LatexCode GeometryElement::draw_color(double fill_opacity) const {
@@ -25,8 +26,9 @@ LatexCode GeometryElement::draw_color(double fill_opacity) const {
     return ret.str();
 }
 
-void GeometryElement::set_label(std::string label) {
+GeometryElement& GeometryElement::set_label(std::string label) {
     _label = label;
+    return *this;
 }
 
 } // namespace valgo

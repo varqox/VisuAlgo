@@ -18,8 +18,8 @@ protected:
 
 public:
 	GeometryElement() = default;
-    void set_color(Color color);
-    void set_label(std::string label);
+    GeometryElement& set_color(Color color);
+    GeometryElement& set_label(std::string label);
 };
 
 } // namespace valgo
