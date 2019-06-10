@@ -1,17 +1,23 @@
+#include "../include/array_1d.h"
+#include "../include/array_2d.h"
 #include "../include/block.h"
+#include "../include/container.h"
+#include "../include/geometry.h"
+#include "../include/image.h"
+#include "../include/image.h"
+#include "../include/image.h"
+#include "../include/image_set.h"
+#include "../include/image_set.h"
+#include "../include/image_set.h"
+#include "../include/itemize.h"
+#include "../include/itemize.h"
 #include "../include/itemize.h"
 #include "../include/latex.h"
 #include "../include/latex_presentation.h"
 #include "../include/slide_builder.h"
 #include "../include/source_code.h"
-#include "../include/array_1d.h"
-#include "../include/variable.h"
-#include "../include/array_2d.h"
 #include "../include/undirected_graph.h"
-#include "../include/image.h"
-#include "../include/image_set.h"
-#include "../include/itemize.h"
-#include "../include/geometry.h"
+#include "../include/variable.h"
 #include "../src/utilities.h"
 
 #include <iostream>
@@ -89,6 +95,56 @@ void add_diagrams(LatexPresentation& pres) {
 		itemz.add_item(Latex("Robienie grafów z użyciem tikza"));
 		pres.add_slide(Slide(itemz).set_title("Dalsze możliwości rozwoju aplikacji"));
 	}
+}
+
+template<class... Elems>
+void add_column_view(Slide& slide, double ratio, const string& cpp_source_title, const string& cpp_source, Elems&&... elems) {
+	// First column
+	slide.add_elem(Latex(concat("\\begin{columns}[c]\n\\begin{column}{", to_string(ratio), "\\textwidth}\n")));
+	slide.add_elem(Block(cpp_source_title, Color::LIGHT_BROWN, SourceCode().set_lang("C++").set_code(cpp_source)));
+
+	// Second column
+	slide.add_elem(Latex(concat("\\end{column}\n\\begin{column}{", to_string(1 - ratio), "\\textwidth}\n")));
+	(slide.add_elem(std::forward<Elems>(elems)), ...);
+	slide.add_elem(Latex("\\end{column}\n\\end{columns}\n"));
+}
+
+void add_containers(LatexPresentation& pres) {
+	pres.add_section("Containers");
+	Slide slide;
+
+	add_column_view(slide, 0.8, "Containers - vector",
+		"Container<std::vector<int>> vec = {1, 2, 3};\n"
+		"vec.set_color(1, Color::GREEN);\n"
+		"vec.emplace_back(4);\n"
+		"slide.add_elem(vec);\n", [] {
+		Container<std::vector<int>> vec = {1, 2, 3};
+		vec.set_color(1, Color::GREEN);
+		vec.emplace_back(4);
+		return vec;
+	}());
+
+	{
+		Container<std::set<char>> set = {'a', 'b', 'c', 'd', 'e'};
+		set.set_range_color(set.lower_bound('b'), set.upper_bound('d'), Color::RED);
+		auto s1 = set;
+		set.erase('c');
+		auto s2 = set;
+		set.emplace('c');
+		auto s3 = set;
+
+		add_column_view(slide, 0.67, "Containers - set",
+			"Container<std::set<char>> set =\n"
+			"    {'a', 'b', 'c', 'd', 'e'};\n"
+			"set.set_range_color(set.lower_bound('b'),\n"
+			"    set.upper_bound('d'), Color::RED);\n"
+			"slide.add_elem(set);\n"
+			"set.erase('c'); slide.add_elem(set);\n"
+			"set.emplace('c'); slide.add_elem(set);\n",
+			s1, s2, s3);
+	}
+
+	pres.add_slide(slide.set_title("Containers"));
 }
 
 void add_geometry(LatexPresentation& pres) {
@@ -207,15 +263,25 @@ void add_geometry(LatexPresentation& pres) {
 int main() {
 	LatexPresentation pres("Visualization of algorithms in C++", "VisuAlgo");
 
-	pres.author(R"=(Piotr Borowski\\Michał Niciejewski\\Krzysztof Małysa\\Philip Smolenski-Jensen)=");
+	pres.author(R"=(
+		\text{Piotr Borowski}
+		\and
+		\text{Michał Niciejewski}
+		\and
+		\text{Krzysztof Małysa}
+		\and
+		\text{Philip Smolenski-Jensen}
+		)=");
 	pres.footer_author("Dream Team");
 	pres.date("10.06.2019");
 	pres.institute("Uniwersytet Warszawski, Wydział Matematyki, Informatyki i Mechaniki");
 	pres.footer_institute("MIMUW");
 
 	add_diagrams(pres);
-	// TODO: add some sensible slides :
+	add_containers(pres);
 	add_geometry(pres);
+
+	// TODO: add more sensible slides :)
 
 	cout << pres.to_str() << endl;
 	return 0;
