@@ -19,7 +19,7 @@ LatexCode Slide::draw_as_latex() const {
 	back_insert(ret, "]{", title_, "}\n");
 
 	for (auto& elem : elems_)
-		back_insert(ret, elem.get()->draw_as_latex(), '\n');
+		back_insert(ret, elem.get()->draw_as_latex(), "%\n");
 
 	return back_insert(ret, "\\end{frame}");
 }
