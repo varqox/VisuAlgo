@@ -139,8 +139,10 @@ void add_containers(LatexPresentation& pres) {
 			"set.set_range_color(set.lower_bound('b'),\n"
 			"    set.upper_bound('d'), Color::RED);\n"
 			"slide.add_elem(set);\n"
-			"set.erase('c'); slide.add_elem(set);\n"
-			"set.emplace('c'); slide.add_elem(set);\n",
+			"set.erase('c');\n"
+			"slide.add_elem(set);\n"
+			"set.emplace('c');\n"
+			"slide.add_elem(set);\n",
 			s1, s2, s3);
 	}
 
@@ -150,7 +152,7 @@ void add_containers(LatexPresentation& pres) {
 void add_geometry(LatexPresentation& pres) {
 	{
 		SlideBuilder sb;
-	
+
 		Latex latex("\\begin{center}\\Large{Geometria}\\end{center}");
 		sb.add_elem(latex);
 		Latex latex2("\\begin{center}Przydatna do wizualizacji wielu algorytmów\\end{center}");
@@ -174,7 +176,7 @@ void add_geometry(LatexPresentation& pres) {
 
 		l.set_color(Color::MAGENTA).set_label("Magenta");
 		l2.set_color(Color::CYAN).set_label("Cyan");
-		
+
 		geo.add(l).add(l2);
 
 		sb.add_elem(geo);
@@ -184,35 +186,33 @@ void add_geometry(LatexPresentation& pres) {
 		pres.add_slide(sb.build().set_title("Punkty i proste"));
 	}
 	{
-		SlideBuilder sb;
 		SourceCode sc;
 		sc.set_lang("C++");
-		sc.set_code(concat("Point p(2, 4), p2(3, 3), p3(4, 2);\n",
-							"p.set_color(Color::RED);\n",
-							"p2.set_color(Color::GREEN);\n",
-							"p3.set_color(Color::BLUE);\n\n",
-
-							"geo.add(p).add(p2).add(p3);\n\n",
-
-							"Line l(1, 1, 5, 5), l2(-3, 2, 3, -4);\n\n",
-
-							"l.set_color(Color::MAGENTA).set_label(\"Magenta\");\n",
-							"l2.set_color(Color::CYAN).set_label(\"Cyan\");\n\n",
-							
-							"geo.add(l).add(l2);\n\n",
-
-							"sb.add_elem(geo);\n",
-							"geo.set_coord_system(-6, 6, -6, 6);\n",
-							"pres.add_slide(sb.build().set_title(\"Punkty i proste\"));\n"));
-		
-		sb.add_elem(sc);
-		pres.add_slide(sb.build().set_title("Kod źródłowy"));
+		sc.set_code(
+			"Point p(2, 4), p2(3, 3), p3(4, 2);\n"
+			"p.set_color(Color::RED);\n"
+			"p2.set_color(Color::GREEN);\n"
+			"p3.set_color(Color::BLUE);\n"
+			"\n"
+			"geo.add(p).add(p2).add(p3);\n"
+			"\n"
+			"Line l(1, 1, 5, 5), l2(-3, 2, 3, -4);\n"
+			"\n"
+			"l.set_color(Color::MAGENTA).set_label(\"Magenta\");\n"
+			"l2.set_color(Color::CYAN).set_label(\"Cyan\");\n"
+			"\n"
+			"geo.add(l).add(l2);\n"
+			"\n"
+			"sb.add_elem(geo);\n"
+			"geo.set_coord_system(-6, 6, -6, 6);\n"
+			"pres.add_slide(sb.build().set_title(\"Punkty i proste\"));\n");
+		pres.add_slide(Slide(sc).set_title("Kod źródłowy").shrink(true));
 	}
 	{
 		SlideBuilder sb;
 		Geometry geo;
 		sb.add_elem(geo);
-		
+
 		Rectangle r(-4, -2, 2, 2, "Rectangle");
 		r.set_color(Color::RED);
 		geo.add(r);
