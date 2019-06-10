@@ -51,6 +51,10 @@ public:
 
 	virtual void add_slide(const Slide& slide) override;
 
+	virtual void add_section(const LatexCode& section_name) override;
+
+	virtual void add_subsection(const LatexCode& subsection_name) override;
+
 	virtual std::string to_str() const override;
 };
 

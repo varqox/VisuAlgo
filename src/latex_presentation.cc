@@ -68,7 +68,15 @@ void LatexPresentation::footer_institute(std::optional<LatexCode> new_footer_ins
 }
 
 void LatexPresentation::add_slide(const Slide& slide) {
-	back_insert(content_, '\n', slide.draw_as_latex(), '\n');
+	back_insert(content_, "%\n", slide.draw_as_latex(), '\n');
+}
+
+void LatexPresentation::add_section(const LatexCode& section_name) {
+	back_insert(content_, "%\n\\section{", section_name, "}\n");
+}
+
+void LatexPresentation::add_subsection(const LatexCode& subsection_name) {
+	back_insert(content_, "%\n\\subsection{", subsection_name, "}\n");
 }
 
 std::string LatexPresentation::to_str() const {
