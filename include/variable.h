@@ -38,7 +38,7 @@ inline void Variable<T>::set(T var) {
 template <class T>
 inline LatexCode Variable<T>::draw_as_latex() const {
 	std::stringstream latex_code;
-	latex_code << name_ << " = " << var_;
+	latex_code << name_ << " = " << var_ << "\\\\\n";
 	return latex_code.str();
 }
 
