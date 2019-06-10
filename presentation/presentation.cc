@@ -10,6 +10,7 @@
 #include "../include/undirected_graph.h"
 #include "../include/image.h"
 #include "../include/image_set.h"
+#include "../include/itemize.h"
 
 #include <iostream>
 #include <vector>
@@ -18,6 +19,14 @@ using namespace std;
 using namespace valgo;
 
 void add_diagrams(LatexPresentation& pres) {
+	{
+		Itemize itemz;
+		itemz.add_item(Latex("nauczyciel informatyki prezentujący działanie algorytmu sortowania"));
+		itemz.add_item(Latex("organizator konkursu algorytmicznego tworzący omówienie zadań"));
+		itemz.add_item(Latex("osoba tworząca internetowy kurs STLa"));
+		itemz.add_item(Latex("pracownik naukowy publikujący własny algorytm"));
+		pres.add_slide(Slide(itemz).set_title("GRUPY UŻYTKOWNIKÓW / ROLE W SYSTEMIE"));
+	}
 	{
 		Image im("./io_stuff/architecture/" ,"Logical_View.pdf");
 		im.set_height(6);
