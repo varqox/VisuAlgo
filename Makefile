@@ -93,7 +93,7 @@ presentation: $(PRESENTATION_PDFS)
 	DEST_DIR="$(dir $(abspath $@))"
 	TMP_DIR=$$(mktemp -d)
 	NAME=$(notdir $*)
-	$(Q)cp -r "$$DEST_DIR" -T "$$TMP_DIR"
+	$(Q)cp -rL "$$DEST_DIR" -T "$$TMP_DIR"
 	$(Q)cd "$$TMP_DIR"
 	$(Q)"$$DEST_DIR$$NAME" > "$$NAME.tex"
 	# Need to run latex twice to get the correct page numbers
