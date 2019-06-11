@@ -154,7 +154,62 @@ void add_containers(LatexPresentation& pres) {
 			s1, s2, s3);
 	}
 
-	pres.add_slide(slide.set_title("Containers"));
+	pres.add_slide(slide.set_title("Containers - vector \\& array"));
+
+	// Next slide
+	{
+		slide = {};
+		Container<std::multimap<int, char>> mmap = {{4, 'a'}, {4, 'b'}, {5, 'a'}, {5, 'b'}};
+		mmap.set_whole_color(Color::RED);
+		auto m1 = mmap;
+		auto i1 = ++mmap.begin();
+		auto i2 = --mmap.end();
+		mmap.set_range_color(i1, i2, Color::CYAN);
+		auto m2 = mmap;
+		auto x = *i1;
+		mmap.erase(i1);
+		auto m3 = mmap;
+		mmap.emplace(x);
+		auto m4 = mmap;
+
+		add_column_view(slide, 0.58, "Containers - multimap",
+			"Container<std::multimap<int, char>>\n"
+			"    mmap = {{4, 'a'}, {4, 'b'},\n"
+			"            {5, 'a'}, {5, 'b'}};\n"
+			"mmap.set_whole_color(Color::RED);\n"
+			"slide.add_elem(mmap);\n"
+			"auto i1 = ++mmap.begin();\n"
+			"auto i2 = ----mmap.end();\n"
+			"mmap.set_range_color(i1, i2,\n"
+			"                     Color::CYAN);\n"
+			"slide.add_elem(mmap);\n"
+			"auto x = *i1;\n"
+			"mmap.erase(i1);\n"
+			"slide.add_elem(mmap);\n"
+			"mmap.emplace(x);\n"
+			"slide.add_elem(mmap);\n",
+			m1, m2, m3, m4);
+
+		pres.add_slide(slide.set_title("Containers - multimap"));
+	}
+
+	// Next slide
+	{
+		slide = {};
+		Itemize itemz;
+		itemz.add_item(Latex("std::array"));
+		itemz.add_item(Latex("std::vector"));
+		itemz.add_item(Latex("std::deque"));
+		itemz.add_item(Latex("std::forward\\_list"));
+		itemz.add_item(Latex("std::list"));
+		itemz.add_item(Latex("std::set"));
+		itemz.add_item(Latex("std::map"));
+		itemz.add_item(Latex("std::multiset"));
+		itemz.add_item(Latex("std::multimap"));
+		slide.add_elem(Latex("Supported STL containers:"));
+		slide.add_elem(itemz);
+		pres.add_slide(slide.set_title("Containers - support"));
+	}
 }
 
 void add_geometry(LatexPresentation& pres) {
