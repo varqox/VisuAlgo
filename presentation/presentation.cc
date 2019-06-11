@@ -2,15 +2,10 @@
 #include "../include/array_2d.h"
 #include "../include/block.h"
 #include "../include/container.h"
+#include "../include/directed_graph.h"
 #include "../include/geometry.h"
 #include "../include/image.h"
-#include "../include/image.h"
-#include "../include/image.h"
 #include "../include/image_set.h"
-#include "../include/image_set.h"
-#include "../include/image_set.h"
-#include "../include/itemize.h"
-#include "../include/itemize.h"
 #include "../include/itemize.h"
 #include "../include/latex.h"
 #include "../include/latex_presentation.h"
@@ -21,6 +16,7 @@
 #include "../src/utilities.h"
 
 #include <iostream>
+#include <queue>
 #include <vector>
 
 using namespace std;
@@ -260,6 +256,264 @@ void add_geometry(LatexPresentation& pres) {
 	}
 }
 
+void add_graphs(LatexPresentation& pres) {
+	{
+		SlideBuilder sb;
+		DirectedGraph<int, string, int> g;
+		sb.add_elem(g);
+		g.add_edge(0, 1)
+		 .add_edge(1, 0)
+		 .add_edge(1, 2)
+		 .add_edge(2, 3)
+		 .add_edge(3, 4)
+		 .add_edge(4, 5);
+		pres.add_slide(sb.build().set_title("Grafy skierowane"));
+		g.add_edge(5, 2);
+		pres.add_slide(sb.build().set_title("Grafy skierowane - add\\_edge(5, 2)"));
+		g.remove_edge(0, 1);
+		pres.add_slide(sb.build().set_title("Grafy skierowane - remove\\_edge(0, 1)"));
+		g.hide_edge(1, 2);
+		pres.add_slide(sb.build().set_title("Grafy skierowane - hide\\_edge(1, 2)"));
+		g.set_edge_color(2, 3, Color::GREEN);
+		pres.add_slide(sb.build().set_title("Grafy skierowane - set\\_edge\\_color(2, 3, Color::GREEN)"));
+
+		SourceCode code;
+		code.set_lang("C++");
+		code.set_code(
+			R"=(SlideBuilder sb;)=" "\n"
+			R"=(DirectedGraph<int, string, int> g;)=" "\n"
+			R"=(sb.add_elem(g);)=" "\n"
+			R"=(g.add_edge(0, 1))=" "\n"
+			R"=( .add_edge(1, 0))=" "\n"
+			R"=( .add_edge(1, 2))=" "\n"
+			R"=( .add_edge(2, 3))=" "\n"
+			R"=( .add_edge(3, 4))=" "\n"
+			R"=( .add_edge(4, 5);)=" "\n" "\n"
+			R"=(pres.add_slide(sb.build());)=" "\n"
+			R"=(g.add_edge(5, 2);)=" "\n" "\n"
+			R"=(pres.add_slide(sb.build());)=" "\n"
+			R"=(g.remove_edge(0, 1);)=" "\n" "\n"
+			R"=(pres.add_slide(sb.build());)=" "\n"
+			R"=(g.hide_edge(1, 2);)=" "\n" "\n"
+			R"=(pres.add_slide(sb.build());)=" "\n"
+			R"=(g.set_edge_color(2, 3, Color::GREEN);)=" "\n"
+			R"=(pres.add_slide(sb.build());)=");
+		pres.add_slide(Slide(code).set_title("Grafy skierowane").shrink(true));
+	}
+	{
+		SlideBuilder sb;
+		UndirectedGraph<int, string, int> visu_g;
+		sb.add_elem(visu_g);
+		constexpr int n = 11;
+		constexpr int source = 0;
+
+		for (int i = 0; i < n; i++)
+			visu_g.add_node(i, "dist=inf").set_node_color(i, Color::LIGHT_RED);
+
+		vector<vector<int>> g(n);
+		auto add_edge = [&](int a, int b) {
+			g[a].emplace_back(b);
+			g[b].emplace_back(a);
+			visu_g.add_edge(a, b);
+		};
+		add_edge(0, 1);
+		add_edge(0, 3);
+		add_edge(3, 4);
+		add_edge(0, 4);
+		add_edge(1, 4);
+		add_edge(4, 2);
+		add_edge(4, 5);
+		add_edge(5, 2);
+		add_edge(1, 2);
+		add_edge(3, 6);
+		add_edge(3, 7);
+		add_edge(3, 8);
+		add_edge(8, 9);
+		add_edge(7, 10);
+
+		queue<int> q;
+		vector<int> dist(n, -1);
+
+		q.emplace(source);
+		dist[source] = 0;
+		visu_g.set_node_color(source, Color::LIGHT_YELLOW).set_node_info(source, "dist=0");
+		int prev_dist = -1;
+		while (!q.empty()) {
+			auto top = q.front();
+			q.pop();
+			if (prev_dist != dist[top]) { // przechodzimy do nastepnego poziomu
+				prev_dist = dist[top];
+				pres.add_slide(sb.build().set_title("BFS"));
+			}
+			visu_g.set_node_color(top, Color::LIGHT_GREEN);
+			for (auto&& neighbor : g[top]) {
+				if (dist[neighbor] == -1) {
+					dist[neighbor] = dist[top] + 1;
+					visu_g.set_node_info(neighbor, "dist=" + to_string(dist[neighbor]));
+					visu_g.set_node_color(neighbor, Color::LIGHT_YELLOW);
+					q.emplace(neighbor);
+				}
+			}
+		}
+		pres.add_slide(sb.build().set_title("BFS"));
+
+		SourceCode code;
+		code.set_lang("C++");
+		code.set_code(
+			R"(SlideBuilder sb;)" "\n"
+			R"(UndirectedGraph<int, string, int> visu_g;)" "\n"
+			R"(sb.add_elem(visu_g);)" "\n"
+			R"()" "\n"
+			R"(for (int i = 0; i < n; i++))" "\n"
+			R"(	visu_g.add_node(i, "dist=inf").set_node_color(i, Color::LIGHT_RED);)" "\n"
+			R"()" "\n"
+			R"(vector<vector<int>> g(n);)" "\n"
+			R"(auto add_edge = [&](int a, int b) {)" "\n"
+			R"(	g[a].emplace_back(b);)" "\n"
+			R"(	g[b].emplace_back(a);)" "\n"
+			R"(	visu_g.add_edge(a, b);)" "\n"
+			R"(};)" "\n"
+			R"(add_edge(1, 2);)" "\n"
+			R"(// ...)");
+		pres.add_slide(Slide(code).set_title("BFS").shrink(true));
+		code.set_code(
+			R"(q.emplace(source);)" "\n"
+			R"(dist[source] = 0;)" "\n"
+			R"(visu_g.set_node_color(source, Color::LIGHT_YELLOW).set_node_info(source, "dist=0");)" "\n"
+			R"(int prev_dist = -1;)" "\n"
+			R"(while (!q.empty()) {)" "\n"
+			R"(	auto top = q.front();)" "\n"
+			R"(	q.pop();)" "\n"
+			R"(	if (prev_dist != dist[top]) { // przechodzimy do nastepnego poziomu)" "\n"
+			R"(		prev_dist = dist[top];)" "\n"
+			R"(		pres.add_slide(sb.build());)" "\n"
+			R"(	})" "\n"
+			R"(	visu_g.set_node_color(top, Color::LIGHT_GREEN);)" "\n"
+			R"(	for (auto&& neighbor : g[top]) {)" "\n"
+			R"(		if (dist[neighbor] == -1) {)" "\n"
+			R"(			dist[neighbor] = dist[top] + 1;)" "\n"
+			R"(			visu_g.set_node_info(neighbor, "dist=" + to_string(dist[neighbor]));)" "\n"
+			R"(			visu_g.set_node_color(neighbor, Color::LIGHT_YELLOW);)" "\n"
+			R"(			q.emplace(neighbor);)" "\n"
+			R"(		})" "\n"
+			R"(	})" "\n"
+			R"(})" "\n"
+			R"(pres.add_slide(sb.build());)");
+		pres.add_slide(Slide(code).set_title("BFS").shrink(true));
+	}
+}
+
+void add_arrays(LatexPresentation& pres) {
+	{
+		Array2D<int> arr("Array2D");
+		arr.resize(5, 10);
+
+		for (int i = 0; i < 5; i++)
+			for (int j = 0; j < 10; j++)
+				arr.set_elem(i, j, 10 * (i + j) + i);
+
+		arr.set_row_color(3, Color::LIGHT_BLUE);
+		arr.set_column_color(4, Color::LIGHT_RED);
+		arr.set_color(3, 4, Color::LIGHT_BROWN);
+
+		SourceCode code;
+		code.set_lang("C++").set_code(
+			R"=(Array2D<int> arr("Array2D");)=" "\n"
+			R"=(arr.resize(5, 10);)=" "\n"
+			R"=()=" "\n"
+			R"=(for (int i = 0; i < 5; i++))=" "\n"
+			R"=(	for (int j = 0; j < 10; j++))=" "\n"
+			R"=(		arr.set_elem(i, j, 10 * (i + j) + i);)=" "\n"
+			R"=()=" "\n"
+			R"=(arr.set_row_color(3, Color::LIGHT_BLUE);)=" "\n"
+			R"=(arr.set_column_color(4, Color::LIGHT_RED);)=" "\n"
+			R"=(arr.set_color(3, 4, Color::LIGHT_BROWN);)=" "\n"
+			R"=()=" "\n"
+			R"=(pres.add_slide(Slide(arr));)=");
+		pres.add_slide(Slide(arr, code).set_title("Array2D").shrink(true));
+	}
+	{
+		SlideBuilder sb;
+		constexpr int N = 12;
+		Array1D<bool> vtab("pierwsza");
+		Variable<int> wielo("wykreślmy wielokrotności");
+		Variable<int> wykr("teraz wykreśliliśmy");
+
+		sb.add_elem(vtab);
+
+		vtab.resize(N);
+		for (int i = 2; i < N; i++)
+			vtab.set_elem(i, true);
+
+		vector<bool> is_prime(N, true);
+		is_prime[0] = is_prime[1] = false;
+
+		vtab.set_color(0, Color::LIGHT_RED).set_color(1, Color::LIGHT_RED);
+		pres.add_slide(sb.build().set_title("Sieve of Erathostenes"));
+
+		sb.add_elem(wielo);
+
+		for (int i = 2; i < N; ++i) {
+			if (is_prime[i]) {
+				wielo.set(i);
+				vtab.set_color(i, Color::LIGHT_YELLOW);
+				pres.add_slide(sb.build().set_title("Sieve of Erathostenes"));
+				for (int j = i + i; j < N; j += i) {
+					sb.add_elem(wykr);
+					wykr.set(j);
+					is_prime[j] = false;
+					vtab.set_color(j, Color::LIGHT_RED).set_elem(j, false);
+					pres.add_slide(sb.build().set_title("Sieve of Erathostenes"));
+					sb.remove_elem(wykr);
+				}
+			}
+		}
+
+		sb.remove_all_elements();
+
+		SourceCode code;
+		code.set_lang("C++");
+		code.set_code(
+			R"(SlideBuilder sb;)" "\n"
+			R"(constexpr int N = 12;)" "\n"
+			R"(Array1D<bool> vtab("pierwsza");)" "\n"
+			R"(Variable<int> wielo("wykreslmy wielokrotnosci");)" "\n"
+			R"(Variable<int> wykr("teraz wykreslilismy");)" "\n"
+			R"()" "\n"
+			R"(sb.add_elem(vtab);)" "\n"
+			R"()" "\n"
+			R"(vtab.resize(N);)" "\n"
+			R"(for (int i = 2; i < N; i++))" "\n"
+			R"(	vtab.set_elem(i, true);)" "\n"
+			R"()" "\n"
+			R"(vector<bool> is_prime(N, true);)" "\n"
+			R"(is_prime[0] = is_prime[1] = false;)" "\n"
+			R"()" "\n"
+			R"(vtab.set_color(0, Color::LIGHT_RED).set_color(1, Color::LIGHT_RED);)" "\n"
+			R"(pres.add_slide(sb.build());)" "\n"
+			R"()" "\n"
+			R"(sb.add_elem(wielo);)");
+		pres.add_slide(Slide(code).set_title("Sieve of Erathostenes").shrink(true));
+		code.set_code(
+			R"(for (int i = 2; i < N; ++i) {)" "\n"
+			R"(	if (is_prime[i]) {)" "\n"
+			R"(		wielo.set(i);)" "\n"
+			R"(		vtab.set_color(i, Color::LIGHT_YELLOW);)" "\n"
+			R"(		pres.add_slide(sb.build());)" "\n"
+			R"(		for (int j = i + i; j < N; j += i) {)" "\n"
+			R"(			sb.add_elem(wykr);)" "\n"
+			R"(			wykr.set(j);)" "\n"
+			R"(			is_prime[j] = false;)" "\n"
+			R"(			vtab.set_color(j, Color::LIGHT_RED).set_elem(j, false);)" "\n"
+			R"(			pres.add_slide(sb.build());)" "\n"
+			R"(			sb.remove_elem(wykr);)" "\n"
+			R"(		})" "\n"
+			R"(	})" "\n"
+			R"(})");
+		pres.add_slide(Slide(code).set_title("Sieve of Erathostenes").shrink(true));
+	}
+}
+
 int main() {
 	LatexPresentation pres("Visualization of algorithms in C++", "VisuAlgo");
 
@@ -280,6 +534,8 @@ int main() {
 	add_diagrams(pres);
 	add_containers(pres);
 	add_geometry(pres);
+	add_arrays(pres);
+	add_graphs(pres);
 
 	// TODO: add more sensible slides :)
 
