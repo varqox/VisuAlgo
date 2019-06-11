@@ -43,6 +43,14 @@ void add_diagrams(LatexPresentation& pres) {
 		pres.add_slide(Slide(itemz).set_title("Funkcjonalności"));
 	}
 	{
+		Image im("./io_stuff/UseCaseDiagram/" ,"UseCaseDiagram.png");
+		im.set_height(6);
+		im.set_width(8);
+		ImageSet imset;
+		imset.add_image(im);
+		pres.add_slide(Slide(imset).set_title("Architecture - use case diagram"));
+	}
+	{
 		Itemize itemz;
 		itemz.add_item(Latex("C++"));
 		itemz.add_item(Latex("Graphviz"));
@@ -75,14 +83,6 @@ void add_diagrams(LatexPresentation& pres) {
 		ImageSet imset;
 		imset.add_image(im);
 		pres.add_slide(Slide(imset).set_title("Architecture - webserver"));
-	}
-	{
-		Image im("./io_stuff/UseCaseDiagram/" ,"UseCaseDiagram.png");
-		im.set_height(6);
-		im.set_width(8);
-		ImageSet imset;
-		imset.add_image(im);
-		pres.add_slide(Slide(imset).set_title("Architecture - use case diagram"));
 	}
 	{
 		Itemize itemz;
