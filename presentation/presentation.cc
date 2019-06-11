@@ -122,10 +122,12 @@ void add_containers(LatexPresentation& pres) {
 	Slide slide;
 
 	add_column_view(slide, 0.8, "Containers - vector",
+		"LatexPresentation pres(\"Title\",\n"
+		"    \"footer title\");\n"
 		"Container<std::vector<int>> vec = {1, 2, 3};\n"
 		"vec.set_color(1, Color::GREEN);\n"
-		"vec.emplace_back(4);\n"
-		"slide.add_elem(vec);\n", [] {
+		"vec.emplace_back(4); slide.add_elem(vec);\n"
+		"pres.add_slide(slide);\n", [] {
 		Container<std::vector<int>> vec = {1, 2, 3};
 		vec.set_color(1, Color::GREEN);
 		vec.emplace_back(4);
@@ -147,14 +149,14 @@ void add_containers(LatexPresentation& pres) {
 			"set.set_range_color(set.lower_bound('b'),\n"
 			"    set.upper_bound('d'), Color::RED);\n"
 			"slide.add_elem(set);\n"
-			"set.erase('c');\n"
-			"slide.add_elem(set);\n"
+			"set.erase('c'); slide.add_elem(set);\n"
 			"set.emplace('c');\n"
-			"slide.add_elem(set);\n",
+			"slide.add_elem(set);\n"
+			"pres.add_slide(slide);\n",
 			s1, s2, s3);
 	}
 
-	pres.add_slide(slide.set_title("Containers - vector \\& array"));
+	pres.add_slide(slide.set_title("Containers - vector \\& array").shrink(true));
 
 	// Next slide
 	{
@@ -173,6 +175,8 @@ void add_containers(LatexPresentation& pres) {
 		auto m4 = mmap;
 
 		add_column_view(slide, 0.58, "Containers - multimap",
+			"LatexPresentation pres(\"Title\",\n"
+			"    \"footer title\");\n"
 			"Container<std::multimap<int, char>>\n"
 			"    mmap = {{4, 'a'}, {4, 'b'},\n"
 			"            {5, 'a'}, {5, 'b'}};\n"
@@ -183,14 +187,14 @@ void add_containers(LatexPresentation& pres) {
 			"mmap.set_range_color(i1, i2,\n"
 			"                     Color::CYAN);\n"
 			"slide.add_elem(mmap);\n"
-			"auto x = *i1;\n"
-			"mmap.erase(i1);\n"
+			"auto x = *i1; mmap.erase(i1);\n"
 			"slide.add_elem(mmap);\n"
 			"mmap.emplace(x);\n"
-			"slide.add_elem(mmap);\n",
+			"slide.add_elem(mmap);\n"
+			"pres.add_slide(slide);\n",
 			m1, m2, m3, m4);
 
-		pres.add_slide(slide.set_title("Containers - multimap"));
+		pres.add_slide(slide.set_title("Containers - multimap").shrink(true));
 	}
 
 	// Next slide
@@ -252,9 +256,9 @@ void add_geometry(LatexPresentation& pres) {
 		SourceCode sc;
 		sc.set_lang("C++");
 		sc.set_code(
-			"SlideBuilder sb;"
-			"Geometry geo;"
-			"sb.add(geo);"
+			"SlideBuilder sb;\n"
+			"Geometry geo;\n"
+			"sb.add(geo);\n"
 			"Point p(2, 4), p2(3, 3), p3(4, 2);\n"
 			"p.set_color(Color::RED);\n"
 			"p2.set_color(Color::GREEN);\n"
@@ -625,8 +629,6 @@ int main() {
 	add_geometry(pres);
 	add_arrays(pres);
 	add_graphs(pres);
-
-	// TODO: add more sensible slides :)
 
 	cout << pres.to_str() << endl;
 	return 0;
