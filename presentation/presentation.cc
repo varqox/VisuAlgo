@@ -70,8 +70,8 @@ void add_diagrams(LatexPresentation& pres) {
 	}
 	{
 		Image im("./io_stuff/" ,"webserver.pdf");
-		im.set_height(6);
-		im.set_width(9);
+		im.set_height(7.2);
+		im.set_width(9.6);
 		ImageSet imset;
 		imset.add_image(im);
 		pres.add_slide(Slide(imset).set_title("Architecture - webserver"));
@@ -252,6 +252,9 @@ void add_geometry(LatexPresentation& pres) {
 		SourceCode sc;
 		sc.set_lang("C++");
 		sc.set_code(
+			"SlideBuilder sb;"
+			"Geometry geo;"
+			"sb.add(geo);"
 			"Point p(2, 4), p2(3, 3), p3(4, 2);\n"
 			"p.set_color(Color::RED);\n"
 			"p2.set_color(Color::GREEN);\n"
@@ -260,12 +263,9 @@ void add_geometry(LatexPresentation& pres) {
 			"geo.add(p).add(p2).add(p3);\n"
 			"\n"
 			"Line l(1, 1, 5, 5), l2(-3, 2, 3, -4);\n"
-			"\n"
 			"l.set_color(Color::MAGENTA).set_label(\"Magenta\");\n"
 			"l2.set_color(Color::CYAN).set_label(\"Cyan\");\n"
-			"\n"
 			"geo.add(l).add(l2);\n"
-			"\n"
 			"sb.add_elem(geo);\n"
 			"geo.set_coord_system(-6, 6, -6, 6);\n"
 			"pres.add_slide(sb.build().set_title(\"Punkty i proste\"));\n");
