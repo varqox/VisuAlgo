@@ -106,6 +106,18 @@ void add_column_view(Slide& slide, double ratio, const string& cpp_source_title,
 }
 
 void add_containers(LatexPresentation& pres) {
+	{
+		SlideBuilder sb;
+
+		Latex latex("\\begin{center}\\Large{Kontenery}\\end{center}");
+		sb.add_elem(latex);
+		Latex latex2("\\begin{center}Przydatne do wizualizacji wielu algorytmów\\end{center}");
+		sb.add_elem(latex2);
+
+		pres.add_slide(sb.build().set_title("Kontenery"));
+		sb.remove_all_elements();
+	}
+
 	pres.add_section("Containers");
 	Slide slide;
 
@@ -259,6 +271,17 @@ void add_geometry(LatexPresentation& pres) {
 void add_graphs(LatexPresentation& pres) {
 	{
 		SlideBuilder sb;
+
+		Latex latex("\\begin{center}\\Large{Grafy}\\end{center}");
+		sb.add_elem(latex);
+		Latex latex2("\\begin{center}Przydatne do wizualizacji wielu algorytmów\\end{center}");
+		sb.add_elem(latex2);
+
+		pres.add_slide(sb.build().set_title("Grafy"));
+		sb.remove_all_elements();
+	}
+	{
+		SlideBuilder sb;
 		DirectedGraph<int, string, int> g;
 		sb.add_elem(g);
 		g.add_edge(0, 1)
@@ -404,6 +427,17 @@ void add_graphs(LatexPresentation& pres) {
 }
 
 void add_arrays(LatexPresentation& pres) {
+	{
+		SlideBuilder sb;
+
+		Latex latex("\\begin{center}\\Large{Tablice}\\end{center}");
+		sb.add_elem(latex);
+		Latex latex2("\\begin{center}Przydatne do wizualizacji wielu algorytmów\\end{center}");
+		sb.add_elem(latex2);
+
+		pres.add_slide(sb.build().set_title("Tablice"));
+		sb.remove_all_elements();
+	}
 	{
 		Array2D<int> arr("Array2D");
 		arr.resize(5, 10);
