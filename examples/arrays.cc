@@ -9,7 +9,6 @@
 #include "../include/array_2d.h"
 #include "../include/undirected_graph.h"
 
-#include <any>
 #include <iostream>
 #include <vector>
 
