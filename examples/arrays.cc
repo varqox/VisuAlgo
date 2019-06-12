@@ -46,6 +46,7 @@ void visualize_kmp(LatexPresentation &pres, const string& str) {
 		}
 		pres.add_slide(sb.build().set_title("KMP"));
 		while (ps >= 0 && str[ps + 1] != str[i]) {
+			int prev_ps = ps;
 			vpi.set_color(2, ps + 1, Color::LIGHT_RED);
 			vpi.set_color(3, i, Color::LIGHT_RED);
 			pres.add_slide(sb.build().set_title("KMP"));
@@ -63,7 +64,7 @@ void visualize_kmp(LatexPresentation &pres, const string& str) {
 				vpi.set_color_range(2, 0, 2, ps, Color::LIGHT_GREEN);
 				vpi.set_color_range(3, i - ps - 1, 3, i - 1, Color::LIGHT_GREEN);
 			}
-			vpi.set_row_color(1, {});
+			vpi.set_color(1, prev_ps, {});
 			pres.add_slide(sb.build().set_title("KMP"));
 		}
 		if (str[ps + 1] == str[i]) {
