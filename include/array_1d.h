@@ -30,13 +30,13 @@ public:
 
 	Array1D& set(std::vector<T> vec) noexcept;
 
-	Array1D& resize(size_t n);
+	Array1D& resize(size_t idx);
 
-	Array1D& set_elem(size_t n, T val);
+	Array1D& set_elem(size_t idx, T val);
 
-	Array1D& set_color(size_t n, std::optional<Color> color);
+	Array1D& set_color(size_t idx, std::optional<Color> color);
 
-	Array1D& set_range_color(size_t a, size_t b, std::optional<Color> color);
+	Array1D& set_range_color(size_t beg, size_t end, std::optional<Color> color);
 
 	Array1D& set_whole_array_color(std::optional<Color> color);
 
@@ -48,16 +48,14 @@ public:
 /****************** Implementation ***********************/
 
 template <class T>
-inline Array1D<T>& Array1D<T>::set_color(size_t n, std::optional<Color> color) {
-	colors_[n] = std::move(color);
+inline Array1D<T>& Array1D<T>::set_color(size_t idx, std::optional<Color> color) {
+	colors_[idx] = std::move(color);
 	return *this;
 }
 
 template <class T>
-inline Array1D<T>& Array1D<T>::set_range_color(size_t a, size_t b, std::optional<Color> color) {
-	if (a > b)
-		std::swap(a, b);
-	for (size_t i = a; i <= b; i++)
+inline Array1D<T>& Array1D<T>::set_range_color(size_t beg, size_t end, std::optional<Color> color) {
+	for (size_t i = beg; i <= end; i++)
 		set_color(i, color);
 	return *this;
 }
@@ -113,15 +111,15 @@ inline Array1D<T>& Array1D<T>::set(std::vector<T> vec) noexcept {
 }
 
 template <class T>
-inline Array1D<T>& Array1D<T>::resize(size_t n) {
-	vec_.resize(n);
-	colors_.resize(n);
+inline Array1D<T>& Array1D<T>::resize(size_t idx) {
+	vec_.resize(idx);
+	colors_.resize(idx);
 	return *this;
 }
 
 template <class T>
-inline Array1D<T>& Array1D<T>::set_elem(size_t n, T val) {
-	vec_[n] = std::move(val);
+inline Array1D<T>& Array1D<T>::set_elem(size_t idx, T val) {
+	vec_[idx] = std::move(val);
 	return *this;
 }
 
