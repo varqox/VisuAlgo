@@ -1,7 +1,7 @@
 include Makefile.config
 
 .PHONY: all
-all: visualgo.a io_stuff examples presentation
+all: visualgo.a io_stuff examples/examples.pdf presentation check-examples-in-readme
 	@printf "\033[32mBuild finished\033[0m\n"
 
 GOOGLETEST_SRCS := \
@@ -72,6 +72,10 @@ EXAMPLES_PDFS := $(patsubst %, %.pdf, $(EXAMPLES_EXECS))
 
 .PHONY:
 examples: $(EXAMPLES_PDFS)
+
+.PHONY:
+check-examples-in-readme:
+	bash -c "diff <(echo $(EXAMPLES_EXECS) | sed 's/ /\n/g' | sed 's@.*/@@' | sort) <(grep '^| [a-z]' README.md | cut -d ' ' -f 2 | sort) || echo Above examples are missing in README.md or are missing in examples/"
 
 PRESENTATION_SRCS := \
 	presentation/presentation.cc
