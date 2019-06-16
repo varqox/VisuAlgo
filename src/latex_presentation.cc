@@ -3,6 +3,14 @@
 
 namespace valgo {
 
+LatexCode LatexPresentation::language() const {
+	return language_;
+}
+
+void LatexPresentation::language(LatexCode new_language) {
+	language_ = std::move(new_language);
+}
+
 LatexCode LatexPresentation::title() const {
 	return title_;
 }
@@ -99,15 +107,16 @@ std::string LatexPresentation::to_str() const {
 		"}\n"
 		"\\usepackage{listings}\n"
 		"\\usepackage{textpos}\n"
+		"\\usepackage{caption}\n"
 		"\\usepackage[T1]{fontenc}\n"
-		"\\usepackage[polish]{babel}\n"
+		"\\usepackage[", language_, "]{babel}\n"
 		"\\usepackage[utf8]{inputenc}\n"
 		"\\usepackage{lmodern}\n"
 		"\\usepackage{xcolor}\n"
 		"\\usepackage{hhline}\n"
 		"\\usepackage{graphicx}\n"
 		"\\usepackage{fancyvrb}\n"
-		"\\selectlanguage{polish}\n"
+		"\\selectlanguage{", language_, "}\n"
 		"\\usepackage{tikz}"
 		"\\usepackage{tkz-euclide}"
 		"\\newcommand\\diag[4]{%\n"
