@@ -71,6 +71,9 @@ $(EXAMPLES_EXECS): %: %.o visualgo.a
 EXAMPLES_PDFS := $(patsubst %, %.pdf, $(EXAMPLES_EXECS))
 
 .PHONY:
+compile_examples: $(EXAMPLES_EXECS)
+
+.PHONY:
 examples: $(EXAMPLES_PDFS)
 
 .PHONY:

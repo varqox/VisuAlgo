@@ -10,31 +10,32 @@ Biblioteka udostępnia wygodne funkcje pozwalające dla dowolnych zmiennych/tabl
 - pdfunite
 
 ## Generowanie plików wykonywalnych
-Aby zbudować bibliotekę, należy użyć komendy:
+Aby zbudować samą bibliotekę, należy użyć komendy:
 ```sh
-make
+make visualgo.a
 ```
 
 ## Architektura
-W katalogu `architecture/` znajdują się 2 diagramy logical view. Ze względu na czytelność, w szczegółowym diagramie umieściliśmy wszystkie klasy użyte w projekcie, a w ogólnym uproszczony diagram z uwzględnieniem kluczowych funkcji najważniejszych klas projektu.
+W katalogu `io_stuff/architecture/` znajdują się 2 diagramy logical view. Ze względu na czytelność, w szczegółowym diagramie umieściliśmy wszystkie klasy użyte w projekcie, a w ogólnym uproszczony diagram z uwzględnieniem kluczowych funkcji najważniejszych klas projektu.
 
-## Przykłady 
-W folderze `examples/` znajdują się przykłady ilustrujące sposoby użycia biblioteki. Aby je zbudować, należy użyć komendy:
+## Przykłady
+Przykłady użycia biblioteki znajdują się w katalogu `examples/` w plikach `*.cc`. Wypisują one kod LaTeXa na standardowe wyjście. Aby je skompilować, automatycznie uruchomić i z wygenerowanego kodu LaTeXa zrobić PDFy, należy użyć komendy:
 ```sh
 make examples
 ```
+Pojedyncze prezentacje odpowiadają przykładowym programom np. dla `arrays.cc` zostanie utworzona prezentacja `arrays.pdf`.
 
-### Prezentacje generowane przez przykładowe programy
-
-Przykłady użycia biblioteki znajdują się w katalogu `examples/` w plikach `*.cc`. Wypisują one kod LaTeXa na standardowe wyjście.
-Aby automatycznie uruchomić wszystkie programy i zrobić z wygenerowanego kodu LaTeXa PDFy należy użyć komendy:
+Aby zrobić z wszystkich przykładowych prezentacji jednego PDFa wystarczy użyć komendy:
 ```sh
 make examples/examples.pdf
 ```
-Stworzy ona wszystkie prezentacje oraz złączy je w jedną i zapisze do pliku `examples/examples.pdf`.
-Pojedyncze prezentacje odpowiadają przykładowym programom np. dla `arrays.cc` zostanie utworzona prezentacja `arrays.pdf`.
+lub
+```sh
+make all
+```
+która dodatkowo zbuduje do pliku `presentation/presentation.pdf` prezentację krótko przedstawiającą naszą bibliotekę.
 
-#### Spis przykładów
+### Spis przykładów
 
 | Nazwa | Opis |
 |------|------|
@@ -47,4 +48,10 @@ Pojedyncze prezentacje odpowiadają przykładowym programom np. dla `arrays.cc` 
 | matrix | wizualizacja działania macierzy |
 | pictures | przykład dodawania obrazków o zadanej wielkości i kącie obrotu na wybrane miejsce na slajdzie | 
 | sieve | prezentuje działanie sita Eratostenesa |
+
+## Testy
+Aby uruchomić testy jednostkowe należy użyć komendy:
+```
+make test
+```
 
