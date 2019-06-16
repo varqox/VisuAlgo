@@ -143,8 +143,10 @@ format:
 
 .PHONY: clean
 clean: OBJS := $(GOOGLETEST_OBJS) $(VISUALGO_OBJS) $(EXAMPLES_OBJS) $(VISUALGO_TEST_OBJS) $(PRESENTATION_OBJS)
+clean: EXECS := $(EXAMPLES_EXECS) $(PRESENTATION_EXECS) $(VISUALGO_TEST_EXECS)
+clean: PDFS := $(EXAMPLES_PDFS) $(PRESENTATION_PDFS)
 clean:
-	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo) gtest_main.a visualgo.a $(EXAMPLES_EXECS) $(EXAMPLES_PDFS) $(VISUALGO_TEST_EXECS) $(PRESENTATION_EXECS) examples/examples.pdf
+	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo) $(EXECS) $(PDFS) gtest_main.a visualgo.a examples/examples.pdf
 	$(Q)find examples -type f -name '*.tex' | xargs rm -f
 	$(Q)find src googletest test examples io_stuff presentation -type f -name '*.deps' | xargs rm -f
 
