@@ -2,18 +2,15 @@
 
 #include "directed_graph.h"
 
-#include <queue>
 #include <iostream>
+#include <queue>
 using namespace std;
 
 namespace valgo {
 
-enum class FuncGraphView {
-	sparse,
-	list
-};
+enum class FuncGraphView { SPARSE, LIST };
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 class FuncGraph : public DirectedGraph<NodeId, NodeInfo, EdgeInfo> {
 public:
 protected:
@@ -35,13 +32,13 @@ protected:
 
 	// (found cycle, may add to result)
 	std::pair<bool, bool> find_cycle(const Node* st, std::set<const Node*>& vis, std::set<const Node*>& on_stack,
-		std::vector<const Node*>& result) const;
+	                                 std::vector<const Node*>& result) const;
 
 	// Returns pointers to nodes in bfs order.
 	std::vector<std::vector<const Node*>> find_all_cycles() const;
 
 public:
-	FuncGraph(FuncGraphView view = FuncGraphView::sparse) : view_(view) {}
+	FuncGraph(FuncGraphView view = FuncGraphView::SPARSE) : view_(view) {}
 
 	FuncGraph& set_view(FuncGraphView view) {
 		view_ = view;
@@ -106,14 +103,20 @@ public:
 
 /****************** Implementation ******************/
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline std::string FuncGraph<NodeId, NodeInfo, EdgeInfo>::tool_name() const {
-	return view_ == FuncGraphView::sparse ? "neato" : "dot";
+	switch (view_) {
+	case FuncGraphView::SPARSE:
+		return "neato";
+	case FuncGraphView::LIST:
+		return "dot";
+	}
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 std::pair<bool, bool> FuncGraph<NodeId, NodeInfo, EdgeInfo>::find_cycle(const Node* st, std::set<const Node*>& vis,
-		std::set<const Node*>& on_stack, std::vector<const Node*>& result) const {
+                                                                        std::set<const Node*>& on_stack,
+                                                                        std::vector<const Node*>& result) const {
 	vis.emplace(st);
 	on_stack.emplace(st);
 	for (auto& nei_id : st->nei_) {
@@ -184,7 +187,15 @@ inline DotCode FuncGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_dot() const {
 	ss << " node [fontname = \"Monospace\", shape=plain, fontsize=11];\n";
 	ss << " edge [fontname = \"Monospace\", tailclip=false];\n";
 
-	if (view_ == FuncGraphView::list) {
+	switch (view_) {
+	case FuncGraphView::SPARSE: {
+		// edges
+		for (const auto& [id, edge] : edges_)
+			ss << ' ' << edge.to_dot(nodes_) << '\n';
+		break;
+	}
+
+	case FuncGraphView::LIST: {
 		// ranks
 		ss << " rankdir = \"BT\";\n";
 		ss << " { rank = same;";
@@ -205,11 +216,8 @@ inline DotCode FuncGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_dot() const {
 				ss << ' ' << edge.to_dot(nodes_) << '\n';
 		}
 		cerr << endl;
+		break;
 	}
-	else {
-		// edges
-		for (const auto& [id, edge] : edges_)
-			ss << ' ' << edge.to_dot(nodes_) << '\n';
 	}
 
 	// nodes

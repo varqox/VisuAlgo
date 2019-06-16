@@ -6,12 +6,9 @@
 
 namespace valgo {
 
-enum class AcyclicGraphView {
-	sparse,
-	list
-};
+enum class AcyclicGraphView { SPARSE, LIST };
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 class AcyclicGraph : public DirectedGraph<NodeId, NodeInfo, EdgeInfo> {
 protected:
 	virtual std::string tool_name() const override;
@@ -22,7 +19,7 @@ protected:
 	using DirectedGraph<NodeId, NodeInfo, EdgeInfo>::nodes_;
 
 public:
-	AcyclicGraph(AcyclicGraphView view = AcyclicGraphView::sparse) : view_(view) {}
+	AcyclicGraph(AcyclicGraphView view = AcyclicGraphView::SPARSE) : view_(view) {}
 
 	AcyclicGraph& set_view(AcyclicGraphView view) {
 		view_ = view;
@@ -115,11 +112,17 @@ inline DotCode AcyclicGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_dot() const {
 	ss << " node [fontname = \"Monospace\", shape=plain, fontsize=11];\n";
 	ss << " edge [fontname = \"Monospace\", tailclip=false];\n";
 
-	if (view_ == AcyclicGraphView::list) {
+	switch (view_) {
+	case AcyclicGraphView::SPARSE:
+		break;
+
+	case AcyclicGraphView::LIST: {
 		ss << " { rank = same;";
 		for (const auto& [id, node] : nodes_)
 			ss << id << ';';
 		ss << " }\n";
+		break;
+	}
 	}
 
 	// edges
