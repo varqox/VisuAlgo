@@ -105,7 +105,7 @@ presentation: $(PRESENTATION_PDFS)
 		$(Q)echo | pdflatex --shell-escape "$$NAME.tex"
 	RET=$$?
 	$(Q)if [ "$$RET" = "0" ]; then cp "$$NAME.pdf" "$$DEST_DIR"; fi
-# 	$(Q)rm -rf "$$TMP_DIR"
+	$(Q)rm -rf "$$TMP_DIR"
 	$(Q)exit $$RET
 
 examples/examples.pdf: $(EXAMPLES_PDFS)
