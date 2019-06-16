@@ -27,7 +27,7 @@ TEST (UndirectedGraph, draw_as_latex) {
 
 TEST (UndirectedGraph, draw_as_html) {
 	UndirectedGraph<int, int, int> x;
-	EXPECT_THROW(Array1D<int>().draw_as_html(), NotImplemented);
+	EXPECT_THROW(x.draw_as_html(), NotImplemented);
 }
 
 TEST (UndirectedGraph, clone) {
