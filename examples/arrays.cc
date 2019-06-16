@@ -87,8 +87,8 @@ void visualize_kmp(LatexPresentation& pres, const string& str) {
 int main() {
 	LatexPresentation pres("Visualization of arrays", "Arrays");
 	SlideBuilder sb;
-	const auto initializer_list = {3, 1, 4, 1, 5, 9, 2, 6, 5};
-	Array1D<int> arr("array", initializer_list);
+	const vector vec = {3, 1, 4, 1, 5, 9, 2, 6, 5};
+	Array1D<int> arr("array", vec);
 	sb.add_elem(arr);
 	arr.set_color(4, Color::LIGHT_GREEN)
 	  .set_color(2, Color::LIGHT_BLUE)
@@ -96,7 +96,7 @@ int main() {
 	  .set_color(1, Color::LIGHT_YELLOW)
 	  .set_color(3, Color::LIGHT_BROWN);
 
-	Array1D<int> arr2(initializer_list);
+	Array1D<int> arr2(vec);
 	sb.add_elem(arr2);
 	arr2.set_whole_array_color(Color::LIGHT_YELLOW)
 	  .set_range_color(2, 4, Color::LIGHT_BROWN)

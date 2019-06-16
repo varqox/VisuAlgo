@@ -112,6 +112,8 @@ inline std::string FuncGraph<NodeId, NodeInfo, EdgeInfo>::tool_name() const {
 	case FuncGraphView::LIST:
 		return "dot";
 	}
+
+	return "dot"; // Should not happen
 }
 
 template <class NodeId, class NodeInfo, class EdgeInfo>
