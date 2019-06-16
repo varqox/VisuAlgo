@@ -24,8 +24,6 @@ LatexCode Slide::draw_as_latex() const {
 	return back_insert(ret, "\\end{frame}");
 }
 
-HTMLCode Slide::draw_as_html() const {
-	throw NotImplemented();
-}
+HTMLCode Slide::draw_as_html() const { throw NotImplemented(); }
 
 } // namespace valgo

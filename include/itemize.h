@@ -19,7 +19,7 @@ public:
 
 	Itemize() noexcept = default;
 
-	template<class... Elem>
+	template <class... Elem>
 	explicit Itemize(const Elem&... elems);
 
 	std::unique_ptr<SlideElement> clone() const override;
@@ -34,7 +34,7 @@ public:
 
 /****************** Implementation ******************/
 
-template<class... Elem>
+template <class... Elem>
 inline Itemize::Itemize(const Elem&... elems) {
 	elems_.reserve(sizeof...(elems));
 	(elems_.emplace_back(elems.clone()), ...);

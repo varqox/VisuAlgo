@@ -1,13 +1,13 @@
+#include "../include/array_1d.h"
+#include "../include/array_2d.h"
 #include "../include/block.h"
 #include "../include/itemize.h"
 #include "../include/latex.h"
 #include "../include/latex_presentation.h"
 #include "../include/slide_builder.h"
 #include "../include/source_code.h"
-#include "../include/array_1d.h"
-#include "../include/variable.h"
-#include "../include/array_2d.h"
 #include "../include/undirected_graph.h"
+#include "../include/variable.h"
 
 #include <iostream>
 #include <vector>
@@ -15,8 +15,7 @@
 using namespace std;
 using namespace valgo;
 
-
-void visualize_kmp(LatexPresentation &pres, const string& str) {
+void visualize_kmp(LatexPresentation& pres, const string& str) {
 	SlideBuilder sb;
 	const int n = str.size();
 	Array2D<string> vpi("KMP", 4, n);
@@ -71,8 +70,7 @@ void visualize_kmp(LatexPresentation &pres, const string& str) {
 			vpi.set_color(3, i, Color::GREEN);
 			pres.add_slide(sb.build().set_title("KMP"));
 			++ps;
-		}
-		else {
+		} else {
 			vpi.set_color(2, ps + 1, Color::RED);
 			vpi.set_color(3, i, Color::RED);
 			pres.add_slide(sb.build().set_title("KMP"));
@@ -93,16 +91,16 @@ int main() {
 	Array1D<int> arr("array", initializer_list);
 	sb.add_elem(arr);
 	arr.set_color(4, Color::LIGHT_GREEN)
-		.set_color(2, Color::LIGHT_BLUE)
-		.set_color(7, Color::LIGHT_RED)
-		.set_color(1, Color::LIGHT_YELLOW)
-		.set_color(3, Color::LIGHT_BROWN);
+	  .set_color(2, Color::LIGHT_BLUE)
+	  .set_color(7, Color::LIGHT_RED)
+	  .set_color(1, Color::LIGHT_YELLOW)
+	  .set_color(3, Color::LIGHT_BROWN);
 
 	Array1D<int> arr2(initializer_list);
 	sb.add_elem(arr2);
 	arr2.set_whole_array_color(Color::LIGHT_YELLOW)
-		.set_range_color(2, 4, Color::LIGHT_BROWN)
-		.set_range_color(5, 6, {});
+	  .set_range_color(2, 4, Color::LIGHT_BROWN)
+	  .set_range_color(5, 6, {});
 
 	Variable<double> var("pi");
 	var.set(3.14159265);
@@ -134,4 +132,4 @@ int main() {
 	return 0;
 }
 /*
-*/
+ */

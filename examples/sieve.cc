@@ -1,12 +1,11 @@
+#include "../include/array_1d.h"
 #include "../include/block.h"
 #include "../include/itemize.h"
 #include "../include/latex.h"
 #include "../include/latex_presentation.h"
 #include "../include/slide_builder.h"
 #include "../include/source_code.h"
-#include "../include/array_1d.h"
 #include "../include/variable.h"
-
 
 #include <iostream>
 #include <vector>
@@ -19,18 +18,15 @@ SlideBuilder sb;
 
 int main() {
 	SourceCode code;
-	code.set_lang("C++").set_code(
-			"for (int i = 2; i < N; ++i)\n"
-			"	is_prime[i] = true;\n"
-			"for (int i = 2; i < N; ++i)\n"
-			"	if (is_prime[i])\n"
-			"		for (int j = i + i; j < N; j += i)\n"
-			"			is_prime[j] = false;\n");
+	code.set_lang("C++").set_code("for (int i = 2; i < N; ++i)\n"
+	                              "	is_prime[i] = true;\n"
+	                              "for (int i = 2; i < N; ++i)\n"
+	                              "	if (is_prime[i])\n"
+	                              "		for (int j = i + i; j < N; j += i)\n"
+	                              "			is_prime[j] = false;\n");
 	Slide slide;
 	slide.set_title("Sieve of Erathostenes");
-	slide.add_elem(
-			Block("Standardowa implementacja", Color::LIGHT_BROWN,
-				  Latex("\\LaTeX~is coming..."), code));
+	slide.add_elem(Block("Standardowa implementacja", Color::LIGHT_BROWN, Latex("\\LaTeX~is coming..."), code));
 
 	Itemize itmz;
 	itmz.add_item(Latex("Znajduje liczby pierwsze od 2 do $N - 1$"));

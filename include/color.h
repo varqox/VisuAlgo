@@ -34,7 +34,7 @@ public:
 	static const Color LIGHT_BROWN;
 };
 
-Color contrast_color(const Color &col);
+Color contrast_color(const Color& col);
 
 /****************** Implementation ******************/
 

@@ -3,9 +3,9 @@
 #include "color.h"
 #include "slide_element.h"
 
+#include <optional>
 #include <sstream>
 #include <vector>
-#include <optional>
 
 #include <iostream>
 using namespace std;
@@ -38,7 +38,8 @@ public:
 
 	Array2D& set_color(size_t row, size_t column, std::optional<Color> color);
 
-	Array2D& set_color_range(size_t first_row, size_t last_row, size_t first_column, size_t last_column, std::optional<Color> color);
+	Array2D& set_color_range(size_t first_row, size_t last_row, size_t first_column, size_t last_column,
+	                         std::optional<Color> color);
 
 	Array2D& set_whole_array_color(std::optional<Color>);
 
@@ -82,16 +83,15 @@ inline std::string Array2D<T>::draw_row(size_t row) const {
 }
 
 template <class T>
-inline Array2D<T>::Array2D(size_t rows, size_t columns)
-	: rows_(rows), columns_(columns), elems_(rows * columns) {}
+inline Array2D<T>::Array2D(size_t rows, size_t columns) : rows_(rows), columns_(columns), elems_(rows * columns) {}
 
 template <class T>
 inline Array2D<T>::Array2D(LatexCode name, size_t rows, size_t columns)
-	: rows_(rows), columns_(columns), name_(std::move(name)), elems_(rows * columns) {}
+  : rows_(rows), columns_(columns), name_(std::move(name)), elems_(rows * columns) {}
 
 template <class T>
 inline std::unique_ptr<SlideElement> Array2D<T>::clone() const {
-	 return std::make_unique<Array2D>(*this);
+	return std::make_unique<Array2D>(*this);
 }
 
 template <class T>
@@ -127,7 +127,8 @@ inline Array2D<T>& Array2D<T>::set_color(size_t row, size_t column, std::optiona
 }
 
 template <class T>
-inline Array2D<T>& Array2D<T>::set_color_range(size_t first_row, size_t last_row, size_t first_column, size_t last_column, std::optional<Color> color) {
+inline Array2D<T>& Array2D<T>::set_color_range(size_t first_row, size_t last_row, size_t first_column,
+                                               size_t last_column, std::optional<Color> color) {
 	for (size_t row = first_row; row <= last_row; ++row)
 		for (size_t column = first_column; column <= last_column; ++column)
 			set_color(row, column, color);
@@ -165,10 +166,12 @@ template <class T>
 inline LatexCode Array2D<T>::draw_as_latex() const {
 	std::stringstream ret;
 	ret << "\\begin{table}[h!]\n"
-		"\\captionsetup{labelsep=none}\n"
-		"\\renewcommand{\\thetable}{}\n"
-		"\\caption{" << name_.value_or("") <<"}\n"
-		"\\begin{tabular}{";
+	       "\\captionsetup{labelsep=none}\n"
+	       "\\renewcommand{\\thetable}{}\n"
+	       "\\caption{"
+	    << name_.value_or("")
+	    << "}\n"
+	       "\\begin{tabular}{";
 	if (name_.has_value())
 		ret << "r";
 	ret << "|";
@@ -204,9 +207,9 @@ inline LatexCode Array2D<T>::draw_as_latex() const {
 	return ret.str();
 }
 
-template<class T>
+template <class T>
 inline HTMLCode Array2D<T>::draw_as_html() const {
-    throw NotImplemented();
+	throw NotImplemented();
 }
 
 } // namespace valgo

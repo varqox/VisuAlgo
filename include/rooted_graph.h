@@ -6,7 +6,7 @@
 
 namespace valgo {
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 class RootedGraph : public UndirectedGraph<NodeId, NodeInfo, EdgeInfo> {
 protected:
 	virtual std::string tool_name() const override;
@@ -48,13 +48,15 @@ public:
 	virtual RootedGraph& add_node(const NodeId& node, std::optional<NodeInfo> node_info = std::nullopt) override {
 		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_node(node, node_info), *this;
 	}
-	virtual RootedGraph& add_edge(const NodeId& from, const NodeId& to, std::optional<EdgeInfo> edge_info = std::nullopt) override {
+	virtual RootedGraph& add_edge(const NodeId& from, const NodeId& to,
+	                              std::optional<EdgeInfo> edge_info = std::nullopt) override {
 		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_edge(from, to, edge_info), *this;
 	}
 	virtual RootedGraph& set_node_info(const NodeId& node, std::optional<NodeInfo> node_info) override {
 		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::set_node_info(node, node_info), *this;
 	}
-	virtual RootedGraph& set_edge_info(const NodeId& from, const NodeId& to, std::optional<EdgeInfo> edge_info) override {
+	virtual RootedGraph& set_edge_info(const NodeId& from, const NodeId& to,
+	                                   std::optional<EdgeInfo> edge_info) override {
 		return UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::set_edge_info(from, to, edge_info), *this;
 	}
 	virtual RootedGraph& set_node_color(const NodeId& node, std::optional<Color> color) override {
@@ -97,12 +99,12 @@ public:
 
 /****************** Implementation ******************/
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline std::string RootedGraph<NodeId, NodeInfo, EdgeInfo>::tool_name() const {
 	return "dot";
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline std::vector<const typename RootedGraph<NodeId, NodeInfo, EdgeInfo>::Node*>
 RootedGraph<NodeId, NodeInfo, EdgeInfo>::bfs(const Node* st, std::set<const Node*>& vis) const {
 	std::queue<const Node*> q;
@@ -125,7 +127,7 @@ RootedGraph<NodeId, NodeInfo, EdgeInfo>::bfs(const Node* st, std::set<const Node
 	return ret;
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline std::vector<const typename RootedGraph<NodeId, NodeInfo, EdgeInfo>::Node*>
 RootedGraph<NodeId, NodeInfo, EdgeInfo>::bfs_order() const {
 	std::set<const Node*> vis;
@@ -151,31 +153,29 @@ RootedGraph<NodeId, NodeInfo, EdgeInfo>::bfs_order() const {
 	return ret;
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
-inline RootedGraph<NodeId, NodeInfo, EdgeInfo>&
-RootedGraph<NodeId, NodeInfo, EdgeInfo>::set_root(NodeId root) {
+template <class NodeId, class NodeInfo, class EdgeInfo>
+inline RootedGraph<NodeId, NodeInfo, EdgeInfo>& RootedGraph<NodeId, NodeInfo, EdgeInfo>::set_root(NodeId root) {
 	roots_ = {std::move(root)};
 	return *this;
 }
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline RootedGraph<NodeId, NodeInfo, EdgeInfo>&
 RootedGraph<NodeId, NodeInfo, EdgeInfo>::set_roots(std::vector<NodeId> roots) {
 	roots_ = std::move(roots);
 	return *this;
 }
-template<class NodeId, class NodeInfo, class EdgeInfo>
-inline RootedGraph<NodeId, NodeInfo, EdgeInfo>&
-RootedGraph<NodeId, NodeInfo, EdgeInfo>::unset_root() {
+template <class NodeId, class NodeInfo, class EdgeInfo>
+inline RootedGraph<NodeId, NodeInfo, EdgeInfo>& RootedGraph<NodeId, NodeInfo, EdgeInfo>::unset_root() {
 	roots_.clear();
 	return *this;
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline std::unique_ptr<SlideElement> RootedGraph<NodeId, NodeInfo, EdgeInfo>::clone() const {
 	return std::make_unique<RootedGraph<NodeId, NodeInfo, EdgeInfo>>(*this);
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline DotCode RootedGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_dot() const {
 	std::stringstream ss;
 

@@ -35,14 +35,14 @@ public:
 		return DirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_node(node, node_info), *this;
 	}
 	virtual AcyclicGraph& add_edge(const NodeId& from, const NodeId& to,
-			std::optional<EdgeInfo> edge_info = std::nullopt) override {
+	                               std::optional<EdgeInfo> edge_info = std::nullopt) override {
 		return DirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_edge(from, to, edge_info), *this;
 	}
 	virtual AcyclicGraph& set_node_info(const NodeId& node, std::optional<NodeInfo> node_info) override {
 		return DirectedGraph<NodeId, NodeInfo, EdgeInfo>::set_node_info(node, node_info), *this;
 	}
 	virtual AcyclicGraph& set_edge_info(const NodeId& from, const NodeId& to,
-			std::optional<EdgeInfo> edge_info) override {
+	                                    std::optional<EdgeInfo> edge_info) override {
 		return DirectedGraph<NodeId, NodeInfo, EdgeInfo>::set_edge_info(from, to, edge_info), *this;
 	}
 	virtual AcyclicGraph& set_node_color(const NodeId& node, std::optional<Color> color) override {
@@ -85,17 +85,17 @@ public:
 
 /****************** Implementation ******************/
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline std::string AcyclicGraph<NodeId, NodeInfo, EdgeInfo>::tool_name() const {
 	return "dot";
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline std::unique_ptr<SlideElement> AcyclicGraph<NodeId, NodeInfo, EdgeInfo>::clone() const {
 	return std::make_unique<AcyclicGraph<NodeId, NodeInfo, EdgeInfo>>(*this);
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline DotCode AcyclicGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_dot() const {
 	std::stringstream ss;
 

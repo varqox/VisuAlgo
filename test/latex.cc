@@ -4,7 +4,7 @@
 
 using namespace valgo;
 
-TEST (Latex, clone) {
+TEST(Latex, clone) {
 	// LaTeX backend
 	EXPECT_EQ(Latex().clone()->draw_as_latex(), "");
 
@@ -33,7 +33,7 @@ TEST (Latex, clone) {
 	}
 }
 
-TEST (Latex, set) {
+TEST(Latex, set) {
 	{
 		Latex latex("lorem ipsum");
 		latex.set("foo bar"); // Setting on value-initialized latex
@@ -49,7 +49,7 @@ TEST (Latex, set) {
 	}
 }
 
-TEST (Latex, draw_as_latex) {
+TEST(Latex, draw_as_latex) {
 	EXPECT_EQ(Latex().draw_as_latex(), "");
 
 	{
@@ -67,7 +67,7 @@ TEST (Latex, draw_as_latex) {
 	}
 }
 
-TEST (Latex, draw_as_html) {
+TEST(Latex, draw_as_html) {
 	EXPECT_THROW(Latex().draw_as_html(), NotImplemented);
 
 	Latex latex("lorem ipsum");

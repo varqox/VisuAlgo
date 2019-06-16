@@ -9,13 +9,9 @@ Itemize::Itemize(const Itemize& be) {
 		elems_.emplace_back(elem->clone());
 }
 
-Itemize& Itemize::operator=(const Itemize& elem) {
-	return (*this = Itemize(elem));
-}
+Itemize& Itemize::operator=(const Itemize& elem) { return (*this = Itemize(elem)); }
 
-std::unique_ptr<SlideElement> Itemize::clone() const {
-	return std::make_unique<Itemize>(*this);
-}
+std::unique_ptr<SlideElement> Itemize::clone() const { return std::make_unique<Itemize>(*this); }
 
 Itemize& Itemize::add_item(const SlideElement& elem) {
 	elems_.emplace_back(elem.clone());
@@ -30,8 +26,6 @@ LatexCode Itemize::draw_as_latex() const {
 	return back_insert(res, "\\end{itemize}");
 }
 
-HTMLCode Itemize::draw_as_html() const {
-	throw NotImplemented();
-}
+HTMLCode Itemize::draw_as_html() const { throw NotImplemented(); }
 
 } // namespace valgo

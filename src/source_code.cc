@@ -3,9 +3,7 @@
 
 namespace valgo {
 
-std::unique_ptr<SlideElement> SourceCode::clone() const {
-	return std::make_unique<SourceCode>(*this);
-}
+std::unique_ptr<SlideElement> SourceCode::clone() const { return std::make_unique<SourceCode>(*this); }
 
 SourceCode& SourceCode::set_title(std::optional<LatexCode> title) {
 	title_ = std::move(title);
@@ -23,30 +21,26 @@ SourceCode& SourceCode::set_lang(std::string lang) noexcept {
 }
 
 LatexCode SourceCode::draw_as_latex() const {
-	return concat("\\begin{lstlisting}[",
-		"language=", lang_, ",",
-		title_.has_value() ? concat("title=", title_.value(), ',') : "",
-		"numbers=left,"
-		"aboveskip=-2pt,"
-		"belowskip=0pt,"
-		"xleftmargin=12pt,"
-		"basicstyle=\\small\\ttfamily,"
-		"showstringspaces=false,"
-		"numbersep=5pt,"
-		"numberstyle=\\small\\ttfamily,"
-		"columns=spaceflexible,"
-		"keepspaces=true,"
-		"tabsize=4,"
-		"breaklines=true,"
-		"commentstyle=\\color{gray},"
-		"keywordstyle=\\color{blue}\\bfseries,"
-		"stringstyle=\\color{purple}]\n",
-		code_,
-		"\\end{lstlisting}");
+	return concat("\\begin{lstlisting}[", "language=", lang_, ",",
+	              title_.has_value() ? concat("title=", title_.value(), ',') : "",
+	              "numbers=left,"
+	              "aboveskip=-2pt,"
+	              "belowskip=0pt,"
+	              "xleftmargin=12pt,"
+	              "basicstyle=\\small\\ttfamily,"
+	              "showstringspaces=false,"
+	              "numbersep=5pt,"
+	              "numberstyle=\\small\\ttfamily,"
+	              "columns=spaceflexible,"
+	              "keepspaces=true,"
+	              "tabsize=4,"
+	              "breaklines=true,"
+	              "commentstyle=\\color{gray},"
+	              "keywordstyle=\\color{blue}\\bfseries,"
+	              "stringstyle=\\color{purple}]\n",
+	              code_, "\\end{lstlisting}");
 }
 
-HTMLCode SourceCode::draw_as_html() const {
-	throw NotImplemented();
-}
+HTMLCode SourceCode::draw_as_html() const { throw NotImplemented(); }
 
 } // namespace valgo

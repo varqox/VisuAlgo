@@ -4,7 +4,7 @@
 
 using namespace valgo;
 
-TEST (Variable, set) {
+TEST(Variable, set) {
 	{
 		Variable<int> variable("magic");
 		variable.set(42);
@@ -38,7 +38,7 @@ TEST (Variable, set) {
 	}
 }
 
-TEST (Variable, setAndClone) {
+TEST(Variable, setAndClone) {
 	{
 		Variable<int> variable("magic");
 		variable.set(42);
@@ -70,5 +70,4 @@ TEST (Variable, setAndClone) {
 		variable.set(2.781);
 		EXPECT_THROW(variable.clone()->draw_as_html(), NotImplemented);
 	}
-
 }

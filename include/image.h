@@ -1,7 +1,7 @@
 #pragma once
 
-#include <sstream>
 #include "slide_element.h"
+#include <sstream>
 
 namespace valgo {
 
@@ -40,4 +40,4 @@ public:
 	virtual HTMLCode draw_as_html() const override;
 };
 
-}
+} // namespace valgo

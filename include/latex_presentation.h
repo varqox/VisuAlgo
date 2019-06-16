@@ -16,10 +16,10 @@ class LatexPresentation : public Presentation {
 
 public:
 	LatexPresentation(LatexCode title, LatexCode footer_title) noexcept
-		: title_(std::move(title)), footer_title_(std::move(footer_title)) {}
+	  : title_(std::move(title)), footer_title_(std::move(footer_title)) {}
 
 	LatexPresentation(std::string language, LatexCode title, LatexCode footer_title) noexcept
-		: language_(std::move(language)), title_(std::move(title)), footer_title_(std::move(footer_title)) {}
+	  : language_(std::move(language)), title_(std::move(title)), footer_title_(std::move(footer_title)) {}
 
 	LatexCode title() const;
 

@@ -1,9 +1,8 @@
+#include "../include/array_1d.h"
 #include "../include/latex.h"
 #include "../include/latex_presentation.h"
 #include "../include/slide_builder.h"
-#include "../include/array_1d.h"
 #include "../include/variable.h"
-
 
 #include <iostream>
 #include <vector>
@@ -44,8 +43,7 @@ int main() {
 		pres.add_slide(sb.build().set_title("Binary Search"));
 		if (b[mid] <= sz) {
 			l = mid;
-		}
-		else {
+		} else {
 			r = mid - 1;
 		}
 	}

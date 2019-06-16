@@ -134,6 +134,10 @@ test/exec: $(VISUALGO_TEST_OBJS) visualgo.a gtest_main.a
 test: $(VISUALGO_TEST_EXECS)
 	test/exec
 
+.PHONY: format
+format:
+	$(Q)ls | grep -vE '^(googletest|html|latex)$$' | xargs find | grep -E '\.(c(|c|pp)|h)$$' | sh -c 'while read a; do echo "Formatting $$a"; clang-format -i $$a; done'
+
 .PHONY: clean
 clean: OBJS := $(GOOGLETEST_OBJS) $(VISUALGO_OBJS) $(EXAMPLES_OBJS) $(VISUALGO_TEST_OBJS) $(PRESENTATION_OBJS)
 clean:

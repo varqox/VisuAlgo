@@ -4,7 +4,7 @@
 
 namespace valgo {
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 class UndirectedGraph : public Graph<NodeId, NodeInfo, EdgeInfo> {
 protected:
 	using Graph<NodeId, NodeInfo, EdgeInfo>::edges_;
@@ -43,7 +43,8 @@ public:
 	virtual UndirectedGraph& set_node_info(const NodeId& node, std::optional<NodeInfo> node_info) override {
 		return Graph<NodeId, NodeInfo, EdgeInfo>::set_node_info(node, node_info), *this;
 	}
-	virtual UndirectedGraph& set_edge_info(const NodeId& from, const NodeId& to, std::optional<EdgeInfo> edge_info) override {
+	virtual UndirectedGraph& set_edge_info(const NodeId& from, const NodeId& to,
+	                                       std::optional<EdgeInfo> edge_info) override {
 		return Graph<NodeId, NodeInfo, EdgeInfo>::set_edge_info(from, to, edge_info), *this;
 	}
 	virtual UndirectedGraph& set_node_color(const NodeId& node, std::optional<Color> color) override {
@@ -52,7 +53,8 @@ public:
 	virtual UndirectedGraph& set_every_node_color(const std::optional<Color>& color) override {
 		return Graph<NodeId, NodeInfo, EdgeInfo>::set_every_node_color(color), *this;
 	}
-	virtual UndirectedGraph& set_edge_color(const NodeId& from, const NodeId& to, std::optional<Color> color) override {
+	virtual UndirectedGraph& set_edge_color(const NodeId& from, const NodeId& to,
+	                                        std::optional<Color> color) override {
 		return Graph<NodeId, NodeInfo, EdgeInfo>::set_edge_color(from, to, color), *this;
 	}
 	virtual UndirectedGraph& set_every_edge_color(const std::optional<Color>& color) override {
@@ -86,7 +88,7 @@ public:
 
 /****************** Implementation ******************/
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline typename UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::EdgesIterator
 UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::find_edge(const NodeId& a, const NodeId& b) {
 	auto it = edges_.find({a, b});
@@ -95,7 +97,7 @@ UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::find_edge(const NodeId& a, const No
 	return edges_.find({b, a});
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline typename UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::EdgesConstIterator
 UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::find_edge(const NodeId& a, const NodeId& b) const {
 	auto it = edges_.find({a, b});
@@ -104,7 +106,7 @@ UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::find_edge(const NodeId& a, const No
 	return edges_.find({b, a});
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline void UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::remove_edge(EdgesIterator edge) {
 	auto it_from = nodes_.find(edge->second.from_);
 	auto it_to = nodes_.find(edge->second.to_);
@@ -113,7 +115,7 @@ inline void UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::remove_edge(EdgesIterat
 	edges_.erase(edge);
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline void UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::remove_node(NodesIterator node) {
 	NodeId id = node->second.id_;
 	for (NodeId nei_id : node->second.nei_) {
@@ -124,7 +126,7 @@ inline void UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::remove_node(NodesIterat
 	nodes_.erase(node);
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline UndirectedGraph<NodeId, NodeInfo, EdgeInfo>&
 UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_edge(const NodeId& from, const NodeId& to,
                                                       std::optional<EdgeInfo> edge_info) {
@@ -135,14 +137,13 @@ UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_edge(const NodeId& from, const 
 		it_from.nei_.emplace(to);
 		Node& it_to = find_or_add(to)->second;
 		it_to.nei_.emplace(from);
-	}
-	else
+	} else
 		it->second.info_ = edge_info;
 
 	return *this;
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline DotCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_dot() const {
 	std::stringstream ss;
 
@@ -172,7 +173,7 @@ inline DotCode UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_dot() const 
 	return ss.str();
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline std::unique_ptr<SlideElement> UndirectedGraph<NodeId, NodeInfo, EdgeInfo>::clone() const {
 	return std::make_unique<UndirectedGraph<NodeId, NodeInfo, EdgeInfo>>(*this);
 }

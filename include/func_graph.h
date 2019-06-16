@@ -54,13 +54,14 @@ public:
 		return DirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_node(node, node_info), *this;
 	}
 	virtual FuncGraph& add_edge(const NodeId& from, const NodeId& to,
-			std::optional<EdgeInfo> edge_info = std::nullopt) override {
+	                            std::optional<EdgeInfo> edge_info = std::nullopt) override {
 		return DirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_edge(from, to, edge_info), *this;
 	}
 	virtual FuncGraph& set_node_info(const NodeId& node, std::optional<NodeInfo> node_info) override {
 		return DirectedGraph<NodeId, NodeInfo, EdgeInfo>::set_node_info(node, node_info), *this;
 	}
-	virtual FuncGraph& set_edge_info(const NodeId& from, const NodeId& to, std::optional<EdgeInfo> edge_info) override {
+	virtual FuncGraph& set_edge_info(const NodeId& from, const NodeId& to,
+	                                 std::optional<EdgeInfo> edge_info) override {
 		return DirectedGraph<NodeId, NodeInfo, EdgeInfo>::set_edge_info(from, to, edge_info), *this;
 	}
 	virtual FuncGraph& set_node_color(const NodeId& node, std::optional<Color> color) override {
@@ -132,8 +133,7 @@ std::pair<bool, bool> FuncGraph<NodeId, NodeInfo, EdgeInfo>::find_cycle(const No
 				}
 				return {true, may};
 			}
-		}
-		else if (on_stack.find(nei_ptr) != on_stack.end()) {
+		} else if (on_stack.find(nei_ptr) != on_stack.end()) {
 			result.emplace_back(nei_ptr);
 			if (nei_ptr == st)
 				return {true, false};
@@ -145,7 +145,7 @@ std::pair<bool, bool> FuncGraph<NodeId, NodeInfo, EdgeInfo>::find_cycle(const No
 	return {false, false};
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 std::vector<std::vector<const typename FuncGraph<NodeId, NodeInfo, EdgeInfo>::Node*>>
 FuncGraph<NodeId, NodeInfo, EdgeInfo>::find_all_cycles() const {
 	std::set<const Node*> vis;
@@ -165,12 +165,12 @@ FuncGraph<NodeId, NodeInfo, EdgeInfo>::find_all_cycles() const {
 	return ret;
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline std::unique_ptr<SlideElement> FuncGraph<NodeId, NodeInfo, EdgeInfo>::clone() const {
 	return std::make_unique<FuncGraph<NodeId, NodeInfo, EdgeInfo>>(*this);
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline DotCode FuncGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_dot() const {
 	std::stringstream ss;
 

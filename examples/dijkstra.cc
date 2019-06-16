@@ -13,12 +13,12 @@ LatexPresentation pres("Visualization of Dijkstra's Algorithm", "Dijkstra");
 SlideBuilder sb;
 UndirectedGraph<int, string, int> visu_g;
 
-vector<int> dijkstra(int n, const vector<vector<pair<int, int>>> &g, int source) {
+vector<int> dijkstra(int n, const vector<vector<pair<int, int>>>& g, int source) {
 	vector<int> dist(n, 1e9);
 	dist[source] = 0;
 	visu_g.set_node_color(source, Color::LIGHT_YELLOW).set_node_info(source, "dist=0");
 
-	set<pair<int, int>> s = { {0, source} };
+	set<pair<int, int>> s = {{0, source}};
 
 	while (!s.empty()) {
 		int v = s.begin()->second;

@@ -1,11 +1,11 @@
+#include "../include/matrix.h"
 #include "../include/latex.h"
 #include "../include/latex_presentation.h"
 #include "../include/slide_builder.h"
-#include "../include/matrix.h"
 
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 
 using namespace std;
 using namespace valgo;
@@ -26,15 +26,11 @@ int main() {
 	m.set_columns(5);
 	pres.add_slide(sb.build());
 
-
-
 	m.set_rows(3);
 	pres.add_slide(sb.build());
 
 	m.set_rows(7);
 	m.set_columns(7);
-
-
 
 	Matrix<double> n(5, 7);
 	sb.add_elem(n);

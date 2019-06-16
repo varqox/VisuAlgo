@@ -4,7 +4,7 @@
 
 namespace valgo {
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 class DirectedGraph : public Graph<NodeId, NodeInfo, EdgeInfo> {
 protected:
 	using Graph<NodeId, NodeInfo, EdgeInfo>::edges_;
@@ -34,7 +34,7 @@ public:
 	virtual std::unique_ptr<SlideElement> clone() const override;
 
 	virtual DirectedGraph& add_edge(const NodeId& from, const NodeId& to,
-	                                  std::optional<EdgeInfo> edge_info = std::nullopt) override;
+	                                std::optional<EdgeInfo> edge_info = std::nullopt) override;
 
 	// fixing chaining
 	virtual DirectedGraph& add_node(const NodeId& node, std::optional<NodeInfo> node_info = std::nullopt) override {
@@ -43,7 +43,8 @@ public:
 	virtual DirectedGraph& set_node_info(const NodeId& node, std::optional<NodeInfo> node_info) override {
 		return Graph<NodeId, NodeInfo, EdgeInfo>::set_node_info(node, node_info), *this;
 	}
-	virtual DirectedGraph& set_edge_info(const NodeId& from, const NodeId& to, std::optional<EdgeInfo> edge_info) override {
+	virtual DirectedGraph& set_edge_info(const NodeId& from, const NodeId& to,
+	                                     std::optional<EdgeInfo> edge_info) override {
 		return Graph<NodeId, NodeInfo, EdgeInfo>::set_edge_info(from, to, edge_info), *this;
 	}
 	virtual DirectedGraph& set_node_color(const NodeId& node, std::optional<Color> color) override {
@@ -86,26 +87,26 @@ public:
 
 /****************** Implementation ******************/
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline typename DirectedGraph<NodeId, NodeInfo, EdgeInfo>::EdgesIterator
 DirectedGraph<NodeId, NodeInfo, EdgeInfo>::find_edge(const NodeId& a, const NodeId& b) {
 	return edges_.find({a, b});
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline typename DirectedGraph<NodeId, NodeInfo, EdgeInfo>::EdgesConstIterator
 DirectedGraph<NodeId, NodeInfo, EdgeInfo>::find_edge(const NodeId& a, const NodeId& b) const {
 	return edges_.find({a, b});
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline void DirectedGraph<NodeId, NodeInfo, EdgeInfo>::remove_edge(EdgesIterator edge) {
 	auto it_from = nodes_.find(edge->second.from_);
 	it_from->second.nei_.erase(edge->second.to_);
 	edges_.erase(edge);
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline void DirectedGraph<NodeId, NodeInfo, EdgeInfo>::remove_node(NodesIterator node) {
 	NodeId id = node->second.id_;
 	for (NodeId nei_id : node->second.nei_)
@@ -113,7 +114,7 @@ inline void DirectedGraph<NodeId, NodeInfo, EdgeInfo>::remove_node(NodesIterator
 	nodes_.erase(node);
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline DirectedGraph<NodeId, NodeInfo, EdgeInfo>&
 DirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_edge(const NodeId& from, const NodeId& to,
                                                     std::optional<EdgeInfo> edge_info) {
@@ -123,14 +124,13 @@ DirectedGraph<NodeId, NodeInfo, EdgeInfo>::add_edge(const NodeId& from, const No
 		Node& it_from = find_or_add(from)->second;
 		find_or_add(to);
 		it_from.nei_.emplace(to);
-	}
-	else
+	} else
 		it->second.info_ = edge_info;
 
 	return *this;
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline DotCode DirectedGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_dot() const {
 	std::stringstream ss;
 
@@ -160,7 +160,7 @@ inline DotCode DirectedGraph<NodeId, NodeInfo, EdgeInfo>::draw_as_dot() const {
 	return ss.str();
 }
 
-template<class NodeId, class NodeInfo, class EdgeInfo>
+template <class NodeId, class NodeInfo, class EdgeInfo>
 inline std::unique_ptr<SlideElement> DirectedGraph<NodeId, NodeInfo, EdgeInfo>::clone() const {
 	return std::make_unique<DirectedGraph<NodeId, NodeInfo, EdgeInfo>>(*this);
 }

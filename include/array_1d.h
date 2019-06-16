@@ -9,7 +9,7 @@
 
 namespace valgo {
 
-template<class T>
+template <class T>
 class Array1D : public SlideElement {
 private:
 	std::optional<LatexCode> name_;
@@ -57,7 +57,7 @@ public:
 
 /****************** Implementation ***********************/
 
-template<class T>
+template <class T>
 inline void Array1D<T>::copy_vec_to_elems(const std::vector<T>& vec) {
 	elems_.resize(vec.size());
 	for (size_t i = 0; i < vec.size(); ++i) {
@@ -103,7 +103,9 @@ inline std::string Array1D<T>::draw_cell(size_t cell_idx) const {
 }
 
 template <class T>
-inline Array1D<T>::Array1D(const std::vector<T>& vec) : elems_(vec.size()) { copy_vec_to_elems(vec); }
+inline Array1D<T>::Array1D(const std::vector<T>& vec) : elems_(vec.size()) {
+	copy_vec_to_elems(vec);
+}
 
 template <class T>
 inline Array1D<T>::Array1D(size_t size) : elems_(size) {}

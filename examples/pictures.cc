@@ -1,15 +1,15 @@
+#include "../include/array_1d.h"
+#include "../include/array_2d.h"
 #include "../include/block.h"
+#include "../include/image.h"
+#include "../include/image_set.h"
 #include "../include/itemize.h"
 #include "../include/latex.h"
 #include "../include/latex_presentation.h"
 #include "../include/slide_builder.h"
 #include "../include/source_code.h"
-#include "../include/array_1d.h"
-#include "../include/variable.h"
-#include "../include/array_2d.h"
 #include "../include/undirected_graph.h"
-#include "../include/image.h"
-#include "../include/image_set.h"
+#include "../include/variable.h"
 
 #include <iostream>
 #include <vector>
@@ -20,12 +20,12 @@ using namespace valgo;
 LatexPresentation pres("Visualization of images", "Images");
 SlideBuilder sb;
 
-int main () {
-	Image im("./sample_images/" ,"kon2.jpg");
-	Image im2("./sample_images/" ,"kon2.jpg");
-	Image im3("./sample_images/" ,"kon2.jpg");
-	Image im4("./sample_images/" ,"kon2.jpg");
-	Image im5("./sample_images/" ,"konik.jpeg");
+int main() {
+	Image im("./sample_images/", "kon2.jpg");
+	Image im2("./sample_images/", "kon2.jpg");
+	Image im3("./sample_images/", "kon2.jpg");
+	Image im4("./sample_images/", "kon2.jpg");
+	Image im5("./sample_images/", "konik.jpeg");
 
 	// we set the size of images im1, im2, im3, im4 to 3x3cm and size of im5 to 2x2cm
 

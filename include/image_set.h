@@ -1,9 +1,9 @@
 #pragma once
 
+#include "image.h"
+#include "slide_element.h"
 #include <sstream>
 #include <vector>
-#include "slide_element.h"
-#include "image.h"
 
 namespace valgo {
 
@@ -23,4 +23,4 @@ public:
 	virtual HTMLCode draw_as_html() const override;
 };
 
-}
+} // namespace valgo

@@ -17,7 +17,7 @@ private:
 public:
 	Slide() = default;
 
-	template<class... Elem>
+	template <class... Elem>
 	explicit Slide(const Elem&... elems);
 
 	Slide& set_title(LatexCode title) noexcept;
@@ -40,7 +40,7 @@ public:
 
 /****************** Implementation ******************/
 
-template<class... Elem>
+template <class... Elem>
 inline Slide::Slide(const Elem&... elems) {
 	elems_.reserve(sizeof...(elems));
 	(elems_.emplace_back(elems.clone()), ...);

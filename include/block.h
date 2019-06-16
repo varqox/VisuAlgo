@@ -22,11 +22,10 @@ public:
 
 	explicit Block(LatexCode title, Color color = Color::BLUE) noexcept;
 
-	template<class... Elem>
-	explicit Block(LatexCode title, Color color, const SlideElement& first_elem,
-		const Elem&... elems);
+	template <class... Elem>
+	explicit Block(LatexCode title, Color color, const SlideElement& first_elem, const Elem&... elems);
 
-	template<class... Elem>
+	template <class... Elem>
 	explicit Block(LatexCode title, const SlideElement& first_elem, const Elem&... elems);
 
 	std::unique_ptr<SlideElement> clone() const override;
@@ -47,23 +46,18 @@ public:
 
 /****************** Implementation ******************/
 
-inline Block::Block(LatexCode title, Color color) noexcept
-	: title_(std::move(title)), color_(color) {}
+inline Block::Block(LatexCode title, Color color) noexcept : title_(std::move(title)), color_(color) {}
 
-template<class... Elem>
-inline Block::Block(LatexCode title, const SlideElement& first_elem, const Elem&... elems)
-	: Block(std::move(title))
-{
+template <class... Elem>
+inline Block::Block(LatexCode title, const SlideElement& first_elem, const Elem&... elems) : Block(std::move(title)) {
 	elems_.reserve(1 + sizeof...(elems));
 	elems_.emplace_back(first_elem.clone());
 	(elems_.emplace_back(elems.clone()), ...);
 }
 
-template<class... Elem>
-inline Block::Block(LatexCode title, Color color, const SlideElement& first_elem,
-		const Elem&... elems)
-	: Block(std::move(title), color)
-{
+template <class... Elem>
+inline Block::Block(LatexCode title, Color color, const SlideElement& first_elem, const Elem&... elems)
+  : Block(std::move(title), color) {
 	elems_.reserve(1 + sizeof...(elems));
 	elems_.emplace_back(first_elem.clone());
 	(elems_.emplace_back(elems.clone()), ...);
