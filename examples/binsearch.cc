@@ -16,7 +16,7 @@ SlideBuilder sb;
 
 int main() {
 	int sz = 9;
-	Array1D<int> bins("Binary Search");
+	Array1D<int> bins("Binary Search", 0);
 	Variable<int> szukamy("szukamy");
 	Variable<int> lewy("lewy");
 	Variable<int> prawy("prawy");
@@ -27,7 +27,7 @@ int main() {
 
 	vector<int> b = {1, 3, 7, 9, 10, 15, 18, 20, 21, 22};
 	bins.resize(b.size());
-	for (size_t i = 0; i < b.size(); i++)
+	for (size_t i = 0; i < b.size(); ++i)
 		bins.set_elem(i, b[i]);
 
 	szukamy.set(sz);

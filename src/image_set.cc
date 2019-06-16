@@ -15,9 +15,9 @@ namespace valgo {
 		std::stringstream ret;
 		ret << "\\begin{center}\n\\begin{tikzpicture}[remember picture,overlay,shift={(current page.center)}]\n";
 
-		for (size_t i = 0; i < _vec.size(); i++) 
+		for (size_t i = 0; i < _vec.size(); ++i)
 			ret << _vec[i].draw_as_latex();
-		
+
 		ret << "\\end{tikzpicture}\n\\end{center}\n";
 
 		return ret.str();

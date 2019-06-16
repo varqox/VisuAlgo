@@ -389,7 +389,7 @@ void add_graphs(LatexPresentation& pres) {
 		constexpr int n = 11;
 		constexpr int source = 0;
 
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < n; ++i)
 			visu_g.add_node(i, "dist=inf").set_node_color(i, Color::LIGHT_RED);
 
 		vector<vector<int>> g(n);
@@ -446,7 +446,7 @@ void add_graphs(LatexPresentation& pres) {
 			R"(UndirectedGraph<int, string, int> visu_g;)" "\n"
 			R"(sb.add_elem(visu_g);)" "\n"
 			R"()" "\n"
-			R"(for (int i = 0; i < n; i++))" "\n"
+			R"(for (int i = 0; i < n; ++i))" "\n"
 			R"(	visu_g.add_node(i, "dist=inf").set_node_color(i, Color::LIGHT_RED);)" "\n"
 			R"()" "\n"
 			R"(vector<vector<int>> g(n);)" "\n"
@@ -498,11 +498,10 @@ void add_arrays(LatexPresentation& pres) {
 		sb.remove_all_elements();
 	}
 	{
-		Array2D<int> arr("Array2D");
-		arr.resize(5, 10);
+		Array2D<int> arr("Array2D", 5, 10);
 
-		for (int i = 0; i < 5; i++)
-			for (int j = 0; j < 10; j++)
+		for (int i = 0; i < 5; ++i)
+			for (int j = 0; j < 10; ++j)
 				arr.set_elem(i, j, 10 * (i + j) + i);
 
 		arr.set_row_color(3, Color::LIGHT_BLUE);
@@ -511,11 +510,10 @@ void add_arrays(LatexPresentation& pres) {
 
 		SourceCode code;
 		code.set_lang("C++").set_code(
-			R"=(Array2D<int> arr("Array2D");)=" "\n"
-			R"=(arr.resize(5, 10);)=" "\n"
+			R"=(Array2D<int> arr("Array2D", 5, 10);)=" "\n"
 			R"=()=" "\n"
-			R"=(for (int i = 0; i < 5; i++))=" "\n"
-			R"=(	for (int j = 0; j < 10; j++))=" "\n"
+			R"=(for (int i = 0; i < 5; ++i))=" "\n"
+			R"=(	for (int j = 0; j < 10; ++j))=" "\n"
 			R"=(		arr.set_elem(i, j, 10 * (i + j) + i);)=" "\n"
 			R"=()=" "\n"
 			R"=(arr.set_row_color(3, Color::LIGHT_BLUE);)=" "\n"
@@ -528,14 +526,13 @@ void add_arrays(LatexPresentation& pres) {
 	{
 		SlideBuilder sb;
 		constexpr int N = 12;
-		Array1D<bool> vtab("pierwsza");
+		Array1D<bool> vtab("pierwsza", N);
 		Variable<int> wielo("wykreślmy wielokrotności");
 		Variable<int> wykr("teraz wykreśliliśmy");
 
 		sb.add_elem(vtab);
 
-		vtab.resize(N);
-		for (int i = 2; i < N; i++)
+		for (int i = 2; i < N; ++i)
 			vtab.set_elem(i, true);
 
 		vector<bool> is_prime(N, true);
@@ -569,14 +566,13 @@ void add_arrays(LatexPresentation& pres) {
 		code.set_code(
 			R"(SlideBuilder sb;)" "\n"
 			R"(constexpr int N = 12;)" "\n"
-			R"(Array1D<bool> vtab("pierwsza");)" "\n"
+			R"(Array1D<bool> vtab("pierwsza", N);)" "\n"
 			R"(Variable<int> wielo("wykreslmy wielokrotnosci");)" "\n"
 			R"(Variable<int> wykr("teraz wykreslilismy");)" "\n"
 			R"()" "\n"
 			R"(sb.add_elem(vtab);)" "\n"
 			R"()" "\n"
-			R"(vtab.resize(N);)" "\n"
-			R"(for (int i = 2; i < N; i++))" "\n"
+			R"(for (int i = 2; i < N; ++i))" "\n"
 			R"(	vtab.set_elem(i, true);)" "\n"
 			R"()" "\n"
 			R"(vector<bool> is_prime(N, true);)" "\n"

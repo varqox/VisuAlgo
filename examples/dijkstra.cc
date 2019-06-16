@@ -49,7 +49,7 @@ int main() {
 	sb.add_elem(visu_g);
 	int n = 6;
 
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < n; ++i)
 		visu_g.add_node(i, "dist=inf").set_node_color(i, Color::LIGHT_RED);
 
 	vector<vector<pair<int, int>>> g(n);

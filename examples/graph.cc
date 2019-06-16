@@ -21,16 +21,16 @@ int main() {
 
 	constexpr int init_level = 8;
 	int level = init_level;
-	for (int i = 1; i < level; i++)
+	for (int i = 1; i < level; ++i)
 		gg.add_edge(i, i * 2, i).add_edge(i, i * 2 + 1, i);
 	gg.set_every_node_color(Color::LIGHT_YELLOW).set_every_edge_color(Color::BLUE);
-	for (int i = level; i < level * 2; i++)
+	for (int i = level; i < level * 2; ++i)
 		gg.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
 	pres.add_slide(sb.build().set_title("grafy - hide\\_node"));
 	while (level != 1) {
-		for (int i = level; i < level * 2; i++)
+		for (int i = level; i < level * 2; ++i)
 			gg.hide_node(i);
-		for (int i = level / 2; i < level; i++)
+		for (int i = level / 2; i < level; ++i)
 			gg.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
 		pres.add_slide(sb.build().set_title("grafy - hide\\_node"));
 		level /= 2;
@@ -38,16 +38,16 @@ int main() {
 
 	gg.remove_all_nodes();
 	level = init_level;
-	for (int i = 1; i < level; i++)
+	for (int i = 1; i < level; ++i)
 		gg.add_edge(i, i * 2, i).add_edge(i, i * 2 + 1, i);
 	gg.set_every_node_color(Color::LIGHT_YELLOW).set_every_edge_color(Color::BLUE);
-	for (int i = level; i < level * 2; i++)
+	for (int i = level; i < level * 2; ++i)
 		gg.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
 	pres.add_slide(sb.build().set_title("grafy - remove\\_node"));
 	while (level != 1) {
-		for (int i = level; i < level * 2; i++)
+		for (int i = level; i < level * 2; ++i)
 			gg.remove_node(i);
-		for (int i = level / 2; i < level; i++)
+		for (int i = level / 2; i < level; ++i)
 			gg.set_node_color(i, Color::LIGHT_RED).set_edge_color(i, i / 2, Color::LIGHT_RED);
 		pres.add_slide(sb.build().set_title("grafy - remove\\_node"));
 		level /= 2;

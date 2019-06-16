@@ -5,7 +5,7 @@ namespace valgo {
 LatexCode Circle::draw_as_latex() const {
     std::stringstream ret;
     ret << "\\filldraw [very thick ";
-    ret << draw_color() << "]  (";
+    ret << draw_color() << "] (";
     ret << _center_x << ", " << _center_y << ")";
     ret << " circle (" << _radius << ")";
     ret << draw_label();

@@ -40,10 +40,9 @@ int main() {
 	pres.add_slide(slide);
 
 	constexpr int N = 12;
-	Array1D<bool> vtab("pierwsza");
+	Array1D<bool> vtab("pierwsza", N);
 	sb.add_elem(vtab);
-	vtab.resize(N);
-	for (int i = 2; i < N; i++)
+	for (int i = 2; i < N; ++i)
 		vtab.set_elem(i, true);
 
 	vector<bool> is_prime(N, true);

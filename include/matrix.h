@@ -72,12 +72,15 @@ template<class T>
 inline LatexCode Matrix<T>::draw_as_latex() const {
 	std::stringstream res;
 	res << "$\\begin{bmatrix}" << std::endl;
-	for (int i = 0; i < rows_; i++) {
-		for (int j = 0; j < columns_; j++) {
-			if (j) res << "& ";
+	for (int i = 0; i < rows_; ++i) {
+		for (int j = 0; j < columns_; ++j) {
+			if (j)
+				res << "& ";
 			res << matrix_[i][j] << " ";
 		}
-		if (i + 1 != rows_) res << " \\\\";
+
+		if (i + 1 != rows_)
+			res << " \\\\";
 		res << std::endl;
 	}
 	res << "\\end{bmatrix}$" << std::endl;
