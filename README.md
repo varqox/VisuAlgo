@@ -1,5 +1,5 @@
 # VisuAlgo
-Biblioteka w C++ do tworzenia prezentacji wizualizujących działanie algorytmów.
+Biblioteka w C++ do tworzenia prezentacji ilustrujących działanie algorytmów.
 
 ## Opis
 Biblioteka udostępnia wygodne funkcje pozwalające dla dowolnych zmiennych/tablic/grafów stworzyć prezentację w PDFie, która obrazuje ich działanie w wybranym algorytmie.
