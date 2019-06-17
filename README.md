@@ -5,6 +5,7 @@ Biblioteka w C++ do tworzenia prezentacji ilustrujących działanie algorytmów.
 Biblioteka udostępnia wygodne funkcje pozwalające dla dowolnych zmiennych/tablic/grafów stworzyć prezentację w PDFie, która obrazuje ich działanie w wybranym algorytmie.
 
 ## Wymagane narzędzia
+- Kompilator C++ wspierający C++17
 - LaTeX (wraz z biblioteką beamer)
 - graphviz
 - pdfunite
