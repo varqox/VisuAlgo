@@ -1,4 +1,4 @@
-include Makefile.config
+include makefile-utils/Makefile.config
 
 .PHONY: all
 all: visualgo.a io_stuff examples/examples.pdf presentation check-examples-in-readme
@@ -138,11 +138,13 @@ test: $(VISUALGO_TEST_EXECS)
 	test/exec
 
 .PHONY: format
-format:
-	$(Q)ls | grep -vE '^(googletest|html|latex)$$' | xargs find | grep -E '\.(c(|c|pp)|h)$$' | sh -c 'while read a; do echo "Formatting $$a"; clang-format -i $$a; done'
+format: $(shell ls | grep -vE '^(googletest|html|latex)$$' | xargs find | grep -E '\.(cc?|h)$$' | sed 's/$$/-make-format/')
+
+VISUALGO_ALL_OBJS := $(VISUALGO_OBJS) $(EXAMPLES_OBJS) $(VISUALGO_TEST_OBJS) $(PRESENTATION_OBJS)
+$(VISUALGO_ALL_OBJS): override CXXSTD_FLAG = -std=c++17
 
 .PHONY: clean
-clean: OBJS := $(GOOGLETEST_OBJS) $(VISUALGO_OBJS) $(EXAMPLES_OBJS) $(VISUALGO_TEST_OBJS) $(PRESENTATION_OBJS)
+clean: OBJS := $(GOOGLETEST_OBJS) $(VISUALGO_ALL_OBJS)
 clean: EXECS := $(EXAMPLES_EXECS) $(PRESENTATION_EXECS) $(VISUALGO_TEST_EXECS)
 clean: PDFS := $(EXAMPLES_PDFS) $(PRESENTATION_PDFS)
 clean:
