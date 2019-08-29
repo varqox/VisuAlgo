@@ -72,7 +72,7 @@ examples: $(EXAMPLES_PDFS)
 
 .PHONY: check-examples-in-readme
 check-examples-in-readme:
-	bash -c "diff <(echo $(EXAMPLES_EXECS) | sed 's/ /\n/g' | sed 's@.*/@@' | sort) <(grep '^| [a-z]' README.md | cut -d ' ' -f 2 | sort) || echo Above examples are missing in README.md or are missing in examples/"
+	bash -c "diff <(echo $(EXAMPLES_EXECS) | sed 's/ /\n/g' | sed 's@.*/@@' | sort) <(grep '^| [a-z]' README.md | cut -d ' ' -f 2 | sort) || (echo -e '\033[1;31mAbove examples are missing in README.md or in examples/\033[m'; exit 1)"
 
 $(eval $(call add_executable, presentation/presentation, , \
 	presentation/presentation.cc \
