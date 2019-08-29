@@ -4,19 +4,17 @@ include makefile-utils/Makefile.config
 all: visualgo.a io_stuff examples/examples.pdf presentation check-examples-in-readme
 	@printf "\033[32mBuild finished\033[0m\n"
 
-GOOGLETEST_SRCS := \
-	$(PREFIX)googletest/googletest/src/gtest-all.cc \
-	$(PREFIX)googletest/googletest/src/gtest_main.cc
+define GOOGLETEST_FLAGS =
+INTERNAL_EXTRA_CXX_FLAGS = -isystem '$(CURDIR)/googletest/googletest/include' -I '$(CURDIR)/googletest/googletest'
+INTERNAL_EXTRA_LD_FLAGS = -pthread
+endef
 
-$(eval $(call load_dependencies, $(GOOGLETEST_SRCS)))
-GOOGLETEST_OBJS := $(call SRCS_TO_OBJS, $(GOOGLETEST_SRCS))
+$(eval $(call add_static_library, gtest_main.a, $(GOOGLETEST_FLAGS), \
+	googletest/googletest/src/gtest-all.cc \
+	googletest/googletest/src/gtest_main.cc \
+))
 
-gtest_main.a: $(GOOGLETEST_OBJS)
-	$(MAKE_STATIC_LIB)
-
-$(GOOGLETEST_OBJS): override EXTRA_CXX_FLAGS += -isystem '$(CURDIR)/googletest/googletest/include' -I '$(CURDIR)/googletest/googletest' -pthread
-
-VISUALGO_SRCS := \
+$(eval $(call add_static_library, visualgo.a, , \
 	src/block.cc \
 	src/color.cc \
 	src/image.cc \
@@ -34,13 +32,8 @@ VISUALGO_SRCS := \
 	src/geometry_element.cc \
 	src/circle.cc \
 	src/vector.cc \
-	src/polygon.cc
-
-$(eval $(call load_dependencies, $(VISUALGO_SRCS)))
-VISUALGO_OBJS := $(call SRCS_TO_OBJS, $(VISUALGO_SRCS))
-
-visualgo.a: $(VISUALGO_OBJS)
-	$(MAKE_STATIC_LIB)
+	src/polygon.cc \
+))
 
 .PHONY: io_stuff
 io_stuff: io_stuff/hierarchy.svg
@@ -62,38 +55,33 @@ EXAMPLES_SRCS := \
 	examples/sieve.cc
 
 $(eval $(call load_dependencies, $(EXAMPLES_SRCS)))
-EXAMPLES_OBJS := $(call SRCS_TO_OBJS, $(EXAMPLES_SRCS))
-EXAMPLES_EXECS := $(patsubst %.o, %, $(EXAMPLES_OBJS))
+EXAMPLES_EXECS := $(patsubst %.cc, %, $(EXAMPLES_SRCS))
 
+BUILD_ARTIFACTS += $(call SRCS_TO_BUILD_ARTIFACTS, $(EXAMPLES_SRCS)) $(EXAMPLES_EXECS)
 $(EXAMPLES_EXECS): %: %.o visualgo.a
 	$(LINK)
 
 EXAMPLES_PDFS := $(patsubst %, %.pdf, $(EXAMPLES_EXECS))
+BUILD_ARTIFACTS += $(EXAMPLES_PDFS)
 
-.PHONY:
+.PHONY: compile_examples
 compile_examples: $(EXAMPLES_EXECS)
 
-.PHONY:
+.PHONY: examples
 examples: $(EXAMPLES_PDFS)
 
-.PHONY:
+.PHONY: check-examples-in-readme
 check-examples-in-readme:
 	bash -c "diff <(echo $(EXAMPLES_EXECS) | sed 's/ /\n/g' | sed 's@.*/@@' | sort) <(grep '^| [a-z]' README.md | cut -d ' ' -f 2 | sort) || echo Above examples are missing in README.md or are missing in examples/"
 
-PRESENTATION_SRCS := \
-	presentation/presentation.cc
+$(eval $(call add_executable, presentation/presentation, , \
+	presentation/presentation.cc \
+	visualgo.a \
+))
 
-$(eval $(call load_dependencies, $(PRESENTATION_SRCS)))
-PRESENTATION_OBJS := $(call SRCS_TO_OBJS, $(PRESENTATION_SRCS))
-PRESENTATION_EXECS := presentation/presentation
-
-$(PRESENTATION_EXECS): $(PRESENTATION_OBJS) visualgo.a
-	$(LINK)
-
-PRESENTATION_PDFS := $(patsubst %, %.pdf, $(PRESENTATION_EXECS))
-
-.PHONY:
-presentation: $(PRESENTATION_PDFS)
+.PHONY: presentation
+presentation: presentation/presentation.pdf
+BUILD_ARTIFACTS += presentation/presentation.pdf
 
 .ONESHELL:
 %.pdf: %
@@ -111,47 +99,31 @@ presentation: $(PRESENTATION_PDFS)
 	$(Q)rm -rf "$$TMP_DIR"
 	$(Q)exit $$RET
 
+BUILD_ARTIFACTS += examples/examples.pdf
 examples/examples.pdf: $(EXAMPLES_PDFS)
 	$(Q)pdfunite $(EXAMPLES_PDFS) $@
 	@printf "\033[32mCombined generated pdfs into \033[1;32m$@\033[0m\n"
 
-VISUALGO_TEST_SRCS := \
+define VISUALGO_TEST_FLAGS =
+INTERNAL_EXTRA_CXX_FLAGS = -isystem '$(CURDIR)/googletest/googletest/include'
+INTERNAL_EXTRA_LD_FLAGS = -pthread
+endef
+
+$(eval $(call add_executable, test/exec, $(VISUALGO_TEST_FLAGS), \
+	gtest_main.a \
 	test/array_1d.cc \
 	test/block.cc \
 	test/graphs.cc \
 	test/image.cc \
 	test/latex.cc \
 	test/source_code.cc \
-	test/variable.cc
-
-$(eval $(call load_dependencies, $(VISUALGO_TEST_SRCS)))
-VISUALGO_TEST_OBJS := $(call SRCS_TO_OBJS, $(VISUALGO_TEST_SRCS))
-VISUALGO_TEST_EXECS := test/exec
-
-$(VISUALGO_TEST_OBJS): override EXTRA_CXX_FLAGS += -isystem '$(CURDIR)/googletest/googletest/include'
-
-test/exec: $(VISUALGO_TEST_OBJS) visualgo.a gtest_main.a
-	$(LINK) -pthread
+	test/variable.cc \
+	visualgo.a \
+))
 
 .PHONY: test
-test: $(VISUALGO_TEST_EXECS)
+test: test/exec
 	test/exec
 
 .PHONY: format
 format: $(shell ls | grep -vE '^(googletest|html|latex)$$' | xargs find | grep -E '\.(cc?|h)$$' | sed 's/$$/-make-format/')
-
-VISUALGO_ALL_OBJS := $(VISUALGO_OBJS) $(EXAMPLES_OBJS) $(VISUALGO_TEST_OBJS) $(PRESENTATION_OBJS)
-$(VISUALGO_ALL_OBJS): override CXXSTD_FLAG = -std=c++17
-
-.PHONY: clean
-clean: OBJS := $(GOOGLETEST_OBJS) $(VISUALGO_ALL_OBJS)
-clean: EXECS := $(EXAMPLES_EXECS) $(PRESENTATION_EXECS) $(VISUALGO_TEST_EXECS)
-clean: PDFS := $(EXAMPLES_PDFS) $(PRESENTATION_PDFS)
-clean:
-	$(Q)$(RM) $(OBJS) $(OBJS:o=dwo) $(EXECS) $(PDFS) gtest_main.a visualgo.a examples/examples.pdf
-	$(Q)find examples -type f -name '*.tex' | xargs rm -f
-	$(Q)find src googletest test examples io_stuff presentation -type f -name '*.deps' | xargs rm -f
-
-.PHONY: help
-help:
-	@echo "Nothing is here yet..."
